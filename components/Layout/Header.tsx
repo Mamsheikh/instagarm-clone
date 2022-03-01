@@ -2,9 +2,13 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { RiMessengerLine } from 'react-icons/ri';
 import { AiOutlinePlusSquare, AiOutlineCompass } from 'react-icons/ai';
+import { BsInstagram } from 'react-icons/bs';
 import { signIn, useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
 
 const Header = () => {
+  const { systemTheme, theme, setTheme } = useTheme();
+  const [dark, setDark] = useState(false);
   const { data: session } = useSession();
   const [searchVisibility, setSearchVisibility] = useState(false);
   const [crossVisibility, setCrossVisibility] = useState(false);
@@ -27,8 +31,8 @@ const Header = () => {
   }, []);
 
   return (
-    <header className='fixed top-0 w-full border-b bg-white shadow-sm'>
-      <div className='mx-5 flex max-w-6xl justify-between  p-2 xl:mx-auto'>
+    <header className='fixed top-0 w-full border-b bg-black shadow-sm dark:bg-white'>
+      <div className='mx-5 flex max-w-6xl justify-between p-2  dark:text-black xl:mx-auto'>
         <div className='relative hidden h-10 w-24 lg:inline-grid'>
           <Image
             src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
@@ -37,16 +41,17 @@ const Header = () => {
           />
         </div>
         <div className='relative mr-3 h-10 w-10 flex-shrink-0 lg:hidden'>
-          <Image
+          {/* <Image
             src='https://links.papareact.com/jjm'
             layout='fill'
             objectFit='contain'
-          />
+          /> /*/}
+          <BsInstagram className='text-white dark:text-black' size={32} />
         </div>
         {/* Search Input TODO: */}
         <div
           ref={inputAreaRef}
-          className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-gray-50 p-2 pl-2  sm:text-sm '
+          className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-black p-2 pl-2 dark:bg-gray-50  sm:text-sm '
         >
           {searchVisibility && (
             <svg
@@ -67,7 +72,7 @@ const Header = () => {
           <input
             type='text'
             placeholder='Search'
-            className='block w-full bg-gray-50 pl-1 focus:outline-none'
+            className='block w-full  bg-black pl-1 focus:outline-none dark:bg-gray-50'
           />
           {crossVisibility && (
             <svg
@@ -108,6 +113,35 @@ const Header = () => {
               clipRule='evenodd'
             />
           </svg>
+          <button
+            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          >
+            {theme === 'dark' ? (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='navBtn h-5 w-5'
+                viewBox='0 0 20 20'
+                fill='currentColor'
+              >
+                <path d='M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z' />
+              </svg>
+            ) : (
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='navBtn h-6 w-6'
+                fill='none'
+                viewBox='0 0 24 24'
+                stroke='currentColor'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                />
+              </svg>
+            )}
+          </button>
           {session ? (
             <>
               <div className='navBtn relative'>
