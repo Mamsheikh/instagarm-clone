@@ -6,9 +6,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/react-fontawesome": "fortawesome/react-fontawesome",
+    "@heroicons/react": "^1.0.5",
     "@next-auth/prisma-adapter": "^1.0.1",
     "@prisma/client": "^3.10.0",
     "apollo-server-micro": "^3.6.3",
+    "daisyui": "^2.2.2",
     "graphql": "15.7.2",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
@@ -16,7 +19,8 @@
     "next-auth": "^4.2.1",
     "nexus": "^1.2.0",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-icons": "^4.3.1"
   },
   "devDependencies": {
     "@types/micro-cors": "^0.1.2",
