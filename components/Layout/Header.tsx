@@ -5,30 +5,13 @@ import { AiOutlinePlusSquare, AiOutlineCompass } from 'react-icons/ai';
 import { BsInstagram } from 'react-icons/bs';
 import { signIn, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
+import Dropdown from '../Dropdown';
+import Search from '../Search';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [dark, setDark] = useState(false);
   const { data: session } = useSession();
-  const [searchVisibility, setSearchVisibility] = useState(false);
-  const [crossVisibility, setCrossVisibility] = useState(false);
-  const inputAreaRef = useRef(null);
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (!inputAreaRef?.current?.contains(e.target)) {
-        console.log('outside input area');
-        setCrossVisibility(false);
-        setSearchVisibility(true);
-      } else {
-        setCrossVisibility(true);
-        setSearchVisibility(false);
-      }
-    };
-    document.addEventListener('mousedown', checkIfClickedOutside);
-    return () => {
-      document.addEventListener('mousedown', checkIfClickedOutside);
-    };
-  }, []);
 
   return (
     <header className='fixed top-0 w-full border-b bg-black shadow-sm dark:bg-white'>
@@ -49,46 +32,7 @@ const Header = () => {
           <BsInstagram className='text-white dark:text-black' size={32} />
         </div>
         {/* Search Input TODO: */}
-        <div
-          ref={inputAreaRef}
-          className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-black p-2 pl-2 dark:bg-gray-50  sm:text-sm '
-        >
-          {searchVisibility && (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5 text-gray-400'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'
-              />
-            </svg>
-          )}
-          <input
-            type='text'
-            placeholder='Search'
-            className='block w-full  bg-black pl-1 focus:outline-none dark:bg-gray-50'
-          />
-          {crossVisibility && (
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='h-5 w-5 text-gray-400'
-              viewBox='0 0 20 20'
-              fill='currentColor'
-            >
-              <path
-                fillRule='evenodd'
-                d='M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z'
-                clipRule='evenodd'
-              />
-            </svg>
-          )}
-        </div>
+        <Search />
         <div className='flex items-center justify-end space-x-4'>
           {/* HomeIcon */}
 
@@ -169,11 +113,12 @@ const Header = () => {
               </div>
               <AiOutlinePlusSquare className='navBtn' />
               <AiOutlineCompass className='navBtn' />
-              <div className='avatar'>
+              {/* <div className='avatar'>
                 <div className='-ml-2 h-8 w-8 rounded-full object-contain'>
                   <img src={session?.user?.image} />
                 </div>
-              </div>
+              </div> */}
+              <Dropdown avatar={session?.user?.image} />
             </>
           ) : (
             <button
