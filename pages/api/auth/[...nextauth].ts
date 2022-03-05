@@ -61,8 +61,13 @@ export default NextAuth({
   callbacks: {
     // async signIn({ user, account, profile, email, credentials }) { return true },
     // async redirect({ url, baseUrl }) { return baseUrl },
-    // async session({ session, token, user }) { return session },
-    // async jwt({ token, user, account, profile, isNewUser }) { return token }
+    // async session({ session, token, user }) {
+    //   session.id = user.id;
+    //   session.image = user.image;
+    //   session.name = user.name;
+    //   return Promise.resolve(session);
+    // },
+    // async jwt({ token, user, account, profile, isNewUser }) { return  }
   },
 
   // Events are useful for logging

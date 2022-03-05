@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { GetServerSideProps } from 'next';
 import { CogIcon, PlayIcon, BookmarkIcon } from '@heroicons/react/outline';
 import { BiGridVertical } from 'react-icons/bi';
 import { MdOutlineContactMail } from 'react-icons/md';
-import axios from 'axios';
 import PostCard from '../../components/PostCard';
 import { images } from '../../data/images';
 import prisma from '../../lib/prisma';
@@ -13,8 +13,11 @@ import { IUser } from '../../lib/types';
 
 interface Props {
   user: IUser;
+  // userr: IUser
 }
 const Profile = ({ user }: Props) => {
+  const { data: session, status } = useSession();
+  // console.log(session.user.id);
   const router = useRouter();
   const { id } = router.query;
   // console.log(user);
@@ -46,10 +49,14 @@ const Profile = ({ user }: Props) => {
         </div>
         <div className='col-span-2'>
           <span className='mr-4 text-2xl text-gray-600'>Mamsheikh</span>
-          <div className='mr-4 inline cursor-pointer rounded border border-gray-300 p-1 px-2 text-sm text-gray-700'>
-            <button>Edit Profile</button>
-          </div>
-          <CogIcon className='inline h-6 flex-1 cursor-pointer' />
+          {user.email === session?.user?.email ? (
+            <>
+              <div className='mr-4 inline cursor-pointer rounded border border-gray-300 p-1 px-2 text-sm text-gray-700'>
+                <button>Edit Profile</button>
+              </div>
+              <CogIcon className='inline h-6 flex-1 cursor-pointer' />
+            </>
+          ) : null}
           <div className='mt-4 flex'>
             <div>
               <span className='font-semibold'>{user?.posts.length}</span> posts
@@ -118,6 +125,10 @@ export default Profile;
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  // const { data: session, status } = useSession();
+  // const userr = await prisma.user.findUnique({
+  //   where: {email: session.user.email}
+  // })
   const user = await prisma.user.findUnique({
     where: { id: params.id as string },
     include: { posts: true, followedBy: true, following: true },
