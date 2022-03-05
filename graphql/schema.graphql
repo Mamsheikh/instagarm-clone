@@ -2,19 +2,38 @@
 ### Do not make changes to this file directly
 
 
+type Follows {
+  follower: User!
+  followerId: String!
+  following: User!
+  followingId: String!
+}
+
+type Post {
+  caption: String
+  id: String!
+  images: [String]
+  user: Post!
+  userId: String!
+}
+
 type Query {
-  searchUser(input: String): [User]
+  getUser(id: String!): User!
+  searchUser(input: String): [User]!
 }
 
 type User {
   address: String
   bio: String
   email: String!
+  followedBy: [Follows]
+  following: [Follows]
   id: String!
   image: String
   isAdmin: Boolean!
   name: String!
   phone: String
+  posts: [Post]!
   username: String
   website: String
 }

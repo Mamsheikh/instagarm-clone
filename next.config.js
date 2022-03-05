@@ -2,6 +2,6 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['www.instagram.com', 'links.papareact.com'],
+    domains: ['www.instagram.com', 'links.papareact.com', 'unsplash.com'],
   },
 };

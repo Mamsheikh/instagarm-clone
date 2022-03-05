@@ -14,8 +14,8 @@ const Header = () => {
   const { data: session } = useSession();
 
   return (
-    <header className='fixed top-0 w-full border-b bg-black shadow-sm dark:bg-white'>
-      <div className='mx-5 flex max-w-6xl justify-between p-2  dark:text-black xl:mx-auto'>
+    <header className='fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black'>
+      <div className='mx-5 flex max-w-6xl justify-between p-2  text-black xl:mx-auto'>
         <div className='relative hidden h-10 w-24 lg:inline-grid'>
           <Image
             src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
@@ -57,10 +57,8 @@ const Header = () => {
               clipRule='evenodd'
             />
           </svg>
-          <button
-            onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-          >
-            {theme === 'dark' ? (
+          <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+            {theme === 'light' ? (
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 className='navBtn h-5 w-5'

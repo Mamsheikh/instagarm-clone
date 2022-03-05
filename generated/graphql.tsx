@@ -44,17 +44,22 @@ export type SearchUserQueryVariables = Exact<{
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', searchUser?: Array<{ __typename?: 'User', id: string, name: string, email: string, image?: string | null, username?: string | null } | null> | null };
+export type SearchUserQuery = { __typename?: 'Query', searchUser?: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> | null };
 
 
 export const SearchUserDocument = gql`
     query SearchUser($input: String) {
   searchUser(input: $input) {
-    id
-    name
+    address
+    bio
     email
+    id
     image
+    isAdmin
+    name
+    phone
     username
+    website
   }
 }
     `;

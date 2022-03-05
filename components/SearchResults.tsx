@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { User, useSearchUserLazyQuery } from '../generated/graphql';
 import { Users } from '../lib/types';
@@ -6,24 +7,27 @@ interface IProps {
   data: [User];
 }
 
-const SearchResults = ({ name, image }) => {
+const SearchResults = ({ name, image, id, onClose }) => {
   // console.log('searchResults', data);
   return (
     <div className='mt-4 flex items-center justify-between'>
       {/* {data && */}
       {/* // data.map((user) => { */}
       <div className='flex items-center'>
-        <div className='avatar'>
-          <div className='h-14 w-14 rounded-full'>
-            <img src={image} alt='' />
-          </div>
-        </div>
-        <div className='pl-4'>
-          <div className='text-md font-bold text-gray-800'>MetaVerse</div>
-          <div className='text-gray-400'>{name}</div>
-        </div>
+        <Link href={`/profile/${id}`}>
+          <a className='flex items-center' onClick={onClose}>
+            <div className='avatar'>
+              <div className='h-14 w-14 rounded-full'>
+                <img src={image} alt='' />
+              </div>
+            </div>
+            <div className='pl-4'>
+              <div className='text-md font-bold text-gray-800'>MetaVerse</div>
+              <div className='text-gray-400'>{name}</div>
+            </div>
+          </a>
+        </Link>
       </div>
-      ;
       <svg
         // onClick={}
         xmlns='http://www.w3.org/2000/svg'

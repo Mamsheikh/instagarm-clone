@@ -1,9 +1,14 @@
 query SearchUser($input: String) {
   searchUser(input: $input) {
-    id
-    name
+    address
+    bio
     email
+    id
     image
+    isAdmin
+    name
+    phone
     username
+    website
   }
 }

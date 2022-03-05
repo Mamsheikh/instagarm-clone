@@ -3,6 +3,7 @@ import { gql, useLazyQuery } from '@apollo/client';
 import SearchResults from './SearchResults';
 import { ISearch } from '../lib/types';
 import { User, useSearchUserLazyQuery } from '../generated/graphql';
+import { spawn } from 'child_process';
 
 interface IProps {
   data: [ISearch];
@@ -14,7 +15,7 @@ interface IUsers {
 
 const Search = () => {
   const [search, setSearch] = useState<string>('');
-  const [users, setUsers] = useState<IUsers | undefined>();
+  const [users, setUsers] = useState<User[]>();
   const [showToolTip, setShowToolTip] = useState(false);
   const [searchVisibility, setSearchVisibility] = useState(false);
   const [crossVisibility, setCrossVisibility] = useState(false);
@@ -45,18 +46,25 @@ const Search = () => {
     if (!search) return;
     try {
       searchUser({ variables: { input: search } });
-      // setUsers(data.searchUser);
+      setUsers(data.searchUser);
       // console.log(data);
       // console.log('users', users);
     } catch (err) {
       console.log(err);
     }
   };
+
+  const onClose = (e) => {
+    setSearch('');
+    setUsers([]);
+    setShowToolTip(false);
+  };
+
   return (
     <form
       onSubmit={onSubmit}
       ref={inputAreaRef}
-      className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-black p-2 pl-2 dark:bg-gray-50  sm:text-sm '
+      className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-gray-50 p-2 pl-2 dark:bg-black  sm:text-sm '
     >
       {/* <form onSubmit={onSubmit}> */}
       {searchVisibility && (
@@ -81,7 +89,7 @@ const Search = () => {
         placeholder='Search'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className='block w-full  bg-black pl-1 focus:outline-none dark:bg-gray-50'
+        className='block w-full  bg-gray-50 pl-1 focus:outline-none dark:bg-black'
       />
       {crossVisibility && (
         <>
@@ -118,16 +126,31 @@ const Search = () => {
           </button>
         </>
       )}
-      {showToolTip && data && data.searchUser && (
+      {showToolTip && data && users && (
         <div className='search-tip absolute top-10 left-1/2 w-96 -translate-x-1/2 rounded-md bg-black p-5 text-white shadow-xl dark:bg-white'>
           <div className='mb-5 flex justify-between'>
             <h3 className='font-bold text-gray-800'>Results</h3>
-            <button className='text-xs font-bold text-blue-400'>
+            <button
+              className='text-xs font-bold text-blue-400'
+              onClick={onClose}
+            >
               clear all
             </button>
+            {loading && <span className='text-gray-800'>loading up</span>}
           </div>
-          {data.searchUser.map((user) => (
-            <SearchResults key={user.id} name={user.name} image={user.image} />
+          {users.length === 0 && (
+            <h2 className='text-center font-bold text-gray-700'>
+              No Results found
+            </h2>
+          )}
+          {users.map((user) => (
+            <SearchResults
+              onClose={onClose}
+              key={user.id}
+              id={user.id}
+              name={user.name}
+              image={user.image}
+            />
           ))}
         </div>
       )}

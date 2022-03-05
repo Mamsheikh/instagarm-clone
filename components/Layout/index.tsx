@@ -1,13 +1,13 @@
-import React, { ReactChildren } from 'react'
-import Header from './Header'
+import React, { ReactChildren } from 'react';
+import Header from './Header';
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className='bg-gray-100 dark:bg-black'>
       <Header />
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

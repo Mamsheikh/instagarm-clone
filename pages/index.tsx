@@ -6,7 +6,7 @@ import { useSession, signIn, signOut } from 'next-auth/react';
 const Home: NextPage = () => {
   const { data: session } = useSession();
   return (
-    <div className='min-h-screen'>
+    <div className=' bg-gray-100 pt-20'>
       <Head>
         <title>Prismagram</title>
         <link rel='icon' href='/favicon.ico' />
