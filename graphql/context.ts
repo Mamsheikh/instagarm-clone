@@ -1,20 +1,22 @@
-import { NextApiResponse } from 'next'
-// /graphql/context.ts
-import { PrismaClient } from '@prisma/client'
-import { NextApiRequest } from 'next'
-import prisma from '../lib/prisma'
+import { NextApiResponse, NextApiRequest } from 'next';
+import { PrismaClient } from '@prisma/client';
+import prisma from '../lib/prisma';
 
 export type Context = {
-  prisma: PrismaClient
-}
+  prisma: PrismaClient;
+  req: NextApiRequest;
+  res: NextApiResponse;
+};
 export async function createContext({
   req,
   res,
 }: {
-  req: NextApiRequest
-  res: NextApiResponse
+  req: NextApiRequest;
+  res: NextApiResponse;
 }): Promise<Context> {
   return {
     prisma,
-  }
+    req,
+    res,
+  };
 }

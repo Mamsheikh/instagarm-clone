@@ -15,9 +15,42 @@ export type Scalars = {
   Float: number;
 };
 
+export type Follows = {
+  __typename?: 'Follows';
+  follower: User;
+  followerId: Scalars['String'];
+  following: User;
+  followingId: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  updateProfile?: Maybe<User>;
+};
+
+
+export type MutationUpdateProfileArgs = {
+  input?: InputMaybe<UpdateProfileInput>;
+};
+
+export type Post = {
+  __typename?: 'Post';
+  caption?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  images?: Maybe<Array<Maybe<Scalars['String']>>>;
+  user: Post;
+  userId: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  searchUser?: Maybe<Array<Maybe<User>>>;
+  getUser: User;
+  searchUser: Array<Maybe<User>>;
+};
+
+
+export type QueryGetUserArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -25,16 +58,28 @@ export type QuerySearchUserArgs = {
   input?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateProfileInput = {
+  address: Scalars['String'];
+  bio?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   address?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   email: Scalars['String'];
+  followedBy?: Maybe<Array<Maybe<Follows>>>;
+  following?: Maybe<Array<Maybe<Follows>>>;
   id: Scalars['String'];
   image?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
+  posts: Array<Maybe<Post>>;
   username?: Maybe<Scalars['String']>;
   website?: Maybe<Scalars['String']>;
 };
@@ -44,7 +89,14 @@ export type SearchUserQueryVariables = Exact<{
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', searchUser?: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> | null };
+export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> };
+
+export type UpdateProfileMutationVariables = Exact<{
+  input?: InputMaybe<UpdateProfileInput>;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 
 export const SearchUserDocument = gql`
@@ -91,3 +143,44 @@ export function useSearchUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SearchUserQueryHookResult = ReturnType<typeof useSearchUserQuery>;
 export type SearchUserLazyQueryHookResult = ReturnType<typeof useSearchUserLazyQuery>;
 export type SearchUserQueryResult = Apollo.QueryResult<SearchUserQuery, SearchUserQueryVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($input: UpdateProfileInput) {
+  updateProfile(input: $input) {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    bio
+    website
+  }
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;

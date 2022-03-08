@@ -8,8 +8,10 @@ import { useTheme } from 'next-themes';
 import Dropdown from '../Dropdown';
 import Search from '../Search';
 import { MoonIcon, SunIcon } from '@heroicons/react/solid';
+import { GetServerSideProps } from 'next';
+import prisma from '../../lib/prisma';
 
-const Header = () => {
+const Header = ({ user }) => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [dark, setDark] = useState(false);
   const { data: session } = useSession();
@@ -97,7 +99,7 @@ const Header = () => {
                   <img src={session?.user?.image} />
                 </div>
               </div> */}
-              <Dropdown avatar={session?.user?.image} />
+              <Dropdown user={user} />
             </>
           ) : (
             <button
@@ -114,3 +116,19 @@ const Header = () => {
 };
 
 export default Header;
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//   // const { data: session, status } = useSession();
+//   // const userr = await prisma.user.findUnique({
+//   //   where: {email: session.user.email}
+//   // })
+//   const user = await prisma.user.findUnique({
+//     where: { id: params.id as string },
+//     // include: { posts: true, followedBy: true, following: true },
+//   });
+
+//   return {
+//     props: {
+//       user,
+//     },
+//   };
+// };

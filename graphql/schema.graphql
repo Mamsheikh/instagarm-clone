@@ -9,6 +9,10 @@ type Follows {
   followingId: String!
 }
 
+type Mutation {
+  updateProfile(input: UpdateProfileInput): User
+}
+
 type Post {
   caption: String
   id: String!
@@ -20,6 +24,15 @@ type Post {
 type Query {
   getUser(id: String!): User!
   searchUser(input: String): [User]!
+}
+
+input UpdateProfileInput {
+  address: String!
+  bio: String
+  name: String
+  phone: String
+  username: String
+  website: String
 }
 
 type User {

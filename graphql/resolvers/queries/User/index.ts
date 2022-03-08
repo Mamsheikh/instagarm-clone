@@ -6,6 +6,7 @@ import {
   queryField,
   stringArg,
 } from 'nexus';
+
 import { User } from '../../models';
 
 export const searchUser = queryField('searchUser', {

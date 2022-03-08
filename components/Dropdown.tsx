@@ -3,13 +3,13 @@ import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
 
-const Dropdown = ({ avatar }) => {
+const Dropdown = ({ user }) => {
   return (
     <div>
       <Menu as='div' className='relative'>
         <Menu.Button>
           <img
-            src={avatar}
+            src={user?.image}
             className='h-8 w-8 rounded-full object-cover'
             alt=''
           />
@@ -25,7 +25,7 @@ const Dropdown = ({ avatar }) => {
             <Menu.Items className='absolute right-0 mt-2 w-32  origin-top-right rounded-md border bg-white shadow-lg'>
               <Menu.Item>
                 {({ active }) => (
-                  <Link href='/profile'>
+                  <Link href={`/profile/${user.id}`}>
                     <a
                       className={`${
                         active ? 'bg-gray-100 ' : ''
