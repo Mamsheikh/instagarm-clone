@@ -29,17 +29,21 @@ const Profile = ({ user }: Props) => {
     <div className='mx-5 max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white xl:mx-auto'>
       <div className='grid grid-cols-4 gap-4'>
         <div className='flex justify-center sm:col-span-2 lg:col-span-1'>
-          <img className='h-36 w-36 rounded-full' src={user.image} alt='' />
+          <img
+            className='h-36 w-36 rounded-full object-cover'
+            src={user.image}
+            alt=''
+          />
         </div>
         <div className='col-span-2'>
-          <span className='mr-4 text-2xl text-gray-600'>
+          <span className='mr-4 text-2xl text-gray-600 dark:text-white'>
             {!user.username
               ? toast.success('setup your profile')
               : user.username}
           </span>
           {user.email === session?.user?.email ? (
             <>
-              <div className='mr-4 inline cursor-pointer rounded border border-gray-300 p-1 px-2 text-sm text-gray-700'>
+              <div className='mr-4 inline cursor-pointer rounded border border-gray-300 p-1 px-2 text-sm text-gray-700 dark:text-white'>
                 <button onClick={() => setIsOpen(!isOpen)}>Edit Profile</button>
               </div>
               {isOpen && <EditProfileModal user={user} />}

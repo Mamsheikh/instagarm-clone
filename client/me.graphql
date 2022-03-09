@@ -1,0 +1,13 @@
+query Me {
+  Me {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    bio
+    website
+  }
+}

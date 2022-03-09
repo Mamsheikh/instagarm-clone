@@ -1,3 +1,4 @@
+import { getSession } from 'next-auth/react';
 import {
   extendType,
   list,
@@ -42,21 +43,21 @@ export const getUser = extendType({
     });
   },
 });
-// export const getUser = queryField('getUser', {
-//   type: 'User',
-//   args: {
-//     id: nonNull(stringArg()),
-//   },
-//   resolve: async (_, args, ctx) => {
-//     try {
-//       const user = await ctx.prisma.user.findUnique({
-//         where: { id: args.id },
-//         rejectOnNotFound: true,
-//         include: { posts: true },
-//       });
-//       return user;
-//     } catch (error) {
-//       throw new Error(`No user found: ${error}`);
-//     }
-//   },
-// });
+export const Me = queryField('Me', {
+  type: 'User',
+  // args: {
+  //   email: nonNull(stringArg()),
+  // },
+  resolve: async (_, args, ctx) => {
+    const req = ctx.req;
+    const session = await getSession({ req });
+    try {
+      const user = await ctx.prisma.user.findUnique({
+        where: { email: session.user.email },
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`No user found: ${error}`);
+    }
+  },
+});

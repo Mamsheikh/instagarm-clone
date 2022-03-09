@@ -21,6 +21,7 @@ export const updateProfile = mutationField('updateProfile', {
             bio: args.input.bio,
             username: args.input.username,
             website: args.input.website,
+            image: args.input.image,
             name: args.input.name,
             phone: args.input.phone,
           },

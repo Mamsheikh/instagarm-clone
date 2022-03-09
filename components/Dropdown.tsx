@@ -22,14 +22,14 @@ const Dropdown = ({ user }) => {
             leaveFrom='transform opacity-100 scale-100'
             leaveTo='transform opacity-0 scale-95'
           >
-            <Menu.Items className='absolute right-0 mt-2 w-32  origin-top-right rounded-md border bg-white shadow-lg'>
+            <Menu.Items className='absolute right-0 mt-2 w-32  origin-top-right rounded-md border bg-white shadow-lg dark:bg-black'>
               <Menu.Item>
                 {({ active }) => (
                   <Link href={`/profile/${user.id}`}>
                     <a
                       className={`${
                         active ? 'bg-gray-100 ' : ''
-                      } block px-3 py-2 text-gray-700 hover:bg-gray-200 `}
+                      } block px-3 py-2 text-gray-700 hover:bg-gray-200 dark:text-white `}
                     >
                       Profile
                     </a>
@@ -39,7 +39,7 @@ const Dropdown = ({ user }) => {
               <Menu.Item>
                 <a
                   onClick={() => signOut()}
-                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                  className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white'
                 >
                   Logout
                 </a>

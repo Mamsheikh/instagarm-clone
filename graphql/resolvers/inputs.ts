@@ -7,7 +7,8 @@ export const UpdateProfileInput = inputObjectType({
       t.nullable.string('username'),
       t.nullable.string('website'),
       t.nullable.string('bio');
+    t.nullable.string('image');
     t.nullable.string('phone');
-    t.nonNull.string('address');
+    t.nullable.string('address');
   },
 });

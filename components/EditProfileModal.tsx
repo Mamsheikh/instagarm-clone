@@ -9,7 +9,7 @@ import { CameraIcon } from '@heroicons/react/outline';
 import { useUpdateProfileMutation } from '../generated/graphql';
 import toast, { LoaderIcon } from 'react-hot-toast';
 import { useRouter } from 'next/router';
-import { checkImage } from '../utils/imageUpload';
+import { checkImage, imageUpload } from '../utils/imageUpload';
 
 interface Props {
   user: IUser;
@@ -42,16 +42,25 @@ const EditProfileModal = ({ user }: Props) => {
       bio: user.bio,
       website: user.website,
       username: user.username,
-      // image: user.image,
+      image: user.image,
       phone: user.phone,
       address: user.phone,
     },
   });
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    const { url } = await imageUpload(file);
     toast.promise(
       updateProfile({
         variables: {
-          input: data,
+          input: {
+            address: data.address,
+            bio: data.bio,
+            name: data.name,
+            phone: data.phone,
+            username: data.username,
+            website: data.website,
+            image: url,
+          },
         },
       }),
       {
@@ -60,16 +69,19 @@ const EditProfileModal = ({ user }: Props) => {
         success: '🎉 Profile updated🥳',
       }
     );
+    // console.log('image: ', url);
   };
-  const changeAvatar = (e) => {
+  const changeAvatar = async (e) => {
     const file = e.target.files[0];
 
     const err = checkImage(file);
     if (err) toast.error(err);
 
+    // console.log(image);
+
     setFile(file);
   };
-  console.log(file);
+  // console.log(file);
   return (
     <Dialog
       open={isOpen}
@@ -77,15 +89,15 @@ const EditProfileModal = ({ user }: Props) => {
       className='fixed inset-0 z-50 flex justify-center'
     >
       <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-70' />
-      <div className='relative mx-4 mt-[10vh] max-h-[85vh] w-full max-w-2xl rounded bg-white '>
+      <div className='relative mx-4 mt-[10vh] max-h-[85vh] w-full max-w-2xl rounded bg-white dark:bg-black '>
         <div className='flex items-center justify-end px-4 py-3'>
           <XIcon
-            className=' h-6 w-6 cursor-pointer'
+            className=' h-6 w-6 cursor-pointer dark:text-white'
             onClick={() => setIsOpen(!isOpen)}
           />
         </div>
         <div>
-          <span className='flex items-center justify-center text-3xl'>
+          <span className='flex items-center justify-center text-3xl dark:text-white'>
             Edit Profile
           </span>
           <form
@@ -95,7 +107,7 @@ const EditProfileModal = ({ user }: Props) => {
             <div className='mb-4 space-y-2 p-3 pb-4'>
               <div className='flex items-center justify-center '>
                 <input
-                  // {...register('image')}
+                  {...register('image')}
                   //   name='userLoginInput'
                   type='file'
                   onChange={changeAvatar}
@@ -117,7 +129,7 @@ const EditProfileModal = ({ user }: Props) => {
                         fileInput.current && fileInput.current.click()
                       }
                     >
-                      <CameraIcon className='h-5 w-5 text-white' />
+                      <CameraIcon className='h-5 w-5 cursor-pointer text-white' />
                     </span>
                   </div>
                 </div>
@@ -126,7 +138,7 @@ const EditProfileModal = ({ user }: Props) => {
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Full name
                   </label>
@@ -134,13 +146,13 @@ const EditProfileModal = ({ user }: Props) => {
                     {...register('name')}
                     name='name'
                     type='text'
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Username
                   </label>
@@ -148,7 +160,7 @@ const EditProfileModal = ({ user }: Props) => {
                     {...register('username')}
                     name='username'
                     type='text'
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
               </div>
@@ -156,7 +168,7 @@ const EditProfileModal = ({ user }: Props) => {
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Phone
                   </label>
@@ -164,13 +176,13 @@ const EditProfileModal = ({ user }: Props) => {
                     {...register('phone')}
                     name='phone'
                     type='text'
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Address
                   </label>
@@ -178,7 +190,7 @@ const EditProfileModal = ({ user }: Props) => {
                     {...register('address')}
                     name='address'
                     type='text'
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
               </div>
@@ -186,7 +198,7 @@ const EditProfileModal = ({ user }: Props) => {
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Website
                   </label>
@@ -194,13 +206,13 @@ const EditProfileModal = ({ user }: Props) => {
                     {...register('website')}
                     name='website'
                     type='url'
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
                 <div className='w-full'>
                   <label
                     htmlFor=''
-                    className='block text-sm font-bold text-gray-600'
+                    className='block text-sm font-bold text-gray-600 dark:text-white'
                   >
                     Bio
                   </label>
@@ -210,7 +222,7 @@ const EditProfileModal = ({ user }: Props) => {
                     type='text'
                     // value={user.bio}
                     // onChange={(e) => console.log(e)}
-                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none'
+                    className='mt-1 w-full rounded border border-gray-300 p-2 outline-none dark:bg-white'
                   />
                 </div>
               </div>

@@ -44,6 +44,7 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  Me?: Maybe<User>;
   getUser: User;
   searchUser: Array<Maybe<User>>;
 };
@@ -59,8 +60,9 @@ export type QuerySearchUserArgs = {
 };
 
 export type UpdateProfileInput = {
-  address: Scalars['String'];
+  address?: InputMaybe<Scalars['String']>;
   bio?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   phone?: InputMaybe<Scalars['String']>;
   username?: InputMaybe<Scalars['String']>;
@@ -84,6 +86,11 @@ export type User = {
   website?: Maybe<Scalars['String']>;
 };
 
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', Me?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
+
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
 }>;
@@ -99,6 +106,48 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 
+export const MeDocument = gql`
+    query Me {
+  Me {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    bio
+    website
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const SearchUserDocument = gql`
     query SearchUser($input: String) {
   searchUser(input: $input) {

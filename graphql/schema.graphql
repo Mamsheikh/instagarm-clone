@@ -22,13 +22,15 @@ type Post {
 }
 
 type Query {
+  Me: User
   getUser(id: String!): User!
   searchUser(input: String): [User]!
 }
 
 input UpdateProfileInput {
-  address: String!
+  address: String
   bio: String
+  image: String
   name: String
   phone: String
   username: String

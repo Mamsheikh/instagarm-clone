@@ -1,17 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
 import SearchResults from './SearchResults';
-import { ISearch } from '../lib/types';
 import { User, useSearchUserLazyQuery } from '../generated/graphql';
-import { spawn } from 'child_process';
-
-interface IProps {
-  data: [ISearch];
-}
-
-interface IUsers {
-  users: [User];
-}
 
 const Search = () => {
   const [search, setSearch] = useState<string>('');
@@ -48,7 +37,7 @@ const Search = () => {
       searchUser({ variables: { input: search } });
       setUsers(data.searchUser);
       // console.log(data);
-      // console.log('users', users);
+      console.log('users', users);
     } catch (err) {
       console.log(err);
     }

@@ -10,11 +10,13 @@ import Search from '../Search';
 import { MoonIcon, SunIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
 import prisma from '../../lib/prisma';
+import { useMeQuery } from '../../generated/graphql';
 
-const Header = ({ user }) => {
+const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [dark, setDark] = useState(false);
   const { data: session } = useSession();
+  const { data } = useMeQuery();
 
   return (
     <header className='fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black'>
@@ -99,7 +101,7 @@ const Header = ({ user }) => {
                   <img src={session?.user?.image} />
                 </div>
               </div> */}
-              <Dropdown user={user} />
+              <Dropdown user={data.Me} />
             </>
           ) : (
             <button
