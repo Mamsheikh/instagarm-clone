@@ -42,7 +42,7 @@ model Session {
 model User {
   id            String    @id @default(uuid())
   name          String?
-  username      String?
+  username      String?   @unique
   phone         String?
   address       String?
   website       String?
@@ -53,11 +53,17 @@ model User {
   isAdmin       Boolean   @default(false)
   accounts      Account[]
   sessions      Session[]
-  followedBy    Follows[] @relation("follower")
-  following     Follows[] @relation("following")
+  // followedBy    Follows[] @relation("follower")
+  // following     Follows[] @relation("following")
+  // <--추가-->
+  followers     User[]    @relation("FollowRelation", references: [id])
+  following     User[]    @relation("FollowRelation", references: [id])
+  // <--추가-->
   comments      Comment[]
   posts         Post[]
   likes         Like[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model VerificationToken {
@@ -68,32 +74,37 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Follows {
-  follower    User   @relation("follower", fields: [followerId], references: [id])
-  followerId  String
-  following   User   @relation("following", fields: [followingId], references: [id])
-  followingId String
+// model Follows {
+//   id          String @unique @default(uuid())
+//   follower    User   @relation("follower", fields: [followerId], references: [id])
+//   followerId  String
+//   following   User   @relation("following", fields: [followingId], references: [id])
+//   followingId String
 
-  @@id([followerId, followingId])
-}
+//   @@id([followerId, followingId])
+// }
 
 model Post {
-  id       String    @id @default(uuid())
-  caption  String?
-  images   String[]
-  user     User      @relation(fields: [userId], references: [id])
-  userId   String
-  comments Comment[]
-  likes    Like[]
+  id        String    @id @default(uuid())
+  caption   String?
+  images    String[]
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  comments  Comment[]
+  likes     Like[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Comment {
-  id      String @id @default(uuid())
-  content String
-  post    Post   @relation(fields: [postId], references: [id])
-  postId  String
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String
+  id        String   @id @default(uuid())
+  content   String
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Like {

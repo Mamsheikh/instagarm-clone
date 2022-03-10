@@ -1,0 +1,16 @@
+mutation Follow($followId: String!) {
+  follow(id: $followId) {
+    id
+    name
+    username
+    email
+    phone
+    following {
+      following {
+        name
+        username
+        image
+      }
+    }
+  }
+}

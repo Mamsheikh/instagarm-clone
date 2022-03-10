@@ -1,12 +1,75 @@
-import React from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { userState } from '../atoms/userState';
+import { useFollowMutation, useUnfollowMutation } from '../generated/graphql';
+import { IUser } from '../lib/types';
 
-const FollowBtn = () => {
+interface Props {
+  user: IUser;
+  // userr: IUser
+}
+
+const FollowBtn = ({ user }: Props) => {
+  const router = useRouter();
+  const [viewer, setViewer] = useRecoilState<IUser>(userState);
+  const [followed, setFollowed] = useState(false);
+  const [follow] = useFollowMutation({
+    onCompleted: () => {
+      refreshData();
+    },
+  });
+  const [unFollow] = useUnfollowMutation({
+    onCompleted: () => {
+      refreshData();
+    },
+  });
+
+  const refreshData = () => {
+    router.replace(router.asPath);
+  };
+
+  useEffect(() => {
+    if (viewer?.following.find((item) => item.id === user.id)) {
+      setFollowed(true);
+    }
+    return () => setFollowed(false);
+  }, [user.following, user.id]);
+
+  const handleFollow = () => {
+    follow({
+      variables: {
+        followId: user.id,
+      },
+    });
+    setFollowed(true);
+  };
+  const handleUnFollow = () => {
+    unFollow({
+      variables: {
+        unfollowId: user.id,
+      },
+    });
+    setFollowed(false);
+  };
   return (
-    // <div>
-    <button className='rounded bg-blue-500 px-4 py-2 text-sm text-white'>
-      Follow
-    </button>
-    // </div>
+    <>
+      {followed ? (
+        <button
+          onClick={handleUnFollow}
+          className='rounded bg-red-400 px-5 py-1 text-white'
+        >
+          Unfollow
+        </button>
+      ) : (
+        <button
+          onClick={handleFollow}
+          className='rounded bg-blue-500 px-5 py-1 text-white'
+        >
+          Follow
+        </button>
+      )}
+    </>
   );
 };
 

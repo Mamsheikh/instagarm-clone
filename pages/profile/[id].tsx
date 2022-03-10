@@ -11,9 +11,15 @@ import prisma from '../../lib/prisma';
 import { useRecoilState } from 'recoil';
 import { IUser } from '../../lib/types';
 import EditProfileModal from '../../components/EditProfileModal';
-import { modalState } from '../../atoms/modalState';
+import {
+  followersState,
+  followingState,
+  modalState,
+} from '../../atoms/modalState';
 import FollowBtn from '../../components/FollowBtn';
 import toast from 'react-hot-toast';
+import Followers from '../../components/Followers';
+import Following from '../../components/Following';
 
 interface Props {
   user: IUser;
@@ -22,8 +28,9 @@ interface Props {
 const Profile = ({ user }: Props) => {
   const posts = user.posts;
   const [isOpen, setIsOpen] = useRecoilState(modalState);
+  const [showFollowers, setShowFollowers] = useRecoilState(followersState);
+  const [showFollowing, setShowFollowing] = useRecoilState(followingState);
   const { data: session, status } = useSession();
-  const [onEdit, setOnEdit] = useState(false);
 
   return (
     <div className='mx-5 max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white xl:mx-auto'>
@@ -50,19 +57,25 @@ const Profile = ({ user }: Props) => {
               <CogIcon className='inline h-6 flex-1 cursor-pointer' />
             </>
           ) : (
-            <FollowBtn />
+            <FollowBtn user={user} />
           )}
           <div className='mt-4 flex'>
             <div>
               <span className='font-semibold'>{user?.posts.length}</span> posts
             </div>
-            <div>
+            <div
+              className='cursor-pointer hover:underline'
+              onClick={() => setShowFollowers(true)}
+            >
               <span className='ml-4 font-semibold'>
-                {user?.followedBy.length}
+                {user?.followers.length}
               </span>{' '}
               followers
             </div>
-            <div>
+            <div
+              className='cursor-pointer hover:underline'
+              onClick={() => setShowFollowing(!showFollowing)}
+            >
               <span className='ml-4 font-semibold'>
                 {user && user.following.length}
               </span>{' '}
@@ -88,6 +101,8 @@ const Profile = ({ user }: Props) => {
           </div>
         </div>
       </div>
+      {showFollowers && <Followers users={user.followers} />}
+      {showFollowing && <Following users={user.following} />}
       <hr className='mt-6 border-gray-500' />
 
       <div className='flex justify-center gap-10'>
@@ -121,15 +136,11 @@ export default Profile;
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  // const { data: session, status } = useSession();
-  // const userr = await prisma.user.findUnique({
-  //   where: {email: session.user.email}
-  // })
-  const user = await prisma.user.findUnique({
+  const data = await prisma.user.findUnique({
     where: { id: params.id as string },
-    include: { posts: true, followedBy: true, following: true },
+    include: { posts: true, followers: true, following: true },
   });
-
+  const user = JSON.parse(JSON.stringify(data));
   return {
     props: {
       user,

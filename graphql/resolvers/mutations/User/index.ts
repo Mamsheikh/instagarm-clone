@@ -1,4 +1,4 @@
-import { mutationField } from 'nexus';
+import { mutationField, nonNull, stringArg } from 'nexus';
 import { UpdateProfileInput } from '../../inputs';
 import { getSession } from 'next-auth/react';
 
@@ -30,5 +30,67 @@ export const updateProfile = mutationField('updateProfile', {
     } catch (error) {
       console.log(error);
     }
+  },
+});
+
+export const follow = mutationField('follow', {
+  type: 'User',
+  args: {
+    id: nonNull(stringArg()),
+  },
+  resolve: async (_, args, ctx) => {
+    const req = ctx.req;
+    const session = await getSession({ req });
+    const user = await ctx.prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    try {
+      const toFollowUser = await ctx.prisma.user.findUnique({
+        where: { id: args.id },
+      });
+
+      if (!toFollowUser) {
+        throw new Error('no user found');
+      }
+      return await ctx.prisma.user.update({
+        where: { email: user.email },
+        data: {
+          following: {
+            connect: { id: args.id },
+          },
+        },
+      });
+    } catch (error) {}
+  },
+});
+
+export const unfollow = mutationField('unfollow', {
+  type: 'User',
+  args: {
+    id: nonNull(stringArg()),
+  },
+  resolve: async (_, args, ctx) => {
+    const req = ctx.req;
+    const session = await getSession({ req });
+    const user = await ctx.prisma.user.findUnique({
+      where: { email: session.user.email },
+    });
+    try {
+      const toUnFollowUser = await ctx.prisma.user.findUnique({
+        where: { id: args.id },
+      });
+
+      if (!toUnFollowUser) {
+        throw new Error('no user found');
+      }
+      return await ctx.prisma.user.update({
+        where: { email: user.email },
+        data: {
+          following: {
+            disconnect: { id: args.id },
+          },
+        },
+      });
+    } catch (error) {}
   },
 });

@@ -11,7 +11,7 @@ export interface IUser {
   image: string;
   isAdmin: boolean;
   posts: Post[];
-  followedBy: IUser[];
+  followers: IUser[];
   following: IUser[];
 }
 

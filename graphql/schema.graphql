@@ -2,14 +2,9 @@
 ### Do not make changes to this file directly
 
 
-type Follows {
-  follower: User!
-  followerId: String!
-  following: User!
-  followingId: String!
-}
-
 type Mutation {
+  follow(id: String!): User
+  unfollow(id: String!): User
   updateProfile(input: UpdateProfileInput): User
 }
 
@@ -41,8 +36,8 @@ type User {
   address: String
   bio: String
   email: String!
-  followedBy: [Follows]
-  following: [Follows]
+  followers: [User]
+  following: [User]
   id: String!
   image: String
   isAdmin: Boolean!

@@ -15,17 +15,21 @@ export type Scalars = {
   Float: number;
 };
 
-export type Follows = {
-  __typename?: 'Follows';
-  follower: User;
-  followerId: Scalars['String'];
-  following: User;
-  followingId: Scalars['String'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
+  follow?: Maybe<User>;
+  unfollow?: Maybe<User>;
   updateProfile?: Maybe<User>;
+};
+
+
+export type MutationFollowArgs = {
+  id: Scalars['String'];
+};
+
+
+export type MutationUnfollowArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -74,8 +78,8 @@ export type User = {
   address?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
   email: Scalars['String'];
-  followedBy?: Maybe<Array<Maybe<Follows>>>;
-  following?: Maybe<Array<Maybe<Follows>>>;
+  followers?: Maybe<Array<Maybe<User>>>;
+  following?: Maybe<Array<Maybe<User>>>;
   id: Scalars['String'];
   image?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
@@ -86,10 +90,17 @@ export type User = {
   website?: Maybe<Scalars['String']>;
 };
 
+export type FollowMutationVariables = Exact<{
+  followId: Scalars['String'];
+}>;
+
+
+export type FollowMutation = { __typename?: 'Mutation', follow?: { __typename?: 'User', id: string, name: string, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', following?: Array<{ __typename?: 'User', name: string, username?: string | null, image?: string | null } | null> | null } | null> | null } | null };
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', Me?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
+export type MeQuery = { __typename?: 'Query', Me?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
 
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
@@ -97,6 +108,13 @@ export type SearchUserQueryVariables = Exact<{
 
 
 export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> };
+
+export type UnfollowMutationVariables = Exact<{
+  unfollowId: Scalars['String'];
+}>;
+
+
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: { __typename?: 'User', id: string, name: string, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', name: string, email: string, image?: string | null, username?: string | null } | null> | null } | null };
 
 export type UpdateProfileMutationVariables = Exact<{
   input?: InputMaybe<UpdateProfileInput>;
@@ -106,6 +124,50 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 
+export const FollowDocument = gql`
+    mutation Follow($followId: String!) {
+  follow(id: $followId) {
+    id
+    name
+    username
+    email
+    phone
+    following {
+      following {
+        name
+        username
+        image
+      }
+    }
+  }
+}
+    `;
+export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMutationVariables>;
+
+/**
+ * __useFollowMutation__
+ *
+ * To run a mutation, you first call `useFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [followMutation, { data, loading, error }] = useFollowMutation({
+ *   variables: {
+ *      followId: // value for 'followId'
+ *   },
+ * });
+ */
+export function useFollowMutation(baseOptions?: Apollo.MutationHookOptions<FollowMutation, FollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<FollowMutation, FollowMutationVariables>(FollowDocument, options);
+      }
+export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
+export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
+export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
 export const MeDocument = gql`
     query Me {
   Me {
@@ -116,8 +178,26 @@ export const MeDocument = gql`
     phone
     image
     address
-    bio
     website
+    bio
+    isAdmin
+    following {
+      id
+      name
+      email
+      username
+      phone
+      image
+    }
+    followers {
+      id
+      name
+      email
+      username
+      phone
+      image
+      address
+    }
   }
 }
     `;
@@ -192,6 +272,49 @@ export function useSearchUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SearchUserQueryHookResult = ReturnType<typeof useSearchUserQuery>;
 export type SearchUserLazyQueryHookResult = ReturnType<typeof useSearchUserLazyQuery>;
 export type SearchUserQueryResult = Apollo.QueryResult<SearchUserQuery, SearchUserQueryVariables>;
+export const UnfollowDocument = gql`
+    mutation Unfollow($unfollowId: String!) {
+  unfollow(id: $unfollowId) {
+    id
+    name
+    username
+    email
+    phone
+    following {
+      name
+      email
+      image
+      username
+    }
+  }
+}
+    `;
+export type UnfollowMutationFn = Apollo.MutationFunction<UnfollowMutation, UnfollowMutationVariables>;
+
+/**
+ * __useUnfollowMutation__
+ *
+ * To run a mutation, you first call `useUnfollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnfollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unfollowMutation, { data, loading, error }] = useUnfollowMutation({
+ *   variables: {
+ *      unfollowId: // value for 'unfollowId'
+ *   },
+ * });
+ */
+export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<UnfollowMutation, UnfollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnfollowMutation, UnfollowMutationVariables>(UnfollowDocument, options);
+      }
+export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
+export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
+export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
 export const UpdateProfileDocument = gql`
     mutation UpdateProfile($input: UpdateProfileInput) {
   updateProfile(input: $input) {

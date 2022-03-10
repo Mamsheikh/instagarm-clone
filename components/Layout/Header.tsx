@@ -11,12 +11,20 @@ import { MoonIcon, SunIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
 import prisma from '../../lib/prisma';
 import { useMeQuery } from '../../generated/graphql';
+import { useRecoilState } from 'recoil';
+import { userState } from '../../atoms/userState';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [dark, setDark] = useState(false);
   const { data: session } = useSession();
   const { data } = useMeQuery();
+
+  const [viewer, setViewer] = useRecoilState(userState);
+
+  if (data) {
+    setViewer(data.Me);
+  }
 
   return (
     <header className='fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black'>
@@ -101,7 +109,7 @@ const Header = () => {
                   <img src={session?.user?.image} />
                 </div>
               </div> */}
-              <Dropdown user={data.Me} />
+              <Dropdown user={data?.Me} />
             </>
           ) : (
             <button

@@ -13,35 +13,35 @@ export const User = objectType({
       t.nullable.string('website'),
       t.nullable.string('bio'),
       t.nonNull.boolean('isAdmin'),
-      t.nullable.list.field('followedBy', {
-        type: 'Follows',
-        resolve(parent, __, ctx) {
-          return ctx.prisma.user
-            .findUnique({
-              where: { id: parent.id },
-            })
-            .followedBy();
-        },
-      }),
       t.nullable.list.field('following', {
-        type: 'Follows',
-        async resolve(parent, __, ctx) {
+        type: 'User',
+        resolve: (parent, __, ctx) => {
           return ctx.prisma.user
             .findUnique({
               where: { id: parent.id },
             })
             .following();
         },
+      }),
+      t.nullable.list.field('followers', {
+        type: 'User',
+        resolve: (parent, __, ctx) => {
+          return ctx.prisma.user
+            .findUnique({
+              where: { id: parent.id },
+            })
+            .followers();
+        },
+      }),
+      t.nonNull.list.field('posts', {
+        type: 'Post',
+        async resolve(parent, __, ctx) {
+          return ctx.prisma.user
+            .findUnique({
+              where: { id: parent.id },
+            })
+            .posts();
+        },
       });
-    t.nonNull.list.field('posts', {
-      type: 'Post',
-      async resolve(parent, __, ctx) {
-        return ctx.prisma.user
-          .findUnique({
-            where: { id: parent.id },
-          })
-          .posts();
-      },
-    });
   },
 });
