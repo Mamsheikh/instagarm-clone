@@ -13,10 +13,12 @@ import prisma from '../../lib/prisma';
 import { useMeQuery } from '../../generated/graphql';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
+import { postState } from '../../atoms/addPostState';
+import AddPostModal from '../AddPostModal';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
-  const [dark, setDark] = useState(false);
+  const [addPost, setAddPost] = useRecoilState(postState);
   const { data: session } = useSession();
   const { data } = useMeQuery();
 
@@ -102,7 +104,10 @@ const Header = () => {
                 </svg>
                 {/* <div className='navBtn absolute left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-red-500'></div> */}
               </div>
-              <AiOutlinePlusSquare className='navBtn' />
+              <AiOutlinePlusSquare
+                onClick={() => setAddPost(!addPost)}
+                className='navBtn'
+              />
               <AiOutlineCompass className='navBtn' />
               {/* <div className='avatar'>
                 <div className='-ml-2 h-8 w-8 rounded-full object-contain'>
@@ -110,6 +115,7 @@ const Header = () => {
                 </div>
               </div> */}
               <Dropdown user={data?.Me} />
+              {addPost && <AddPostModal />}
             </>
           ) : (
             <button
