@@ -8,7 +8,7 @@ export const Post = objectType({
       t.list.string('images'),
       t.nonNull.string('userId'),
       t.nonNull.field('user', {
-        type: 'Post',
+        type: 'User',
         async resolve(parent, _, ctx) {
           return ctx.prisma.post
             .findUnique({

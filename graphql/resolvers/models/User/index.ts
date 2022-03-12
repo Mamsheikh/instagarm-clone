@@ -34,7 +34,7 @@ export const User = objectType({
         },
       }),
       t.nonNull.list.field('posts', {
-        type: 'Post',
+        type: 'User',
         async resolve(parent, __, ctx) {
           return ctx.prisma.user
             .findUnique({

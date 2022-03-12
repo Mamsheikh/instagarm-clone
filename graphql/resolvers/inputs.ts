@@ -12,3 +12,11 @@ export const UpdateProfileInput = inputObjectType({
     t.nullable.string('address');
   },
 });
+
+export const CreatePostInput = inputObjectType({
+  name: 'CreatePostInput',
+  definition(t) {
+    t.nullable.string('caption');
+    t.list.string('images');
+  },
+});

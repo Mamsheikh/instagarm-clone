@@ -2,7 +2,13 @@
 ### Do not make changes to this file directly
 
 
+input CreatePostInput {
+  caption: String
+  images: [String]
+}
+
 type Mutation {
+  createPost(input: CreatePostInput!): Post
   follow(id: String!): User
   unfollow(id: String!): User
   updateProfile(input: UpdateProfileInput): User
@@ -12,7 +18,7 @@ type Post {
   caption: String
   id: String!
   images: [String]
-  user: Post!
+  user: User!
   userId: String!
 }
 
@@ -43,7 +49,7 @@ type User {
   isAdmin: Boolean!
   name: String!
   phone: String
-  posts: [Post]!
+  posts: [User]!
   username: String
   website: String
 }

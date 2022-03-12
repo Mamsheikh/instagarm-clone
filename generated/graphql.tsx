@@ -15,11 +15,22 @@ export type Scalars = {
   Float: number;
 };
 
+export type CreatePostInput = {
+  caption?: InputMaybe<Scalars['String']>;
+  images?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createPost?: Maybe<Post>;
   follow?: Maybe<User>;
   unfollow?: Maybe<User>;
   updateProfile?: Maybe<User>;
+};
+
+
+export type MutationCreatePostArgs = {
+  input: CreatePostInput;
 };
 
 
@@ -42,7 +53,7 @@ export type Post = {
   caption?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
-  user: Post;
+  user: User;
   userId: Scalars['String'];
 };
 
@@ -85,10 +96,17 @@ export type User = {
   isAdmin: Scalars['Boolean'];
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
-  posts: Array<Maybe<Post>>;
+  posts: Array<Maybe<User>>;
   username?: Maybe<Scalars['String']>;
   website?: Maybe<Scalars['String']>;
 };
+
+export type CreatePostMutationVariables = Exact<{
+  input: CreatePostInput;
+}>;
+
+
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, id: string } } | null };
 
 export type FollowMutationVariables = Exact<{
   followId: Scalars['String'];
@@ -124,6 +142,46 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 
+export const CreatePostDocument = gql`
+    mutation CreatePost($input: CreatePostInput!) {
+  createPost(input: $input) {
+    id
+    caption
+    images
+    userId
+    user {
+      name
+      id
+    }
+  }
+}
+    `;
+export type CreatePostMutationFn = Apollo.MutationFunction<CreatePostMutation, CreatePostMutationVariables>;
+
+/**
+ * __useCreatePostMutation__
+ *
+ * To run a mutation, you first call `useCreatePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostMutation, { data, loading, error }] = useCreatePostMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePostMutation(baseOptions?: Apollo.MutationHookOptions<CreatePostMutation, CreatePostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePostMutation, CreatePostMutationVariables>(CreatePostDocument, options);
+      }
+export type CreatePostMutationHookResult = ReturnType<typeof useCreatePostMutation>;
+export type CreatePostMutationResult = Apollo.MutationResult<CreatePostMutation>;
+export type CreatePostMutationOptions = Apollo.BaseMutationOptions<CreatePostMutation, CreatePostMutationVariables>;
 export const FollowDocument = gql`
     mutation Follow($followId: String!) {
   follow(id: $followId) {

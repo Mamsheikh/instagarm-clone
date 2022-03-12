@@ -115,7 +115,7 @@ const Header = () => {
                 </div>
               </div> */}
               <Dropdown user={data?.Me} />
-              {addPost && <AddPostModal />}
+              {addPost && <AddPostModal user={data?.Me} />}
             </>
           ) : (
             <button
