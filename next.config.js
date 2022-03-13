@@ -2,6 +2,11 @@
 module.exports = {
   reactStrictMode: true,
   images: {
-    domains: ['www.instagram.com', 'links.papareact.com', 'unsplash.com'],
+    domains: [
+      'www.instagram.com',
+      'links.papareact.com',
+      'unsplash.com',
+      'res.cloudinary.com',
+    ],
   },
 };

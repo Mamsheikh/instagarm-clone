@@ -27,6 +27,7 @@ interface Props {
 }
 const Profile = ({ user }: Props) => {
   const posts = user.posts;
+  // console.log(posts.images[0]);
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [showFollowers, setShowFollowers] = useRecoilState(followersState);
   const [showFollowing, setShowFollowing] = useRecoilState(followingState);
@@ -122,8 +123,8 @@ const Profile = ({ user }: Props) => {
       <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3'>
         {posts.map((post) => (
           <div key={post.id} className='group relative cursor-pointer'>
-            {/* <PostCard image={post.images.id} /> */}
-            <div>{post.caption}</div>
+            <PostCard post={post} />
+            {/* <div>{post.images[0]}</div> */}
           </div>
         ))}
       </div>

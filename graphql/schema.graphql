@@ -24,6 +24,7 @@ type Post {
 
 type Query {
   Me: User
+  getPosts: [Post]
   getUser(id: String!): User!
   searchUser(input: String): [User]!
 }

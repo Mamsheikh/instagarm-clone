@@ -2,14 +2,21 @@ import React from 'react';
 import Image from 'next/image';
 import { ChatIcon, HeartIcon } from '@heroicons/react/solid';
 import { FaRegCommentDots } from 'react-icons/fa';
-const PostCard = ({ image }) => {
+import { Post } from '../lib/types';
+
+interface Props {
+  post: Post;
+}
+
+const PostCard = ({ post }: Props) => {
+  console.log('images', post.images[0]);
   return (
     <div className='h-64 overflow-hidden'>
       <div className='relative h-64'>
         <Image
           objectFit='cover'
           layout='fill'
-          src={image}
+          src={post?.images[0]}
           alt=''
           className='h-64 w-full object-cover'
         />

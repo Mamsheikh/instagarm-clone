@@ -53,7 +53,7 @@ const Search = () => {
     <form
       onSubmit={onSubmit}
       ref={inputAreaRef}
-      className='relative flex rounded-md border-[1.2px] border-solid border-gray-300 bg-gray-50 p-2 pl-2 dark:bg-black  sm:text-sm '
+      className='relative hidden  rounded-md border-[1.2px] border-solid border-gray-300 bg-gray-50 p-2 pl-2 dark:bg-black sm:text-sm  md:flex '
     >
       {/* <form onSubmit={onSubmit}> */}
       {searchVisibility && (

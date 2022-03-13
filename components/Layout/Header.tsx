@@ -15,6 +15,7 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
 import { postState } from '../../atoms/addPostState';
 import AddPostModal from '../AddPostModal';
+import Link from 'next/link';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -30,13 +31,16 @@ const Header = () => {
 
   return (
     <header className='fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black'>
-      <div className='mx-5 flex max-w-6xl justify-between p-2  text-black xl:mx-auto'>
+      <div className='mx-5 flex max-w-4xl justify-between p-2  text-black xl:mx-auto'>
         <div className='relative hidden h-10 w-24 lg:inline-grid'>
-          <Image
-            src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
-            layout='fill'
-            objectFit='contain'
-          />
+          <Link href='/'>
+            <Image
+              src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
+              layout='fill'
+              objectFit='contain'
+              className='cursor-pointer'
+            />
+          </Link>
         </div>
         <div className='relative mr-3 h-10 w-10 flex-shrink-0 lg:hidden'>
           {/* <Image
@@ -44,7 +48,9 @@ const Header = () => {
             layout='fill'
             objectFit='contain'
           /> /*/}
-          <BsInstagram className='text-white dark:text-black' size={32} />
+          <Link href={'/'}>
+            <BsInstagram className='cursor-pointer dark:text-black' size={32} />
+          </Link>
         </div>
         {/* Search Input TODO: */}
         <Search />
