@@ -4,8 +4,8 @@ import PostActionsModal from './PostActionsModal';
 
 const PostHeader = ({ data }) => {
   return (
-    <div className=''>
-      <div className='flex items-center p-4'>
+    <div className='relative'>
+      <div className=' flex items-center p-4'>
         <div>
           <img
             src={data?.user?.image}
@@ -17,7 +17,7 @@ const PostHeader = ({ data }) => {
           {data?.user?.username}
         </p>
         {/* <DotsHorizontalIcon className='h-5 w-5' /> */}
-        <PostActionsModal />
+        <PostActionsModal user={data} />
       </div>
     </div>
   );

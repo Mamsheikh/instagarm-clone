@@ -20,3 +20,11 @@ export const CreatePostInput = inputObjectType({
     t.list.string('images');
   },
 });
+
+export const UpdatePostInput = inputObjectType({
+  name: 'UpdatePostInput',
+  definition(t) {
+    t.nonNull.string('id'), t.nullable.string('caption');
+    // t.nullable.list.string('images');
+  },
+});

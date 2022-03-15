@@ -1,4 +1,4 @@
-import { CreatePostInput } from './../../inputs';
+import { CreatePostInput, UpdatePostInput } from './../../inputs';
 import { mutationField, nonNull } from 'nexus';
 import { getSession } from 'next-auth/react';
 
@@ -21,6 +21,33 @@ export const createPost = mutationField('createPost', {
           images: args.input.images,
           caption: args.input.caption,
           userId: user.id,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  },
+});
+
+export const updatePost = mutationField('updatePost', {
+  type: 'Post',
+  args: {
+    input: nonNull(UpdatePostInput),
+  },
+  resolve: async (_, args, ctx) => {
+    // const req = ctx.req;
+    // const session = await getSession({ req });
+    // const user = await ctx.prisma.user.findUnique({
+    //   where: { email: session.user.email },
+    // });
+
+    try {
+      // if (args.input.images.length === 0) throw new Error('Enter a pic');
+      return await ctx.prisma.post.update({
+        where: { id: args.input.id },
+        data: {
+          // images: args.input.images,
+          caption: args.input.caption,
         },
       });
     } catch (error) {

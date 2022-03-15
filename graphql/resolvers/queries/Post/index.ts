@@ -21,6 +21,7 @@ export const getPosts = queryField('getPosts', {
           id: { in: [...following.map((user) => user.id), user.id] },
         },
       },
+      orderBy: { createdAt: 'asc' },
     });
   },
 });

@@ -11,6 +11,7 @@ type Mutation {
   createPost(input: CreatePostInput!): Post
   follow(id: String!): User
   unfollow(id: String!): User
+  updatePost(input: UpdatePostInput!): Post
   updateProfile(input: UpdateProfileInput): User
 }
 
@@ -27,6 +28,11 @@ type Query {
   getPosts: [Post]
   getUser(id: String!): User!
   searchUser(input: String): [User]!
+}
+
+input UpdatePostInput {
+  caption: String
+  id: String!
 }
 
 input UpdateProfileInput {
