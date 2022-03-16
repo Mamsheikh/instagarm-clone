@@ -2,14 +2,33 @@
 ### Do not make changes to this file directly
 
 
+type Comment {
+  content: String!
+  id: String!
+  post: Post!
+  postId: String!
+  user: User!
+  userId: String!
+}
+
 input CreatePostInput {
   caption: String
   images: [String]
 }
 
+type Like {
+  id: String!
+  post: Post!
+  postId: String!
+  user: User!
+  userId: String!
+}
+
 type Mutation {
+  createComment(content: String!, postId: String!): Comment
   createPost(input: CreatePostInput!): Post
   follow(id: String!): User
+  toggleLike(postId: String!): Like
   unfollow(id: String!): User
   updatePost(input: UpdatePostInput!): Post
   updateProfile(input: UpdateProfileInput): User
@@ -17,8 +36,10 @@ type Mutation {
 
 type Post {
   caption: String
+  comments: [Comment]!
   id: String!
   images: [String]
+  likes: [Like]!
   user: User!
   userId: String!
 }
@@ -48,15 +69,17 @@ input UpdateProfileInput {
 type User {
   address: String
   bio: String
+  comments: [Comment]!
   email: String!
   followers: [User]
   following: [User]
   id: String!
   image: String
   isAdmin: Boolean!
+  likes: [Like]!
   name: String!
   phone: String
-  posts: [User]!
+  posts: [Post]!
   username: String
   website: String
 }

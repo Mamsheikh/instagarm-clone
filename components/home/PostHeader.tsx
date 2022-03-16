@@ -13,7 +13,7 @@ const PostHeader = ({ data }) => {
             className='h-10 w-10 rounded-full object-cover'
           />
         </div>
-        <p className='ml-4 flex-1 text-sm font-semibold'>
+        <p className='ml-4 flex-1 text-sm font-semibold dark:text-white'>
           {data?.user?.username}
         </p>
         {/* <DotsHorizontalIcon className='h-5 w-5' /> */}

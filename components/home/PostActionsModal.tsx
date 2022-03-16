@@ -31,11 +31,11 @@ const PostActionsModal = ({ user }) => {
     <div className=' w-56 overflow-visible object-top text-right'>
       <Menu as='div' className=''>
         <Menu.Button onClick={() => setIsOpen(!isOpen)}>
-          <DotsHorizontalIcon className=' h-5 w-5' />
+          <DotsHorizontalIcon className=' h-5 w-5 dark:text-white' />
         </Menu.Button>
         <Menu.Items className='absolute right-10 bottom-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:divide-gray-600 dark:bg-black'>
           <div className='px-1 py-1 '>
-            {viewer.id === user.user.id && (
+            {viewer?.id === user.user.id && (
               <>
                 <Menu.Item>
                   {({ active }) => (

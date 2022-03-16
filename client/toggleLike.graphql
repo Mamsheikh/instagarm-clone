@@ -1,0 +1,20 @@
+mutation ToggleLike($postId: String!) {
+  toggleLike(postId: $postId) {
+    id
+    user {
+      name
+      username
+      image
+    }
+    userId
+    postId
+    post {
+      caption
+      userId
+      likes {
+        id
+        userId
+      }
+    }
+  }
+}

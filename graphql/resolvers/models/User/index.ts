@@ -34,13 +34,33 @@ export const User = objectType({
         },
       }),
       t.nonNull.list.field('posts', {
-        type: 'User',
+        type: 'Post',
         async resolve(parent, __, ctx) {
           return ctx.prisma.user
             .findUnique({
               where: { id: parent.id },
             })
             .posts();
+        },
+      }),
+      t.nonNull.list.field('likes', {
+        type: 'Like',
+        resolve: (parent, __, ctx) => {
+          return ctx.prisma.user
+            .findUnique({
+              where: { id: parent.id },
+            })
+            .likes();
+        },
+      }),
+      t.nonNull.list.field('comments', {
+        type: 'Comment',
+        resolve(parent, _, ctx) {
+          return ctx.prisma.user
+            .findUnique({
+              where: { id: parent.id },
+            })
+            .comments();
         },
       });
   },

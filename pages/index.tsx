@@ -8,7 +8,7 @@ import Feed from '../components/Feed';
 const Home: NextPage = () => {
   const { data: session } = useSession();
   return (
-    <div className=' bg-gray-100 pt-20'>
+    <div className=' bg-gray-100 pt-20 dark:bg-black'>
       <Head>
         <title>Prismagram</title>
         <link rel='icon' href='/favicon.ico' />

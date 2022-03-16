@@ -15,18 +15,46 @@ export type Scalars = {
   Float: number;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  content: Scalars['String'];
+  id: Scalars['String'];
+  post: Post;
+  postId: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
+};
+
 export type CreatePostInput = {
   caption?: InputMaybe<Scalars['String']>;
   images?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+export type Like = {
+  __typename?: 'Like';
+  id: Scalars['String'];
+  post: Post;
+  postId: Scalars['String'];
+  user: User;
+  userId: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  createComment?: Maybe<Comment>;
   createPost?: Maybe<Post>;
   follow?: Maybe<User>;
+  toggleLike?: Maybe<Like>;
   unfollow?: Maybe<User>;
   updatePost?: Maybe<Post>;
   updateProfile?: Maybe<User>;
+};
+
+
+export type MutationCreateCommentArgs = {
+  content: Scalars['String'];
+  postId: Scalars['String'];
+  userId: Scalars['String'];
 };
 
 
@@ -37,6 +65,11 @@ export type MutationCreatePostArgs = {
 
 export type MutationFollowArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationToggleLikeArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -57,8 +90,10 @@ export type MutationUpdateProfileArgs = {
 export type Post = {
   __typename?: 'Post';
   caption?: Maybe<Scalars['String']>;
+  comments: Array<Maybe<Comment>>;
   id: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
+  likes: Array<Maybe<Like>>;
   user: User;
   userId: Scalars['String'];
 };
@@ -100,15 +135,17 @@ export type User = {
   __typename?: 'User';
   address?: Maybe<Scalars['String']>;
   bio?: Maybe<Scalars['String']>;
+  comments: Array<Maybe<Comment>>;
   email: Scalars['String'];
   followers?: Maybe<Array<Maybe<User>>>;
   following?: Maybe<Array<Maybe<User>>>;
   id: Scalars['String'];
   image?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
+  likes: Array<Maybe<Like>>;
   name: Scalars['String'];
   phone?: Maybe<Scalars['String']>;
-  posts: Array<Maybe<User>>;
+  posts: Array<Maybe<Post>>;
   username?: Maybe<Scalars['String']>;
   website?: Maybe<Scalars['String']>;
 };
@@ -137,7 +174,7 @@ export type FollowMutation = { __typename?: 'Mutation', follow?: { __typename?: 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, username?: string | null, id: string, image?: string | null } } | null> | null };
+export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, username?: string | null, id: string, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name: string, image?: string | null } } | null> } | null> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -150,6 +187,13 @@ export type SearchUserQueryVariables = Exact<{
 
 
 export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> };
+
+export type ToggleLikeMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: string, userId: string, postId: string, user: { __typename?: 'User', name: string, username?: string | null, image?: string | null }, post: { __typename?: 'Post', caption?: string | null, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string } | null> } } | null };
 
 export type UnfollowMutationVariables = Exact<{
   unfollowId: Scalars['String'];
@@ -305,6 +349,22 @@ export const GetPostsDocument = gql`
       id
       image
     }
+    likes {
+      post {
+        caption
+        images
+        id
+        userId
+      }
+      id
+      userId
+      postId
+      user {
+        id
+        name
+        image
+      }
+    }
   }
 }
     `;
@@ -439,6 +499,54 @@ export function useSearchUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SearchUserQueryHookResult = ReturnType<typeof useSearchUserQuery>;
 export type SearchUserLazyQueryHookResult = ReturnType<typeof useSearchUserLazyQuery>;
 export type SearchUserQueryResult = Apollo.QueryResult<SearchUserQuery, SearchUserQueryVariables>;
+export const ToggleLikeDocument = gql`
+    mutation ToggleLike($postId: String!) {
+  toggleLike(postId: $postId) {
+    id
+    user {
+      name
+      username
+      image
+    }
+    userId
+    postId
+    post {
+      caption
+      userId
+      likes {
+        id
+        userId
+      }
+    }
+  }
+}
+    `;
+export type ToggleLikeMutationFn = Apollo.MutationFunction<ToggleLikeMutation, ToggleLikeMutationVariables>;
+
+/**
+ * __useToggleLikeMutation__
+ *
+ * To run a mutation, you first call `useToggleLikeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleLikeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleLikeMutation, { data, loading, error }] = useToggleLikeMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useToggleLikeMutation(baseOptions?: Apollo.MutationHookOptions<ToggleLikeMutation, ToggleLikeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleLikeMutation, ToggleLikeMutationVariables>(ToggleLikeDocument, options);
+      }
+export type ToggleLikeMutationHookResult = ReturnType<typeof useToggleLikeMutation>;
+export type ToggleLikeMutationResult = Apollo.MutationResult<ToggleLikeMutation>;
+export type ToggleLikeMutationOptions = Apollo.BaseMutationOptions<ToggleLikeMutation, ToggleLikeMutationVariables>;
 export const UnfollowDocument = gql`
     mutation Unfollow($unfollowId: String!) {
   unfollow(id: $unfollowId) {

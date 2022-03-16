@@ -10,5 +10,21 @@ query GetPosts {
       id
       image
     }
+    likes {
+      post {
+        caption
+        images
+        id
+        userId
+      }
+      id
+      userId
+      postId
+      user {
+        id
+        name
+        image
+      }
+    }
   }
 }

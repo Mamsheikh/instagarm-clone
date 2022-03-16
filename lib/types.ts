@@ -1,3 +1,5 @@
+import { Like } from '../generated/graphql';
+
 export interface IUser {
   id: string;
   name: string;
@@ -11,6 +13,7 @@ export interface IUser {
   image: string;
   isAdmin: boolean;
   posts: Post[];
+  likes: Like[];
   followers: IUser[];
   following: IUser[];
 }
