@@ -5,6 +5,7 @@ import {
   HeartIcon,
   PaperAirplaneIcon,
 } from '@heroicons/react/outline';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { LoaderIcon } from 'react-hot-toast';
@@ -20,6 +21,7 @@ import {
 import { IUser } from '../../lib/types';
 import { refreshData } from '../../utils';
 import LikeBtn from '../LikeBtn';
+import AddComment from './AddComment';
 import Carousel from './Carouseel';
 import PostHeader from './PostHeader';
 
@@ -75,9 +77,11 @@ const PostCard = ({ data }: Props) => {
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
       <PostHeader data={data} />
       {data.images.length > 1 ? (
-        <Carousel images={data.images} />
+        <Carousel id={data.id} images={data.images} />
       ) : (
-        <img className='w-full' src={data.images[0]} alt='' />
+        <Link href={`/p/${data.id}`}>
+          <img className='w-full cursor-pointer' src={data.images[0]} alt='' />
+        </Link>
       )}
       <div className='flex justify-between p-4'>
         <div className='flex space-x-4 '>
@@ -106,31 +110,30 @@ const PostCard = ({ data }: Props) => {
         {data.caption}
       </p>
       <div className='mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white'>
-        View all 14 comments
+        <Link href={`/p/${data.id}`}>
+          <a>View all {data.comments.length} comments</a>
+        </Link>
       </div>
-      <div className='flex justify-between px-4'>
-        <div>
-          <span className='mr-1 text-sm font-semibold'>Alan</span>That's noice😅
+      {data.comments.map((comment) => (
+        <div className='flex justify-between px-4'>
+          <div>
+            <span className='mr-1 text-sm font-semibold'>
+              {comment.user.username}
+            </span>
+            {comment.content}
+          </div>
         </div>
-      </div>
-      <div className='flex justify-between px-4'>
+      ))}
+      {/* <div className='flex justify-between px-4'>
         <div>
           <span className='mr-1 text-sm font-semibold'>Elon</span>Cool 🌚
         </div>
-      </div>
+      </div> */}
       <div className='mb-4 mt-2 px-4 text-xs uppercase text-gray-400'>
         2 days ago.
       </div>
       <hr />
-      <form action='' className='flex items-center p-4'>
-        <EmojiHappyIcon className='mr-2 h-7 cursor-pointer dark:text-white' />
-        <input
-          type='text'
-          placeholder='Add a comment...'
-          className='flex-1 border-none outline-none focus:ring-0 dark:bg-black dark:text-white'
-        />
-        <button className='font-semibold text-blue-400'>Post</button>
-      </form>
+      <AddComment postId={data.id} />
     </div>
   );
 };

@@ -54,7 +54,6 @@ export type Mutation = {
 export type MutationCreateCommentArgs = {
   content: Scalars['String'];
   postId: Scalars['String'];
-  userId: Scalars['String'];
 };
 
 
@@ -150,6 +149,14 @@ export type User = {
   website?: Maybe<Scalars['String']>;
 };
 
+export type CreateCommentMutationVariables = Exact<{
+  postId: Scalars['String'];
+  content: Scalars['String'];
+}>;
+
+
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment?: { __typename?: 'Comment', id: string, content: string, postId: string, userId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', name: string, id: string, username?: string | null, image?: string | null } } | null };
+
 export type CreatePostMutationVariables = Exact<{
   input: CreatePostInput;
 }>;
@@ -174,7 +181,7 @@ export type FollowMutation = { __typename?: 'Mutation', follow?: { __typename?: 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, username?: string | null, id: string, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name: string, image?: string | null } } | null> } | null> | null };
+export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, username?: string | null, id: string, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name: string, image?: string | null } } | null> } | null> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -210,6 +217,54 @@ export type UpdateProfileMutationVariables = Exact<{
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 
+export const CreateCommentDocument = gql`
+    mutation CreateComment($postId: String!, $content: String!) {
+  createComment(postId: $postId, content: $content) {
+    id
+    content
+    postId
+    userId
+    post {
+      caption
+      images
+      userId
+    }
+    user {
+      name
+      id
+      username
+      image
+    }
+  }
+}
+    `;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      content: // value for 'content'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CreatePostDocument = gql`
     mutation CreatePost($input: CreatePostInput!) {
   createPost(input: $input) {
@@ -348,6 +403,15 @@ export const GetPostsDocument = gql`
       username
       id
       image
+    }
+    comments {
+      id
+      content
+      user {
+        username
+        id
+        image
+      }
     }
     likes {
       post {

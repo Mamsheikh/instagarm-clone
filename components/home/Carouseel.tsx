@@ -1,7 +1,8 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline';
+import Link from 'next/link';
 import React from 'react';
 
-const Carousel = ({ images }) => {
+const Carousel = ({ images, id }) => {
   // We will start by storing the index of the current image in the state.
   const [currentImage, setCurrentImage] = React.useState(0);
 
@@ -88,7 +89,12 @@ const Carousel = ({ images }) => {
             {sliderControl(true)}
             {images.map((img, i) => (
               <div className='w-full flex-shrink-0' key={img} ref={refs[i]}>
-                <img src={img} className='w-full object-cover' />
+                <Link href={`/p/${id}`}>
+                  <img
+                    src={img}
+                    className='w-full cursor-pointer object-cover'
+                  />
+                </Link>
               </div>
             ))}
             {sliderControl('')}

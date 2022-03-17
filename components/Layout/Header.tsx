@@ -2,12 +2,13 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { RiMessengerLine } from 'react-icons/ri';
 import { AiOutlinePlusSquare, AiOutlineCompass } from 'react-icons/ai';
-import { BsInstagram } from 'react-icons/bs';
+import { BsInstagram, BsSunFill } from 'react-icons/bs';
+import { FaMoon } from 'react-icons/fa';
 import { signIn, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Dropdown from '../Dropdown';
 import Search from '../Search';
-import { MoonIcon, SunIcon } from '@heroicons/react/solid';
+import { MoonIcon, SunIcon } from '@heroicons/react/outline';
 import { GetServerSideProps } from 'next';
 import prisma from '../../lib/prisma';
 import { useMeQuery } from '../../generated/graphql';
@@ -16,6 +17,7 @@ import { userState } from '../../atoms/userState';
 import { postState } from '../../atoms/addPostState';
 import AddPostModal from '../AddPostModal';
 import Link from 'next/link';
+import { HomeIcon, MenuIcon } from '@heroicons/react/outline';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
@@ -34,12 +36,7 @@ const Header = () => {
       <div className='mx-5 flex max-w-4xl justify-between p-2  text-black xl:mx-auto'>
         <div className='relative hidden h-10 w-24 lg:inline-grid'>
           <Link href='/'>
-            <Image
-              src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png'
-              layout='fill'
-              objectFit='contain'
-              className='cursor-pointer'
-            />
+            <h2 className='cursor-pointer text-gray-500'>Instagram</h2>
           </Link>
         </div>
         <div className='relative mr-3 h-10 w-10 flex-shrink-0 lg:hidden'>
@@ -48,8 +45,13 @@ const Header = () => {
             layout='fill'
             objectFit='contain'
           /> /*/}
-          <Link href={'/'}>
-            <BsInstagram className='cursor-pointer dark:text-black' size={32} />
+          <Link href='/'>
+            <a>
+              <BsInstagram
+                className='cursor-pointer dark:text-black'
+                size={32}
+              />
+            </a>
           </Link>
         </div>
         {/* Search Input TODO: */}
@@ -57,16 +59,17 @@ const Header = () => {
         <div className='flex items-center justify-end space-x-4'>
           {/* HomeIcon */}
 
-          <svg
+          {/* <svg
             xmlns='http://www.w3.org/2000/svg'
             className='navBtn'
             viewBox='0 0 20 20'
             fill='currentColor'
           >
             <path d='M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z' />
-          </svg>
+          </svg> */}
+          <HomeIcon className='navBtn' />
           {/* MenuIcon */}
-          <svg
+          {/* <svg
             xmlns='http://www.w3.org/2000/svg'
             className='h-6 w-6 md:hidden'
             viewBox='0 0 20 20'
@@ -77,14 +80,22 @@ const Header = () => {
               d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
               clipRule='evenodd'
             />
-          </svg>
-          <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
+          
+          </svg> */}
+          <MenuIcon className='h-6 md:hidden' />
+          <div onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             {theme === 'light' ? (
-              <MoonIcon className='navBtn' />
+              // <MoonIcon className='navBtn' />
+              <span>
+                <FaMoon className='h-7 cursor-pointer' />
+              </span>
             ) : (
-              <SunIcon className='navBtn' />
+              <span>
+                {/* <SunIcon /> */}
+                <BsSunFill className='h-7 cursor-pointer' />
+              </span>
             )}
-          </button>
+          </div>
           {session ? (
             <>
               <div className='navBtn relative'>

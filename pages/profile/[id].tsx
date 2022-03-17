@@ -20,6 +20,7 @@ import FollowBtn from '../../components/FollowBtn';
 import toast from 'react-hot-toast';
 import Followers from '../../components/Followers';
 import Following from '../../components/Following';
+import Link from 'next/link';
 
 interface Props {
   user: IUser;
@@ -123,7 +124,9 @@ const Profile = ({ user }: Props) => {
       <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3'>
         {posts.map((post) => (
           <div key={post.id} className='group relative cursor-pointer'>
-            <PostCard post={post} />
+            <Link href={`/p/${post.id}`}>
+              <PostCard post={post} />
+            </Link>
             {/* <div>{post.images[0]}</div> */}
           </div>
         ))}

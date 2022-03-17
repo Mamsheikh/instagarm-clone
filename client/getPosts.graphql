@@ -10,6 +10,15 @@ query GetPosts {
       id
       image
     }
+    comments {
+      id
+      content
+      user {
+        username
+        id
+        image
+      }
+    }
     likes {
       post {
         caption

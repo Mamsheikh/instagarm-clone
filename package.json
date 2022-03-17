@@ -15,6 +15,7 @@
     "apollo-server-micro": "^3.6.3",
     "axios": "^0.26.0",
     "daisyui": "^2.2.2",
+    "emoji-mart": "^3.0.1",
     "graphql": "15.7.2",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
