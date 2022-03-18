@@ -1,0 +1,47 @@
+query Posts($first: Int, $after: String) {
+  posts(first: $first, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        caption
+        images
+        userId
+        user {
+          id
+          name
+          username
+          image
+        }
+        likes {
+          id
+          userId
+          postId
+          post {
+            caption
+            images
+            userId
+          }
+          user {
+            id
+            name
+            image
+          }
+        }
+        comments {
+          id
+          content
+          user {
+            username
+            id
+            image
+          }
+        }
+      }
+    }
+  }
+}

@@ -29,7 +29,7 @@ interface Props {
   data: Post;
 }
 
-const PostCard = ({ data }: Props) => {
+const PostCard = ({ data }) => {
   // console.log('postcard', data.likes);
   const router = useRouter();
   const [isLike, setIsLike] = useState(false);

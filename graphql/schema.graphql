@@ -16,6 +16,11 @@ input CreatePostInput {
   images: [String]
 }
 
+type Edge {
+  cursor: String
+  node: Post
+}
+
 type Like {
   id: String!
   post: Post!
@@ -34,6 +39,11 @@ type Mutation {
   updateProfile(input: UpdateProfileInput): User
 }
 
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean
+}
+
 type Post {
   caption: String
   comments: [Comment]!
@@ -48,7 +58,13 @@ type Query {
   Me: User
   getPosts: [Post]
   getUser(id: String!): User!
+  posts(after: String, first: Int): Response
   searchUser(input: String): [User]!
+}
+
+type Response {
+  edges: [Edge]
+  pageInfo: PageInfo
 }
 
 input UpdatePostInput {
