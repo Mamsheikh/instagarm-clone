@@ -100,7 +100,7 @@ const PostCard = ({ data }) => {
         </div>
         <BookmarkIcon className='postBtn' />
       </div>
-      <p className='truncate px-4 dark:text-white'>
+      <div className='truncate px-4 dark:text-white'>
         <p className='mb-1 mr-2 text-sm font-semibold'>
           {data.likes.length} likes
         </p>
@@ -108,14 +108,14 @@ const PostCard = ({ data }) => {
           {data?.user.username}
         </span>{' '}
         {data.caption}
-      </p>
+      </div>
       <div className='mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white'>
         <Link href={`/p/${data.id}`}>
           <a>View all {data.comments.length} comments</a>
         </Link>
       </div>
       {data.comments.map((comment) => (
-        <div className='flex justify-between px-4'>
+        <div key={comment.id} className='flex justify-between px-4'>
           <div>
             <span className='mr-1 text-sm font-semibold'>
               {comment.user.username}

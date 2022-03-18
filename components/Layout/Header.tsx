@@ -27,9 +27,11 @@ const Header = () => {
 
   const [viewer, setViewer] = useRecoilState(userState);
 
-  if (data) {
-    setViewer(data.Me);
-  }
+  useEffect(() => {
+    if (data) {
+      setViewer(data.Me);
+    }
+  }, [data]);
 
   return (
     <header className='fixed top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black'>
@@ -87,12 +89,12 @@ const Header = () => {
             {theme === 'light' ? (
               // <MoonIcon className='navBtn' />
               <span>
-                <FaMoon className='h-7 cursor-pointer' />
+                <MoonIcon className='navBtn' />
               </span>
             ) : (
               <span>
                 {/* <SunIcon /> */}
-                <BsSunFill className='h-7 cursor-pointer' />
+                <SunIcon className='navBtn' />
               </span>
             )}
           </div>
