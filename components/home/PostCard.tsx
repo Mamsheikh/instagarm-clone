@@ -115,7 +115,10 @@ const PostCard = ({ data }) => {
         </Link>
       </div>
       {data.comments.map((comment) => (
-        <div key={comment.id} className='flex justify-between px-4'>
+        <div
+          key={comment.id}
+          className='flex justify-between px-4 dark:text-gray-300'
+        >
           <div>
             <span className='mr-1 text-sm font-semibold'>
               {comment.user.username}

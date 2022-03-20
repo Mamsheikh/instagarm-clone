@@ -23,7 +23,7 @@ const Post = ({ post }: Props) => {
 
   return (
     <div className='max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white md:mx-5 xl:mx-auto'>
-      <div className='relative mb-10 flex h-full flex-col bg-white'>
+      <div className='relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900'>
         {/* header */}
         <header className='static top-0 right-0 flex h-20 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l'>
           <div className='flex items-center'>

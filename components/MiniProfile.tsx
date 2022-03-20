@@ -16,7 +16,7 @@ const MiniProfile = () => {
         />
       </div>
       <div className='mx-4 flex-1'>
-        <h2 className='font-bold'>{viewer?.username}</h2>
+        <h2 className='font-bold dark:text-gray-300'>{viewer?.username}</h2>
         <h3 className='text-sm text-gray-400'>Welcome to Prismagram</h3>
       </div>
       <button
