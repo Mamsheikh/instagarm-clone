@@ -10,5 +10,11 @@ query SearchUser($input: String) {
     phone
     username
     website
+    following {
+      name
+      id
+      username
+      image
+    }
   }
 }

@@ -4,6 +4,8 @@ import { editPostModalState } from '../atoms/editPostState';
 import { useGetPostsQuery, usePostsQuery } from '../generated/graphql';
 import EditPostModal from './EditPostModal';
 import PostCard from './home/PostCard';
+import MiniProfile from './MiniProfile';
+import Suggestions from './Suggestions';
 
 const Feed = () => {
   // const { data, loading } = useGetPostsQuery({
@@ -54,7 +56,10 @@ const Feed = () => {
         )}
       </section>
       <section className=' md:col-span-1 md:hidden xl:inline-grid'>
-        Mini profile
+        <div className='fixed'>
+          <MiniProfile />
+          <Suggestions />
+        </div>
       </section>
     </div>
   );

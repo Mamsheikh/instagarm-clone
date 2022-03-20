@@ -11,7 +11,12 @@ const AddComment = ({ postId }) => {
   const [content, setContent] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
   const [createComment] = useCreateCommentMutation();
-  const onSubmit = async () => {
+
+  const onChange = (e) => {
+    setContent(e.target.value);
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault();
     try {
       await createComment({
         variables: {
@@ -19,12 +24,15 @@ const AddComment = ({ postId }) => {
           postId,
         },
         refetchQueries: () => [{ query: GetPostsDocument }],
+        onCompleted: () => {
+          setContent('');
+        },
       });
     } catch (error) {}
   };
   return (
     <>
-      <div className=' flex items-center p-4'>
+      <form onSubmit={onSubmit} className=' flex items-center p-4'>
         {/* <div className='relative'> */}
         {/* {showEmojis && (
           <Picker
@@ -49,14 +57,18 @@ const AddComment = ({ postId }) => {
         {/* </div> */}
         <input
           type='text'
-          onChange={(e) => setContent(e.target.value)}
+          onChange={onChange}
           placeholder='Add a comment...'
           className='flex-1 border-none outline-none focus:ring-0 dark:bg-black dark:text-white'
         />
-        <button className='font-semibold text-blue-400' onClick={onSubmit}>
+        <button
+          type='submit'
+          className='font-semibold text-blue-400'
+          // onClick={onSubmit}
+        >
           Post
         </button>
-      </div>
+      </form>
     </>
   );
 };

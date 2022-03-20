@@ -226,7 +226,7 @@ export type SearchUserQueryVariables = Exact<{
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null } | null> };
+export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null, following?: Array<{ __typename?: 'User', name: string, id: string, username?: string | null, image?: string | null } | null> | null } | null> };
 
 export type ToggleLikeMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -643,6 +643,12 @@ export const SearchUserDocument = gql`
     phone
     username
     website
+    following {
+      name
+      id
+      username
+      image
+    }
   }
 }
     `;

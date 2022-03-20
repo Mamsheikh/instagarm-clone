@@ -38,7 +38,12 @@ const Header = () => {
       <div className='mx-5 flex max-w-4xl justify-between p-2  text-black xl:mx-auto'>
         <div className='relative hidden h-10 w-24 lg:inline-grid'>
           <Link href='/'>
-            <h2 className='cursor-pointer text-gray-500'>Instagram</h2>
+            <h2
+              className='cursor-pointer text-gray-800 dark:text-white'
+              style={{ fontFamily: 'Grand Hotel', fontSize: '2rem' }}
+            >
+              Prismagram
+            </h2>
           </Link>
         </div>
         <div className='relative mr-3 h-10 w-10 flex-shrink-0 lg:hidden'>
@@ -50,7 +55,7 @@ const Header = () => {
           <Link href='/'>
             <a>
               <BsInstagram
-                className='cursor-pointer dark:text-black'
+                className='cursor-pointer  dark:text-white'
                 size={32}
               />
             </a>
@@ -101,10 +106,14 @@ const Header = () => {
           {session ? (
             <>
               <div className='navBtn relative'>
-                <RiMessengerLine className='navBtn' />
-                <span className='absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-white'>
-                  3
-                </span>
+                <Link href='/message'>
+                  <a>
+                    <RiMessengerLine className='navBtn' />
+                    <span className='absolute -top-1 -right-2 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-xs leading-none text-white'>
+                      3
+                    </span>
+                  </a>
+                </Link>
               </div>
               <div className=' relative'>
                 <svg

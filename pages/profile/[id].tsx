@@ -28,7 +28,7 @@ interface Props {
 }
 const Profile = ({ user }: Props) => {
   const posts = user.posts;
-  // console.log(posts.images[0]);
+  // console.log(posts);
   const [isOpen, setIsOpen] = useRecoilState(modalState);
   const [showFollowers, setShowFollowers] = useRecoilState(followersState);
   const [showFollowing, setShowFollowing] = useRecoilState(followingState);
@@ -124,9 +124,11 @@ const Profile = ({ user }: Props) => {
       <div className='grid gap-5 md:grid-cols-2 lg:grid-cols-3'>
         {posts.map((post) => (
           <div key={post.id} className='group relative cursor-pointer'>
-            <Link href={`/p/${post.id}`}>
-              <PostCard post={post} />
-            </Link>
+            {/* <Link href={`/p/${post.id}`}>
+              <a> */}
+            <PostCard post={post} />
+            {/* </a>
+            </Link> */}
             {/* <div>{post.images[0]}</div> */}
           </div>
         ))}
@@ -142,7 +144,11 @@ export default Profile;
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const data = await prisma.user.findUnique({
     where: { id: params.id as string },
-    include: { posts: true, followers: true, following: true },
+    include: {
+      posts: { include: { likes: true, comments: true } },
+      followers: true,
+      following: true,
+    },
   });
   const user = JSON.parse(JSON.stringify(data));
   return {
