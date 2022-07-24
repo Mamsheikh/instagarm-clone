@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../atoms/userState';
 import { useFollowMutation, useUnfollowMutation } from '../generated/graphql';
 import { IUser } from '../lib/types';
@@ -12,7 +12,7 @@ interface Props {
 
 const FollowBtn = ({ user }: Props) => {
   const router = useRouter();
-  const [viewer, setViewer] = useRecoilState<IUser>(userState);
+  const viewer = useRecoilValue<IUser>(userState);
   const [followed, setFollowed] = useState(false);
   const [follow] = useFollowMutation({
     onCompleted: () => {

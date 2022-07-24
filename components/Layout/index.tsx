@@ -6,7 +6,7 @@ const Layout = ({ children }) => {
   return (
     <div className='bg-gray-100 dark:bg-black'>
       <Header />
-      <Toaster />
+
       {children}
     </div>
   );

@@ -146,12 +146,11 @@ const Header = () => {
               {addPost && <AddPostModal user={data?.Me} />}
             </>
           ) : (
-            <button
-              onClick={() => signIn()}
-              className='rounded bg-blue-500 px-4 py-1 text-sm text-white'
-            >
-              Login
-            </button>
+            <Link href='/login'>
+              <a className='rounded bg-blue-500 px-4 py-1 text-sm text-white'>
+                Login
+              </a>
+            </Link>
           )}
         </div>
       </div>

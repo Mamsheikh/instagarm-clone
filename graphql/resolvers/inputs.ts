@@ -13,6 +13,21 @@ export const UpdateProfileInput = inputObjectType({
   },
 });
 
+export const CreateUserInput = inputObjectType({
+  name: 'CreateUserInput',
+  definition(t) {
+    t.nonNull.string('email');
+    t.nonNull.string('username');
+    t.nonNull.string('password');
+  },
+});
+export const LoginUserInput = inputObjectType({
+  name: 'LoginUserInput',
+  definition(t) {
+    t.nonNull.string('email_or_username');
+    t.nonNull.string('password');
+  },
+});
 export const CreatePostInput = inputObjectType({
   name: 'CreatePostInput',
   definition(t) {

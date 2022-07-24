@@ -6,20 +6,20 @@ import { ApolloProvider } from '@apollo/client';
 import { RecoilRoot } from 'recoil';
 import Layout from '../components/Layout';
 import apolloClient from '../lib/apollo';
+import { Toaster } from 'react-hot-toast';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps }) {
   return (
-    <SessionProvider session={pageProps.session}>
-      <ApolloProvider client={apolloClient}>
-        <RecoilRoot>
-          <ThemeProvider enableSystem={true} attribute='class'>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </RecoilRoot>
-      </ApolloProvider>
-    </SessionProvider>
+    <ApolloProvider client={apolloClient}>
+      <RecoilRoot>
+        <ThemeProvider enableSystem={true} attribute='class'>
+          {/* <Layout> */}
+          <Component {...pageProps} />
+          <Toaster />
+          {/* </Layout> */}
+        </ThemeProvider>
+      </RecoilRoot>
+    </ApolloProvider>
   );
 }
 

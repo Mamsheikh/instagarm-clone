@@ -4,17 +4,20 @@ import Image from 'next/image';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import prisma from '../lib/prisma';
 import Feed from '../components/Feed';
+import Layout from '../components/Layout';
 
-const Home: NextPage = () => {
+const Home: NextPage = (props) => {
   const { data: session } = useSession();
   return (
-    <div className=' bg-gray-100 pt-20 dark:bg-black'>
-      <Head>
-        <title>Prismagram</title>
-        <link rel='icon' href='/favicon.ico' />
-      </Head>
-      <Feed />
-    </div>
+    <Layout>
+      <div className=' bg-gray-100 pt-20 dark:bg-black'>
+        <Head>
+          <title>Prismagram</title>
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
+        <Feed />
+      </div>
+    </Layout>
   );
 };
 

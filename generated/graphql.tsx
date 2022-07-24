@@ -30,6 +30,12 @@ export type CreatePostInput = {
   images?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+export type CreateUserInput = {
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
 export type Edge = {
   __typename?: 'Edge';
   cursor?: Maybe<Scalars['String']>;
@@ -45,15 +51,21 @@ export type Like = {
   userId: Scalars['String'];
 };
 
+export type LoginUserInput = {
+  email_or_username: Scalars['String'];
+  password: Scalars['String'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createComment?: Maybe<Comment>;
   createPost?: Maybe<Post>;
   follow?: Maybe<User>;
+  login?: Maybe<User>;
+  signup?: Maybe<User>;
   toggleLike?: Maybe<Like>;
   unfollow?: Maybe<User>;
   updatePost?: Maybe<Post>;
-  updateProfile?: Maybe<User>;
 };
 
 
@@ -73,6 +85,16 @@ export type MutationFollowArgs = {
 };
 
 
+export type MutationLoginArgs = {
+  input: LoginUserInput;
+};
+
+
+export type MutationSignupArgs = {
+  input: CreateUserInput;
+};
+
+
 export type MutationToggleLikeArgs = {
   postId: Scalars['String'];
 };
@@ -85,11 +107,6 @@ export type MutationUnfollowArgs = {
 
 export type MutationUpdatePostArgs = {
   input: UpdatePostInput;
-};
-
-
-export type MutationUpdateProfileArgs = {
-  input?: InputMaybe<UpdateProfileInput>;
 };
 
 export type PageInfo = {
@@ -143,16 +160,6 @@ export type Response = {
 export type UpdatePostInput = {
   caption?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
-};
-
-export type UpdateProfileInput = {
-  address?: InputMaybe<Scalars['String']>;
-  bio?: InputMaybe<Scalars['String']>;
-  image?: InputMaybe<Scalars['String']>;
-  name?: InputMaybe<Scalars['String']>;
-  phone?: InputMaybe<Scalars['String']>;
-  username?: InputMaybe<Scalars['String']>;
-  website?: InputMaybe<Scalars['String']>;
 };
 
 export type User = {
@@ -242,12 +249,19 @@ export type UnfollowMutationVariables = Exact<{
 
 export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: { __typename?: 'User', id: string, name: string, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', name: string, email: string, image?: string | null, username?: string | null } | null> | null } | null };
 
-export type UpdateProfileMutationVariables = Exact<{
-  input?: InputMaybe<UpdateProfileInput>;
+export type SignupMutationVariables = Exact<{
+  input: CreateUserInput;
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
+export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
+
+export type LoginMutationVariables = Exact<{
+  input: LoginUserInput;
+}>;
+
+
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
 
 
 export const CreateCommentDocument = gql`
@@ -771,9 +785,9 @@ export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<Unf
 export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
 export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
 export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
-export const UpdateProfileDocument = gql`
-    mutation UpdateProfile($input: UpdateProfileInput) {
-  updateProfile(input: $input) {
+export const SignupDocument = gql`
+    mutation Signup($input: CreateUserInput!) {
+  signup(input: $input) {
     id
     name
     email
@@ -781,34 +795,111 @@ export const UpdateProfileDocument = gql`
     phone
     image
     address
-    bio
     website
+    bio
+    isAdmin
+    following {
+      id
+      name
+      email
+      username
+      phone
+      image
+    }
+    followers {
+      id
+      name
+      email
+      username
+      phone
+      image
+      address
+    }
   }
 }
     `;
-export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export type SignupMutationFn = Apollo.MutationFunction<SignupMutation, SignupMutationVariables>;
 
 /**
- * __useUpdateProfileMutation__
+ * __useSignupMutation__
  *
- * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSignupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSignupMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ * const [signupMutation, { data, loading, error }] = useSignupMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<SignupMutation, SignupMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+        return Apollo.useMutation<SignupMutation, SignupMutationVariables>(SignupDocument, options);
       }
-export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
-export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
-export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
+export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
+export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
+export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const LoginDocument = gql`
+    mutation Login($input: LoginUserInput!) {
+  login(input: $input) {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    website
+    bio
+    isAdmin
+    following {
+      id
+      name
+      email
+      username
+      phone
+      image
+    }
+    followers {
+      id
+      name
+      email
+      username
+      phone
+      image
+      address
+    }
+  }
+}
+    `;
+export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
+
+/**
+ * __useLoginMutation__
+ *
+ * To run a mutation, you first call `useLoginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLoginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [loginMutation, { data, loading, error }] = useLoginMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginMutation, LoginMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument, options);
+      }
+export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
+export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
+export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;

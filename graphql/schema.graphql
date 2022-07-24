@@ -16,6 +16,12 @@ input CreatePostInput {
   images: [String]
 }
 
+input CreateUserInput {
+  email: String!
+  password: String!
+  username: String!
+}
+
 type Edge {
   cursor: String
   node: Post
@@ -29,14 +35,20 @@ type Like {
   userId: String!
 }
 
+input LoginUserInput {
+  email_or_username: String!
+  password: String!
+}
+
 type Mutation {
   createComment(content: String!, postId: String!): Comment
   createPost(input: CreatePostInput!): Post
   follow(id: String!): User
+  login(input: LoginUserInput!): User
+  signup(input: CreateUserInput!): User
   toggleLike(postId: String!): Like
   unfollow(id: String!): User
   updatePost(input: UpdatePostInput!): Post
-  updateProfile(input: UpdateProfileInput): User
 }
 
 type PageInfo {
@@ -72,16 +84,6 @@ input UpdatePostInput {
   id: String!
 }
 
-input UpdateProfileInput {
-  address: String
-  bio: String
-  image: String
-  name: String
-  phone: String
-  username: String
-  website: String
-}
-
 type User {
   address: String
   bio: String
@@ -93,7 +95,7 @@ type User {
   image: String
   isAdmin: Boolean!
   likes: [Like]!
-  name: String!
+  name: String
   phone: String
   posts: [Post]!
   username: String

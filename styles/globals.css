@@ -15,3 +15,10 @@
     @apply h-7 cursor-pointer transition-all duration-150 ease-out hover:scale-125 dark:text-white;
   }
 }
+
+.instagram-logo {
+  background-position: 0 -130px;
+  height: 51px;
+  width: 175px;
+  background-image: url(https://bit.ly/3v2LT17);
+}

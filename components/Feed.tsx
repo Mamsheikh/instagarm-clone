@@ -20,7 +20,7 @@ const Feed = () => {
   if (loading) {
     return <h3>LOading....</h3>;
   }
-  const { endCursor, hasNextPage } = data.posts.pageInfo;
+  const { endCursor, hasNextPage } = data?.posts?.pageInfo;
   return (
     <div className='mx-auto grid grid-cols-1 md:max-w-3xl md:grid-cols-2 xl:max-w-4xl xl:grid-cols-3'>
       <section className='col-span-2'>

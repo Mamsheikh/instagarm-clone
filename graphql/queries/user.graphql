@@ -1,0 +1,63 @@
+mutation Signup($input: CreateUserInput!) {
+  signup(input: $input) {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    website
+    bio
+    isAdmin
+    following {
+      id
+      name
+      email
+      username
+      phone
+      image
+    }
+    followers {
+      id
+      name
+      email
+      username
+      phone
+      image
+      address
+    }
+  }
+}
+
+mutation Login($input: LoginUserInput!) {
+  login(input: $input) {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    website
+    bio
+    isAdmin
+    following {
+      id
+      name
+      email
+      username
+      phone
+      image
+    }
+    followers {
+      id
+      name
+      email
+      username
+      phone
+      image
+      address
+    }
+  }
+}

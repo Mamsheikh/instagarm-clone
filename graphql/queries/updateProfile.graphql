@@ -1,0 +1,13 @@
+# mutation UpdateProfile($input: UpdateProfileInput) {
+#   updateProfile(input: $input) {
+#     id
+#     name
+#     email
+#     username
+#     phone
+#     image
+#     address
+#     bio
+#     website
+#   }
+# }
