@@ -55,7 +55,7 @@ model Post {
 }
 
 model Comment {
-  id        String   @id @default(cuid())
+  id        String   @id @unique
   content   String
   post      Post     @relation(fields: [postId], references: [id])
   postId    String

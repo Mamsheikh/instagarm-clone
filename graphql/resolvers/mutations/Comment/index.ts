@@ -1,4 +1,3 @@
-import { getSession } from 'next-auth/react';
 import { mutationField, nonNull, stringArg } from 'nexus';
 
 export const createComment = mutationField('createComment', {
@@ -9,9 +8,9 @@ export const createComment = mutationField('createComment', {
   },
   async resolve(_, args, ctx) {
     const req = ctx.req;
-    const session = await getSession({ req });
+    // const session = await getSession({ req });
     const user = await ctx.prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: '' },
     });
     try {
       const post = await ctx.prisma.post.findUnique({
@@ -72,9 +71,9 @@ const deleteComment = mutationField('deleteComment', {
   async resolve(_, args, ctx) {
     try {
       const req = ctx.req;
-      const session = await getSession({ req });
+      // const session = await getSession({ req });
       const user = await ctx.prisma.user.findUnique({
-        where: { email: session.user.email },
+        where: { email: '' },
       });
       const comment = await ctx.prisma.comment.findUnique({
         where: { id: args.commentId },

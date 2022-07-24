@@ -66,6 +66,7 @@ export type Mutation = {
   toggleLike?: Maybe<Like>;
   unfollow?: Maybe<User>;
   updatePost?: Maybe<Post>;
+  updateProfile?: Maybe<User>;
 };
 
 
@@ -109,6 +110,11 @@ export type MutationUpdatePostArgs = {
   input: UpdatePostInput;
 };
 
+
+export type MutationUpdateProfileArgs = {
+  input?: InputMaybe<UpdateProfileInput>;
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -128,9 +134,9 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  Me?: Maybe<User>;
   getPosts?: Maybe<Array<Maybe<Post>>>;
   getUser: User;
+  me?: Maybe<User>;
   posts?: Maybe<Response>;
   searchUser: Array<Maybe<User>>;
 };
@@ -162,6 +168,16 @@ export type UpdatePostInput = {
   id: Scalars['String'];
 };
 
+export type UpdateProfileInput = {
+  address?: InputMaybe<Scalars['String']>;
+  bio?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+  website?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   address?: Maybe<Scalars['String']>;
@@ -174,7 +190,7 @@ export type User = {
   image?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   likes: Array<Maybe<Like>>;
-  name: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
   phone?: Maybe<Scalars['String']>;
   posts: Array<Maybe<Post>>;
   username?: Maybe<Scalars['String']>;
@@ -187,28 +203,28 @@ export type CreateCommentMutationVariables = Exact<{
 }>;
 
 
-export type CreateCommentMutation = { __typename?: 'Mutation', createComment?: { __typename?: 'Comment', id: string, content: string, postId: string, userId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', name: string, id: string, username?: string | null, image?: string | null } } | null };
+export type CreateCommentMutation = { __typename?: 'Mutation', createComment?: { __typename?: 'Comment', id: string, content: string, postId: string, userId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', name?: string | null, id: string, username?: string | null, image?: string | null } } | null };
 
 export type CreatePostMutationVariables = Exact<{
   input: CreatePostInput;
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, id: string } } | null };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name?: string | null, id: string } } | null };
 
 export type UpdatePostMutationVariables = Exact<{
   input: UpdatePostInput;
 }>;
 
 
-export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, username?: string | null, image?: string | null, name: string } } | null };
+export type UpdatePostMutation = { __typename?: 'Mutation', updatePost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, username?: string | null, image?: string | null, name?: string | null } } | null };
 
 export type FollowMutationVariables = Exact<{
   followId: Scalars['String'];
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow?: { __typename?: 'User', id: string, name: string, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', following?: Array<{ __typename?: 'User', name: string, username?: string | null, image?: string | null } | null> | null } | null> | null } | null };
+export type FollowMutation = { __typename?: 'Mutation', follow?: { __typename?: 'User', id: string, name?: string | null, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', following?: Array<{ __typename?: 'User', name?: string | null, username?: string | null, image?: string | null } | null> | null } | null> | null } | null };
 
 export type PostsQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']>;
@@ -216,52 +232,59 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, name: string, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name: string, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null } | null> | null } | null };
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null } | null> | null } | null };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name: string, username?: string | null, id: string, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name: string, image?: string | null } } | null> } | null> | null };
+export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name?: string | null, username?: string | null, id: string, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null> } | null> | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', Me?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
 
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name: string, phone?: string | null, username?: string | null, website?: string | null, following?: Array<{ __typename?: 'User', name: string, id: string, username?: string | null, image?: string | null } | null> | null } | null> };
+export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name?: string | null, phone?: string | null, username?: string | null, website?: string | null, following?: Array<{ __typename?: 'User', name?: string | null, id: string, username?: string | null, image?: string | null } | null> | null } | null> };
 
 export type ToggleLikeMutationVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: string, userId: string, postId: string, user: { __typename?: 'User', name: string, username?: string | null, image?: string | null }, post: { __typename?: 'Post', caption?: string | null, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string } | null> } } | null };
+export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike?: { __typename?: 'Like', id: string, userId: string, postId: string, user: { __typename?: 'User', name?: string | null, username?: string | null, image?: string | null }, post: { __typename?: 'Post', caption?: string | null, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string } | null> } } | null };
 
 export type UnfollowMutationVariables = Exact<{
   unfollowId: Scalars['String'];
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: { __typename?: 'User', id: string, name: string, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', name: string, email: string, image?: string | null, username?: string | null } | null> | null } | null };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: { __typename?: 'User', id: string, name?: string | null, username?: string | null, email: string, phone?: string | null, following?: Array<{ __typename?: 'User', name?: string | null, email: string, image?: string | null, username?: string | null } | null> | null } | null };
+
+export type UpdateProfileMutationVariables = Exact<{
+  input?: InputMaybe<UpdateProfileInput>;
+}>;
+
+
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile?: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, bio?: string | null, website?: string | null } | null };
 
 export type SignupMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
+export type SignupMutation = { __typename?: 'Mutation', signup?: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
 
 export type LoginMutationVariables = Exact<{
   input: LoginUserInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name: string, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
+export type LoginMutation = { __typename?: 'Mutation', login?: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null, website?: string | null, bio?: string | null, isAdmin: boolean, following?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null } | null> | null, followers?: Array<{ __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, phone?: string | null, image?: string | null, address?: string | null } | null> | null } | null };
 
 
 export const CreateCommentDocument = gql`
@@ -586,7 +609,7 @@ export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery
 export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const MeDocument = gql`
     query Me {
-  Me {
+  me {
     id
     name
     email
@@ -785,6 +808,47 @@ export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<Unf
 export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
 export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
 export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($input: UpdateProfileInput) {
+  updateProfile(input: $input) {
+    id
+    name
+    email
+    username
+    phone
+    image
+    address
+    bio
+    website
+  }
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, options);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const SignupDocument = gql`
     mutation Signup($input: CreateUserInput!) {
   signup(input: $input) {

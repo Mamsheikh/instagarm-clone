@@ -4,7 +4,6 @@ import { RiMessengerLine } from 'react-icons/ri';
 import { AiOutlinePlusSquare, AiOutlineCompass } from 'react-icons/ai';
 import { BsInstagram, BsSunFill } from 'react-icons/bs';
 import { FaMoon } from 'react-icons/fa';
-import { signIn, useSession } from 'next-auth/react';
 import { useTheme } from 'next-themes';
 import Dropdown from '../Dropdown';
 import Search from '../Search';
@@ -22,14 +21,14 @@ import { HomeIcon, MenuIcon } from '@heroicons/react/outline';
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [addPost, setAddPost] = useRecoilState(postState);
-  const { data: session } = useSession();
+
   const { data } = useMeQuery();
 
   const [viewer, setViewer] = useRecoilState(userState);
 
   useEffect(() => {
     if (data) {
-      setViewer(data.Me);
+      setViewer(data.me);
     }
   }, [data]);
 
@@ -103,7 +102,7 @@ const Header = () => {
               </span>
             )}
           </div>
-          {session ? (
+          {data?.me ? (
             <>
               <div className='navBtn relative'>
                 <Link href='/message'>
@@ -142,8 +141,8 @@ const Header = () => {
                   <img src={session?.user?.image} />
                 </div>
               </div> */}
-              <Dropdown user={data?.Me} />
-              {addPost && <AddPostModal user={data?.Me} />}
+              <Dropdown user={data?.me} />
+              {addPost && <AddPostModal user={data?.me} />}
             </>
           ) : (
             <Link href='/login'>

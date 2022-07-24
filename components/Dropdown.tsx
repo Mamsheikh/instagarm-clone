@@ -1,18 +1,28 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import { signOut } from 'next-auth/react';
+import { User } from '../generated/graphql';
+import { FaUserCircle } from 'react-icons/fa';
+import { UserIcon } from '@heroicons/react/outline';
 
-const Dropdown = ({ user }) => {
+interface DropdownProps {
+  user?: User;
+}
+
+const Dropdown: React.FC<DropdownProps> = ({ user }) => {
   return (
     <div>
       <Menu as='div' className='relative'>
         <Menu.Button>
-          <img
-            src={user?.image}
-            className='h-8 w-8 rounded-full object-cover'
-            alt=''
-          />
+          {user.image ? (
+            <img
+              src={user?.image}
+              className='h-8 w-8 rounded-full object-cover'
+              alt=''
+            />
+          ) : (
+            <FaUserCircle className='navBtn' />
+          )}
           <Transition
             as={Fragment}
             enter='transition ease-out duration-100'
@@ -25,7 +35,7 @@ const Dropdown = ({ user }) => {
             <Menu.Items className='absolute right-0 mt-2 w-32  origin-top-right rounded-md border bg-white shadow-lg dark:bg-black'>
               <Menu.Item>
                 {({ active }) => (
-                  <Link href={`/profile/${user.id}`}>
+                  <Link href={`/u/${user.id}`}>
                     <a
                       className={`${
                         active ? 'bg-gray-100 ' : ''
@@ -38,7 +48,7 @@ const Dropdown = ({ user }) => {
               </Menu.Item>
               <Menu.Item>
                 <a
-                  onClick={() => signOut()}
+                  onClick={() => {}}
                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white'
                 >
                   Logout

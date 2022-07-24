@@ -1,4 +1,3 @@
-import { getSession } from 'next-auth/react';
 import { mutationField, nonNull, stringArg } from 'nexus';
 
 export const toggleLike = mutationField('toggleLike', {
@@ -8,9 +7,9 @@ export const toggleLike = mutationField('toggleLike', {
   },
   resolve: async (_, args, ctx) => {
     const req = ctx.req;
-    const session = await getSession({ req });
+    // const session = await getSession({ req });
     const user = await ctx.prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: '' },
     });
     try {
       const isExist = await ctx.prisma.like.findFirst({

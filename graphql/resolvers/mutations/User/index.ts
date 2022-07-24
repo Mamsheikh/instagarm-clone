@@ -1,4 +1,4 @@
-import { mutationField, nonNull, stringArg, extendType } from 'nexus';
+import { mutationField, nonNull, stringArg, extendType, nullable } from 'nexus';
 import { hash, compare } from 'bcrypt';
 import { serialize } from 'cookie';
 import {
@@ -14,7 +14,7 @@ import {
 } from '../../../../utils/registrationValidation';
 import { PrismaClient } from '@prisma/client';
 import { createToken } from '../../../../utils/jwt';
-import { getSession } from 'next-auth/react';
+import { isAuth } from '../../../../utils/auth';
 
 export const userSignUpMutation = extendType({
   type: 'Mutation',
@@ -95,36 +95,34 @@ export const userLoginMutation = extendType({
   },
 });
 
-// export const updateProfile = mutationField('updateProfile', {
-//   type: 'User',
-//   args: { input: UpdateProfileInput },
-//   resolve: async (parent, args, ctx) => {
-//     let req = ctx.req;
-//     const session = await getSession({ req });
-//     // console.log({ session });
-//     try {
-//       const user = await ctx.prisma.user.findUnique({
-//         where: { email: session.user.email },
-//       });
-//       if (user) {
-//         return ctx.prisma.user.update({
-//           where: { email: user.email },
-//           data: {
-//             address: args.input.address,
-//             bio: args.input.bio,
-//             username: args.input.username,
-//             website: args.input.website,
-//             image: args.input.image,
-//             name: args.input.name,
-//             phone: args.input.phone,
-//           },
-//         });
-//       }
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   },
-// });
+export const updateProfile = mutationField('updateProfile', {
+  type: 'User',
+  args: { input: nullable(UpdateProfileInput) },
+  resolve: async (parent, args, ctx) => {
+    let req = ctx.req;
+    const decodedJwt = await isAuth(req);
+
+    const user = await ctx.prisma.user.findUnique({
+      where: { id: decodedJwt.userId },
+    });
+
+    if (!user) throw new Error('User not found');
+    if (user) {
+      return ctx.prisma.user.update({
+        where: { email: user.email },
+        data: {
+          address: args.input.address,
+          bio: args.input.bio,
+          username: args.input.username,
+          website: args.input.website,
+          image: args.input.image,
+          name: args.input.name,
+          phone: args.input.phone,
+        },
+      });
+    }
+  },
+});
 
 export const follow = mutationField('follow', {
   type: 'User',
@@ -133,9 +131,9 @@ export const follow = mutationField('follow', {
   },
   resolve: async (_, args, ctx) => {
     const req = ctx.req;
-    const session = await getSession({ req });
+    const decodedJwt = await isAuth(req);
     const user = await ctx.prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { email: decodedJwt.userId },
     });
     try {
       const toFollowUser = await ctx.prisma.user.findUnique({
@@ -164,9 +162,9 @@ export const unfollow = mutationField('unfollow', {
   },
   resolve: async (_, args, ctx) => {
     const req = ctx.req;
-    const session = await getSession({ req });
+    const decodedJwt = await isAuth(req);
     const user = await ctx.prisma.user.findUnique({
-      where: { email: session.user.email },
+      where: { id: decodedJwt.userId },
     });
     try {
       const toUnFollowUser = await ctx.prisma.user.findUnique({

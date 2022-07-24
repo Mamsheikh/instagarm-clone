@@ -1,4 +1,4 @@
-import { signOut } from 'next-auth/react';
+
 import image from 'next/image';
 import React from 'react';
 import { useRecoilState } from 'recoil';
@@ -20,7 +20,7 @@ const MiniProfile = () => {
         <h3 className='text-sm text-gray-400'>Welcome to Prismagram</h3>
       </div>
       <button
-        onClick={() => signOut()}
+        onClick={() => {}}
         className='text-sm font-bold text-blue-400'
       >
         Sign out

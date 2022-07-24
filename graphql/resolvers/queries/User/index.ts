@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/react';
+import { isAuth } from './../../../../utils/auth';
 import {
   extendType,
   list,
@@ -43,21 +43,18 @@ export const getUser = extendType({
     });
   },
 });
-export const Me = queryField('Me', {
+export const Me = queryField('me', {
   type: 'User',
   // args: {
   //   email: nonNull(stringArg()),
   // },
   resolve: async (_, args, ctx) => {
     const req = ctx.req;
-    const session = await getSession({ req });
-    try {
-      const user = await ctx.prisma.user.findUnique({
-        where: { email: session.user.email },
-      });
-      return user;
-    } catch (error) {
-      throw new Error(`No user found: ${error}`);
-    }
+    const decodedJWT = await isAuth(req);
+    console.log(decodedJWT);
+
+    return await ctx.prisma.user.findUnique({
+      where: { id: decodedJWT.userId },
+    });
   },
 });

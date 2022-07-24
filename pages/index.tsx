@@ -1,13 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useSession, signIn, signOut } from 'next-auth/react';
+
 import prisma from '../lib/prisma';
 import Feed from '../components/Feed';
 import Layout from '../components/Layout';
 
 const Home: NextPage = (props) => {
-  const { data: session } = useSession();
   return (
     <Layout>
       <div className=' bg-gray-100 pt-20 dark:bg-black'>
