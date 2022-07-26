@@ -2,10 +2,12 @@ import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import EditPostModal from '../EditPostModal';
 import PostActionsModal from './PostActionsModal';
 
 const PostHeader = ({ post }) => {
   const [open, setOpen] = useState(false);
+  const [editPost, setEditPost] = useState(false);
   return (
     <div className='relative'>
       <div className=' flex items-center p-4'>
@@ -35,7 +37,22 @@ const PostHeader = ({ post }) => {
           className='h-5 w-5 cursor-pointer'
           onClick={() => setOpen(!open)}
         />
-        {open && <PostActionsModal open={open} post={post} setOpen={setOpen} />}
+        {open && (
+          <PostActionsModal
+            setEditPost={setEditPost}
+            editPost={editPost}
+            open={open}
+            post={post}
+            setOpen={setOpen}
+          />
+        )}
+        {editPost && (
+          <EditPostModal
+            editPost={editPost}
+            post={post}
+            setEditPost={setEditPost}
+          />
+        )}
       </div>
     </div>
   );

@@ -52,7 +52,6 @@ const AddPostModal = ({ user }) => {
     if (images.length > 0) {
       media = await imagesUpload(images);
     }
-    console.log('masoyi', media);
     if (images.length === 0) {
       toast.error('Please select a cool Pic🌚');
     } else {
@@ -66,17 +65,6 @@ const AddPostModal = ({ user }) => {
       });
     }
   };
-  // if (addPost) {
-  //   // console.log(editPost);
-  // // }
-  // useEffect(() => {
-  //   if (addPost) {
-  //     // setCaption(edit)
-  //     // console.log('edit', editPost);
-  //     setCaption(editPost.caption);
-  //     setImages(editPost.images);
-  //   }
-  // }, [addPost]);
 
   return (
     <Dialog

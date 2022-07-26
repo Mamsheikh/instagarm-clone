@@ -17,18 +17,17 @@ import { userState } from '../../atoms/userState';
 import { IUser } from '../../lib/types';
 import EditPostModal from '../EditPostModal';
 
-const PostActionsModal = ({ post, open, setOpen }) => {
+const PostActionsModal = ({ post, open, setOpen, editPost, setEditPost }) => {
   // console.log('post', user);
   const [isOpen, setIsOpen] = useRecoilState(postActionsState);
-  const [editPost, setEditPost] = useRecoilState(editPostState);
+  // const [editPost, setEditPost] = useRecoilState(editPostState);
   const [editPostModal, setEditPostModal] = useRecoilState(editPostModalState);
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
   const [addPost, setAddPost] = useRecoilState(postState);
 
   const onEditPost = () => {
     setOpen(false);
-    setEditPostModal(!editPostModal);
-    setEditPost(post);
+    setEditPost(!editPost);
   };
   return (
     <Dialog

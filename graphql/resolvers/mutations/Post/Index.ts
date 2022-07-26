@@ -40,18 +40,27 @@ export const updatePost = mutationField('updatePost', {
     input: nonNull(UpdatePostInput),
   },
   resolve: async (_, args, ctx) => {
-    // const req = ctx.req;
-    // const session = await getSession({ req });
-    // const user = await ctx.prisma.user.findUnique({
-    //   where: { email: session.user.email },
-    // });
-
     try {
+      const req = ctx.req;
+      const decodedJwt = await isAuth(req);
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: decodedJwt.userId },
+      });
+      const post = await ctx.prisma.post.findFirst({
+        where: {
+          id: args.input.id,
+        },
+      });
+
+      if (post.userId !== user.id) {
+        throw new Error('not authorized');
+      }
+
       // if (args.input.images.length === 0) throw new Error('Enter a pic');
       return await ctx.prisma.post.update({
         where: { id: args.input.id },
         data: {
-          // images: args.input.images,
+          images: args.input.images,
           caption: args.input.caption,
         },
       });

@@ -4,30 +4,32 @@ import { XIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useRecoilState } from 'recoil';
-import { postState } from '../atoms/addPostState';
-import { editPostModalState, editPostState } from '../atoms/editPostState';
-import {
-  useCreatePostMutation,
-  useUpdatePostMutation,
-} from '../generated/graphql';
+import { Post, useUpdatePostMutation } from '../generated/graphql';
 import { refreshData } from '../utils';
 import { imagesUpload } from '../utils/imageUpload';
 import UserCard from './UserCard';
 
-const EditPostModal = () => {
+interface EditPostModalProps {
+  editPost: boolean;
+  setEditPost: (editPost: boolean) => void;
+  post: Post;
+}
+
+const EditPostModal: React.FC<EditPostModalProps> = ({
+  editPost,
+  post,
+  setEditPost,
+}) => {
   const router = useRouter();
   const [updatePost, { loading, error }] = useUpdatePostMutation({
     onCompleted: () => {
       toast.success('Post updated Successfull🎉');
-      setEditPostModal(false);
+      setEditPost(false);
       refreshData(router);
     },
   });
   const inputRef = useRef(null);
-  const [editPostData, setEditPostData] = useRecoilState(editPostState);
-  const [editPostModal, setEditPostModal] = useRecoilState(editPostModalState);
-  const [images, setImages] = useState([]);
+  const [images, setImages] = useState<string[]>();
   const [newImages, setNewImages] = useState([]);
   const [caption, setCaption] = useState('');
 
@@ -46,64 +48,67 @@ const EditPostModal = () => {
 
       return newImages.push(file);
     });
-    console.log('newImages', newImages);
 
     if (err) toast.error(err);
     // setImages([...images, ...newImages]);
     setNewImages(newImages);
     // console.log('images', images);
   };
-  // const deleteImage = (index) => {
-  //   const newArr = [...images];
-  //   newArr.splice(index, 1);
-  //   setImages(newArr);
-  // };
-
+  const deleteImage = (index) => {
+    const newArr = [...newImages];
+    newArr.splice(index, 1);
+    setNewImages(newArr);
+  };
+  const deleteOldImage = (index) => {
+    const newArr = [...images];
+    newArr.splice(index, 1);
+    setImages(newArr);
+  };
   const onSubmit = async () => {
     // console.log({ imgNewUrl, imgOldUrl });
-    if (caption === editPostData.caption) return;
-    // if (imgNewUrl.length > 0) media = await imagesUpload(imgNewUrl);
+    // if (caption === post.caption) return;
+    if (newImages.length > 0) {
+      const media = await imagesUpload(newImages);
+      const newURLs = [...images, media];
+      console.log('images updated', newURLs);
+    }
     try {
-      await updatePost({
-        variables: {
-          input: {
-            id: editPostData.id,
-            caption: caption,
-            // images: [...imgOldUrl, media],
-          },
-        },
-      });
+      // await updatePost({
+      //   variables: {
+      //     input: {
+      //       id: post.id,
+      //       caption: caption,
+      //       // images: [...imgOldUrl, media],
+      //     },
+      //   },
+      // });
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    if (editPostModal) {
-      setCaption(editPostData.caption);
-      setImages(editPostData.images);
-      // console.log('edit', editPost);
-    }
-  }, [editPostModal]);
 
+  useEffect(() => {
+    setImages(post.images);
+  }, [post.images]);
   return (
     <Dialog
-      open={editPostModal}
-      onClose={() => setEditPostModal(!editPostModal)}
+      open={editPost}
+      onClose={() => setEditPost(!editPost)}
       className='fixed inset-0 z-50 flex justify-center'
     >
-      <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-20' />
-      <div className='relative  mx-4 mt-[10vh] max-h-[85vh] w-full max-w-sm rounded-lg bg-white dark:bg-black '>
+      <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-50' />
+      <div className='relative  mx-4 my-auto mt-[10vh] w-full max-w-sm rounded-lg bg-white dark:bg-black '>
         <span className='flex items-center justify-center border-b border-gray-300  pb-3 pt-3 text-center font-semibold'>
           update post
         </span>
         <div className='relative top-0 -mt-12 flex items-center justify-end px-3 py-3'>
           <XIcon
             className=' h-6 w-6 cursor-pointer dark:text-white'
-            onClick={() => setEditPostModal(!editPostModal)}
+            onClick={() => setEditPost(!editPost)}
           />
         </div>
         <div className='flex flex-col items-center justify-center p-6'>
-          {images.length === 0 ? (
+          {post.images.length === 0 ? (
             <>
               <div className='flex items-stretch'>
                 <PhotographIcon className='h-20 w-20 rotate-12 text-sm text-gray-500' />
@@ -115,21 +120,38 @@ const EditPostModal = () => {
             </>
           ) : (
             <div className='grid max-h-[270px] w-full grid-cols-3 items-center gap-3 overflow-y-auto'>
-              {images.map((image, index) => (
-                <div key={index} className=' h-24'>
-                  {/* <div className='relative top-2 -left-1 '>
-                    <XIcon
-                      onClick={() => deleteImage(index)}
-                      className='relative  h-5 w-5 cursor-pointer   rounded-full text-red-600 hover:text-red-900'
+              {images &&
+                images.map((image, index) => (
+                  <div key={index} className=' h-24'>
+                    <div className='relative top-2 -left-1 '>
+                      <XIcon
+                        onClick={() => deleteOldImage(index)}
+                        className='relative  h-5 w-5 cursor-pointer   rounded-full text-red-600 hover:text-red-900'
+                      />
+                    </div>
+                    <img
+                      className=' h-full w-full object-cover'
+                      src={image}
+                      alt=''
                     />
-                  </div> */}
-                  <img
-                    className=' h-full w-full object-cover'
-                    src={image ? image : URL.createObjectURL(image)}
-                    alt=''
-                  />
-                </div>
-              ))}
+                  </div>
+                ))}
+              {newImages.length > 0 &&
+                newImages.map((image, index) => (
+                  <div key={index} className=' h-24'>
+                    <div className='relative top-2 -left-1 '>
+                      <XIcon
+                        onClick={() => deleteImage(index)}
+                        className='relative  h-5 w-5 cursor-pointer   rounded-full text-red-600 hover:text-red-900'
+                      />
+                    </div>
+                    <img
+                      className=' h-full w-full object-cover'
+                      src={URL.createObjectURL(image)}
+                      alt=''
+                    />
+                  </div>
+                ))}
             </div>
           )}
           <input
@@ -145,23 +167,10 @@ const EditPostModal = () => {
           >
             Select from computer
           </button>
-          {/* <div className='grid  max-h-[250px] grid-cols-3 gap-2 overflow-y-auto'>
-            {images.map((image, index) => (
-              <div key={index} className='max-h-[250px] '>
-                <div className='overflow-hidden  overflow-y-auto '>
-                  <img
-                    className=' block h-full w-full rounded  object-cover'
-                    src={URL.createObjectURL(image)}
-                    alt='images'
-                  />
-                </div>
-              </div>
-            ))}
-          </div> */}
           <input
             placeholder='Enter a catchy caption'
             type='text'
-            value={caption}
+            value={post.caption}
             onChange={(e) => setCaption(e.target.value)}
             className='mt-6 w-full  rounded-lg border border-gray-300 px-4 py-1 focus:outline-none'
           />
