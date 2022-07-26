@@ -4,6 +4,7 @@ import { editPostModalState } from '../atoms/editPostState';
 import { useGetPostsQuery, usePostsQuery } from '../generated/graphql';
 import EditPostModal from './EditPostModal';
 import PostCard from './home/PostCard';
+import PostSkeleton from './home/PostSkeleton';
 import MiniProfile from './MiniProfile';
 import Suggestions from './Suggestions';
 
@@ -18,14 +19,14 @@ const Feed = () => {
   });
   const [editPostModal, setEditPostModal] = useRecoilState(editPostModalState);
   if (loading) {
-    return <h3>LOading....</h3>;
+    return [0, 1, 2].map((item, index) => <PostSkeleton key={index} />);
   }
   const { endCursor, hasNextPage } = data?.posts?.pageInfo;
   return (
     <div className='mx-auto grid grid-cols-1 md:max-w-3xl md:grid-cols-2 xl:max-w-4xl xl:grid-cols-3'>
       <section className='col-span-2'>
         {data?.posts.edges.map(({ node }, index) => (
-          <PostCard key={node.id} data={node} />
+          <PostCard key={node.id} post={node} />
           //   <h2 key={post.id}>{post.user.username}</h2>
         ))}
         {editPostModal && <EditPostModal />}

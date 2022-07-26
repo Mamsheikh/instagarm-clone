@@ -22,14 +22,15 @@ import { IUser } from '../../lib/types';
 import { refreshData } from '../../utils';
 import LikeBtn from '../LikeBtn';
 import AddComment from './AddComment';
+import Slider from './Carouseel';
 import Carousel from './Carouseel';
 import PostHeader from './PostHeader';
 
 interface Props {
-  data: Post;
+  post: Post;
 }
 
-const PostCard = ({ data }) => {
+const PostCard: React.FC<Props> = ({ post }) => {
   // console.log('postcard', data.likes);
   const router = useRouter();
   const [isLike, setIsLike] = useState(false);
@@ -41,17 +42,17 @@ const PostCard = ({ data }) => {
   });
 
   useEffect(() => {
-    if (data.likes.find((like) => like.userId === viewer?.id)) {
+    if (post.likes.find((like) => like.userId === viewer?.id)) {
       setIsLike(true);
     } else {
       setIsLike(false);
     }
-  }, [data.likes]);
+  }, [post.likes]);
 
   const handleLike = async () => {
     await toggleLike({
       variables: {
-        postId: data.id,
+        postId: post.id,
       },
       refetchQueries: () => [{ query: GetPostsDocument }],
     });
@@ -60,10 +61,10 @@ const PostCard = ({ data }) => {
   const handleUnLike = async () => {
     await toggleLike({
       variables: {
-        postId: data.id,
+        postId: post.id,
       },
       refetchQueries: () => [{ query: GetPostsDocument }],
-      // update: (cache, { data }) => {
+      // update: (cache, { post }) => {
       //   console.log(cache);
       //   const postsData = cache.readQuery({
       //     query: GetPostsDocument,
@@ -73,14 +74,18 @@ const PostCard = ({ data }) => {
     setIsLike(false);
   };
   return (
-    <div className='relative my-7 rounded-sm bg-white dark:border dark:border-gray-400 dark:bg-black'>
+    <div className='relative my-7 mx-auto max-w-lg rounded-sm bg-white dark:border dark:border-gray-400 dark:bg-black'>
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
-      <PostHeader data={data} />
-      {data.images.length > 1 ? (
-        <Carousel id={data.id} images={data.images} />
+      <PostHeader post={post} />
+      {post.images.length > 1 ? (
+        <Slider id={post.id} images={post.images} />
       ) : (
-        <Link href={`/p/${data.id}`}>
-          <img className='w-full cursor-pointer' src={data.images[0]} alt='' />
+        <Link href={`/p/${post.id}`}>
+          <img
+            className='h-72 w-full cursor-pointer object-cover'
+            src={post.images[0]}
+            alt=''
+          />
         </Link>
       )}
       <div className='flex justify-between p-4'>
@@ -102,19 +107,19 @@ const PostCard = ({ data }) => {
       </div>
       <div className='truncate px-4 dark:text-white'>
         <p className='mb-1 mr-2 text-sm font-semibold'>
-          {data.likes.length} likes
+          {post.likes.length} likes
         </p>
         <span className='mr-1 text-sm font-semibold'>
-          {data?.user.username}
+          {post?.user.username}
         </span>{' '}
-        {data.caption}
+        {post.caption}
       </div>
       <div className='mb-1 cursor-pointer px-4 text-sm text-gray-400 dark:text-white'>
-        <Link href={`/p/${data.id}`}>
-          <a>View all {data.comments.length} comments</a>
+        <Link href={`/p/${post.id}`}>
+          <a>View all {post.comments.length} comments</a>
         </Link>
       </div>
-      {data.comments.map((comment) => (
+      {post.comments.map((comment) => (
         <div
           key={comment.id}
           className='flex justify-between px-4 dark:text-gray-300'
@@ -136,7 +141,7 @@ const PostCard = ({ data }) => {
         2 days ago.
       </div>
       <hr />
-      <AddComment postId={data.id} />
+      <AddComment postId={post.id} />
     </div>
   );
 };

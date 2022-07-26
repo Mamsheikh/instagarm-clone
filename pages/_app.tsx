@@ -1,13 +1,13 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { SessionProvider } from 'next-auth/react';
+
 import { ThemeProvider } from 'next-themes';
 import { ApolloProvider } from '@apollo/client';
 import { RecoilRoot } from 'recoil';
 import Layout from '../components/Layout';
 import apolloClient from '../lib/apollo';
 import { Toaster } from 'react-hot-toast';
-
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={apolloClient}>
