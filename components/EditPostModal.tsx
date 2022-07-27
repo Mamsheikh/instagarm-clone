@@ -31,7 +31,7 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
   const inputRef = useRef(null);
   const [images, setImages] = useState<string[]>();
   const [newImages, setNewImages] = useState([]);
-  const [caption, setCaption] = useState('');
+  const [caption, setCaption] = useState<string>(post.caption);
 
   const handleImagesChange = (e) => {
     const files = [...e.target.files];
@@ -69,19 +69,19 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
     // if (caption === post.caption) return;
     try {
       // if (newImages.length > 0) {
-        const media = await imagesUpload(newImages);
-        const newURLs: string[] = images.concat(media);
-        console.log('images updated', newURLs);
+      const media = await imagesUpload(newImages);
+      const newURLs: string[] = images.concat(media);
+      console.log('images updated', newURLs);
 
-        await updatePost({
-          variables: {
-            input: {
-              id: post.id,
-              caption: caption,
-              images: newURLs,
-            },
+      await updatePost({
+        variables: {
+          input: {
+            id: post.id,
+            caption: caption,
+            images: newURLs,
           },
-        });
+        },
+      });
       // }
     } catch (error) {
       console.log(error);
@@ -166,12 +166,12 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
             onClick={() => inputRef.current && inputRef.current.click()}
             className='mt-6 mb-2 rounded bg-blue-500 px-6 py-1 font-semibold text-white focus:outline-none'
           >
-            Select from computer
+            Add another image
           </button>
           <input
             placeholder='Enter a catchy caption'
             type='text'
-            value={post.caption}
+            value={caption}
             onChange={(e) => setCaption(e.target.value)}
             className='mt-6 w-full  rounded-lg border border-gray-300 px-4 py-1 focus:outline-none'
           />

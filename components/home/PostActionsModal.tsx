@@ -39,7 +39,7 @@ const PostActionsModal = ({ post, open, setOpen, editPost, setEditPost }) => {
       <div className='relative  mx-4 mt-[30vh] max-h-40 w-full max-w-md rounded-lg bg-white dark:bg-black '>
         <div className='flex flex-col items-center justify-center space-y-2 px-4 py-3'>
           <div className='w-full border-b'>
-            <button className='mb-1 w-full font-semibold text-red-400'>
+            <button className='mb-1 w-full font-semibold text-red-400 outline-none focus:outline-none'>
               <span className='text-center'>Delete Post</span>
             </button>
           </div>

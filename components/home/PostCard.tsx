@@ -1,24 +1,18 @@
 import {
   BookmarkIcon,
   ChatIcon,
-  EmojiHappyIcon,
-  HeartIcon,
   PaperAirplaneIcon,
 } from '@heroicons/react/outline';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { LoaderIcon } from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
-import { editPostModalState } from '../../atoms/editPostState';
 import { userState } from '../../atoms/userState';
 import {
   GetPostsDocument,
-  GetPostsQuery,
   useToggleLikeMutation,
 } from '../../generated/graphql';
 import { IUser, Post } from '../../lib/types';
-import { refreshData } from '../../utils';
 import LikeBtn from '../LikeBtn';
 import AddComment from './AddComment';
 import Slider from './ImageSlider';
