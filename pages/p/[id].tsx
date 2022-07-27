@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import prisma from '../../lib/prisma';
-import { Post } from '../../generated/graphql';
+// import { Post } from '../../generated/graphql';
 import { DotsHorizontalIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import AddComment from '../../components/home/AddComment';
@@ -12,19 +12,24 @@ import Layout from '../../components/Layout';
 import Slider from '../../components/home/ImageSlider';
 import PostActionsModal from '../../components/home/PostActionsModal';
 import EditPostModal from '../../components/EditPostModal';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { editPostModalState } from '../../atoms/editPostState';
+import moment from 'moment';
+import { Post } from '../../lib/types';
 
 interface Props {
   post: Post;
   // userr: IUser
 }
 const Post = ({ post }: Props) => {
+  console.log({ post });
   const [open, setOpen] = useState(false);
-  const [editPost, setEditPost] = useState(false);
+  const [editPost, setEditPost] = useRecoilState(editPostModalState);
   const [coment, setComent] = useState();
 
   return (
     <Layout>
-      <div className='max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white md:mx-5 xl:mx-auto'>
+      <div className=' mx-auto overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white md:mx-5 md:max-w-4xl xl:mx-auto'>
         <div className='relative mb-10 flex h-full flex-col bg-white dark:bg-gray-900'>
           {/* header */}
           <header className='static top-0 right-0 flex h-20 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l'>
@@ -41,8 +46,7 @@ const Post = ({ post }: Props) => {
                 </a>
               </Link>
             </div>
-            {/* TODO Icon Button */}
-            {/* <PostOptions post={data.getSinglePost as Post} /> */}
+
             <DotsHorizontalIcon
               className='h-5 w-5 cursor-pointer'
               onClick={() => setOpen(!open)}
@@ -65,7 +69,7 @@ const Post = ({ post }: Props) => {
             )}
           </header>
           {/* Media */}
-          <div className='flex flex-1 flex-col justify-center bg-gray-800 md:mr-80 md:h-full'>
+          <div className='flex max-w-xl flex-1 flex-col justify-center bg-gray-800 md:mr-80 md:h-full'>
             {post.images.length > 1 ? (
               <Slider
                 publicId={post.publicId}
@@ -76,7 +80,7 @@ const Post = ({ post }: Props) => {
               <Link href={`/p/${post.id}`}>
                 <img
                   loading='lazy'
-                  className='mr-0  w-full md:h-full md:object-cover'
+                  className='mr-0 w-full   md:h-full md:object-cover'
                   src={post.images[0]}
                   alt={post.caption}
                 />
@@ -105,10 +109,8 @@ const Post = ({ post }: Props) => {
                       </Link>
                       <span>{post.caption}</span>
                     </div>
-                    <span className='mt-2 text-sm text-gray-400'>
-                      {/* {dayjs(post.createdAt).fromNow(true)}
-                       */}
-                      2 DAYS AGO
+                    <span className='mt-2 text-sm uppercase text-gray-400'>
+                      {moment(post.createdAt).fromNow(true)} ago
                     </span>
                   </div>
                 </div>
@@ -136,9 +138,7 @@ const Post = ({ post }: Props) => {
                           <span>{comment?.content}</span>
                         </div>
                         <span className='mt-2 text-sm text-gray-400'>
-                          {/* {dayjs(comment.createdAt).fromNow(true)}
-                           */}
-                          2 Seconds ago
+                          {moment(post.createdAt).fromNow(true)} ago
                         </span>
                       </div>
                     </div>
@@ -161,7 +161,7 @@ const Post = ({ post }: Props) => {
                 {/* TimeStamp */}
                 <Link href={`/p/${post.id}`}>
                   <a className='px-3 py-1 text-xs uppercase text-gray-500'>
-                    {/* {dayjs(createdAt).fromNow()} */}2 Minutes ago
+                    {moment(post.createdAt).fromNow(true)} ago
                   </a>
                 </Link>
                 <AddComment postId={post.id} />

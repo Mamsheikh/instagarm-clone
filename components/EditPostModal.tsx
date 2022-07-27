@@ -10,8 +10,8 @@ import { imagesUpload } from '../utils/imageUpload';
 import UserCard from './UserCard';
 
 interface EditPostModalProps {
-  editPost: boolean;
-  setEditPost: (editPost: boolean) => void;
+  editPost?: boolean;
+  setEditPost?: (editPost: boolean) => void;
   post: Post;
 }
 
