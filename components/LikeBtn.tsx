@@ -4,7 +4,19 @@ import React from 'react';
 import { useToggleLikeMutation } from '../generated/graphql';
 import { LoaderIcon } from 'react-hot-toast';
 
-const LikeBtn = ({ isLike, handleLike, handleUnLike, loading }) => {
+interface LikeBtnProps {
+  isLike: boolean;
+  handleLike: () => void;
+  handleUnLike: () => void;
+  loading?: boolean;
+}
+
+const LikeBtn: React.FC<LikeBtnProps> = ({
+  isLike,
+  handleLike,
+  handleUnLike,
+  loading,
+}) => {
   //   const [toggleLike, { loading, error }] = useToggleLikeMutation();
   return (
     <>

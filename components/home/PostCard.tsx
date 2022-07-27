@@ -10,6 +10,8 @@ import { useRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
 import {
   GetPostsDocument,
+  PostsDocument,
+  useMeQuery,
   useToggleLikeMutation,
 } from '../../generated/graphql';
 import { IUser, Post } from '../../lib/types';
@@ -26,6 +28,7 @@ interface Props {
 const PostCard: React.FC<Props> = ({ post }) => {
   // console.log('postcard', data.likes);
   const router = useRouter();
+  const { data } = useMeQuery();
   const [isLike, setIsLike] = useState(false);
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
   const [toggleLike, { loading, error }] = useToggleLikeMutation({
@@ -35,7 +38,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
   });
 
   useEffect(() => {
-    if (post.likes.find((like) => like.userId === viewer?.id)) {
+    if (post.likes.find((like) => like.userId === data?.me?.id)) {
       setIsLike(true);
     } else {
       setIsLike(false);
@@ -47,7 +50,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
       variables: {
         postId: post.id,
       },
-      refetchQueries: () => [{ query: GetPostsDocument }],
+      refetchQueries: () => [{ query: PostsDocument }],
     });
     setIsLike(true);
   };
@@ -56,7 +59,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
       variables: {
         postId: post.id,
       },
-      refetchQueries: () => [{ query: GetPostsDocument }],
+      refetchQueries: () => [{ query: PostsDocument }],
       // update: (cache, { post }) => {
       //   console.log(cache);
       //   const postsData = cache.readQuery({

@@ -16,16 +16,63 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { editPostModalState } from '../../atoms/editPostState';
 import moment from 'moment';
 import { Post } from '../../lib/types';
+import {
+  useMeQuery,
+  useToggleLikeMutation,
+  PostsDocument,
+} from '../../generated/graphql';
+import { refreshData } from '../../utils';
 
 interface Props {
   post: Post;
   // userr: IUser
 }
 const Post = ({ post }: Props) => {
-  console.log({ post });
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useRecoilState(editPostModalState);
+  const { data } = useMeQuery();
+  const [isLike, setIsLike] = useState(false);
+  // const [viewer, setViewer] = useRecoilState<IUser>(userState);
+  const [toggleLike, { loading, error }] = useToggleLikeMutation({
+    onCompleted: () => {
+      refreshData(router);
+    },
+  });
   const [coment, setComent] = useState();
+
+  useEffect(() => {
+    if (post.likes.find((like) => like.userId === data?.me?.id)) {
+      setIsLike(true);
+    } else {
+      setIsLike(false);
+    }
+  }, [post.likes]);
+
+  const handleLike = async () => {
+    await toggleLike({
+      variables: {
+        postId: post.id,
+      },
+      // refetchQueries: () => [{ query: PostsDocument }],
+    });
+    setIsLike(true);
+  };
+  const handleUnLike = async () => {
+    await toggleLike({
+      variables: {
+        postId: post.id,
+      },
+      // refetchQueries: () => [{ query: PostsDocument }],
+      // update: (cache, { post }) => {
+      //   console.log(cache);
+      //   const postsData = cache.readQuery({
+      //     query: GetPostsDocument,
+      //   });
+      // },
+    });
+    setIsLike(false);
+  };
 
   return (
     <Layout>
@@ -154,7 +201,11 @@ const Post = ({ post }: Props) => {
               userLike={userLike}
             />
             {/* Like Count */}
-                <LikeBtn isLike={true} />
+                <LikeBtn
+                  isLike={isLike}
+                  handleLike={handleLike}
+                  handleUnLike={handleUnLike}
+                />
                 <p className='px-3 font-semibold'>
                   {post.likes.length} like{post.likes.length === 1 ? '' : 's'}
                 </p>
