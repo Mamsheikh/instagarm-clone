@@ -10,6 +10,7 @@ query Posts($first: Int, $after: String) {
         id
         caption
         images
+        publicId
         userId
         user {
           id

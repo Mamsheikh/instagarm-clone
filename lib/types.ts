@@ -1,4 +1,4 @@
-import { Like } from '../generated/graphql';
+import { Comment, User, Like } from '../generated/graphql';
 
 export interface IUser {
   id: string;
@@ -20,8 +20,11 @@ export interface IUser {
 
 export interface Post {
   id: string;
-  caption: string;
-  images: string[];
-  user: IUser;
-  userId: String;
+  caption?: string | null;
+  images?: string[];
+  publicId?: string[];
+  userId: string;
+  user: User | null;
+  likes?: Like[] | null;
+  comments?: Comment[] | null;
 }

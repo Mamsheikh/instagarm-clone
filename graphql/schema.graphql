@@ -63,6 +63,7 @@ type Post {
   id: String!
   images: [String]
   likes: [Like]!
+  publicId: [String]
   user: User!
   userId: String!
 }
@@ -83,6 +84,7 @@ type Response {
 input UpdatePostInput {
   caption: String
   id: String!
+  images: [String]
 }
 
 input UpdateProfileInput {

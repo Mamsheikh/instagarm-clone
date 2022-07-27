@@ -128,6 +128,7 @@ export type Post = {
   id: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
   likes: Array<Maybe<Like>>;
+  publicId?: Maybe<Array<Maybe<Scalars['String']>>>;
   user: User;
   userId: Scalars['String'];
 };
@@ -166,6 +167,7 @@ export type Response = {
 export type UpdatePostInput = {
   caption?: InputMaybe<Scalars['String']>;
   id: Scalars['String'];
+  images?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type UpdateProfileInput = {
@@ -232,7 +234,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null } | null> | null } | null };
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null } | null> | null } | null };
 
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -474,6 +476,7 @@ export const PostsDocument = gql`
         id
         caption
         images
+        publicId
         userId
         user {
           id

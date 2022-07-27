@@ -1,4 +1,3 @@
-import { getSession } from 'next-auth/react';
 import { extendType, intArg, list, queryField, stringArg } from 'nexus';
 import { Post } from '../../models';
 

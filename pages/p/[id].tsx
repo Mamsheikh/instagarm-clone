@@ -9,8 +9,9 @@ import AddComment from '../../components/home/AddComment';
 import LikeBtn from '../../components/LikeBtn';
 import PostCard from '../../components/PostCard';
 import { images } from '../../data/images';
-import Carousel from '../../components/home/Carouseel';
+import Carousel from '../../components/home/ImageSlider';
 import Layout from '../../components/Layout';
+import Slider from '../../components/home/ImageSlider';
 
 interface Props {
   post: Post;
@@ -46,7 +47,11 @@ const Post = ({ post }: Props) => {
           {/* Media */}
           <div className='flex flex-1 flex-col justify-center bg-gray-800 md:mr-80 md:h-full'>
             {post.images.length > 1 ? (
-              <Carousel id={post.id} images={post.images} />
+              <Slider
+                publicId={post.publicId}
+                id={post.id}
+                images={post.images}
+              />
             ) : (
               <Link href={`/p/${post.id}`}>
                 <img

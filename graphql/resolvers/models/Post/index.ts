@@ -34,7 +34,15 @@ export const Post = objectType({
     t.nonNull.string('id'),
       t.nullable.string('caption'),
       t.list.string('images'),
-      t.nonNull.string('userId'),
+      t.list.field('publicId', {
+        type: 'String',
+        resolve(parent, _args, _ctx) {
+          return parent.images.map((image) =>
+            image.split('/').pop().split('.').slice(0, -1).join('.')
+          );
+        },
+      });
+    t.nonNull.string('userId'),
       t.nonNull.field('user', {
         type: 'User',
         async resolve(parent, _, ctx) {

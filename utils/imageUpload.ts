@@ -31,7 +31,7 @@ export const imageUpload = async (file: File) => {
   // }
 };
 export const imagesUpload = async (images) => {
-  let imgArr = [];
+  let imgArr: string[] = [];
   for (const item of images) {
     const formData = new FormData();
 

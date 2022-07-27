@@ -15,15 +15,14 @@ import { userState } from '../../atoms/userState';
 import {
   GetPostsDocument,
   GetPostsQuery,
-  Post,
   useToggleLikeMutation,
 } from '../../generated/graphql';
-import { IUser } from '../../lib/types';
+import { IUser, Post } from '../../lib/types';
 import { refreshData } from '../../utils';
 import LikeBtn from '../LikeBtn';
 import AddComment from './AddComment';
-import Slider from './Carouseel';
-import Carousel from './Carouseel';
+import Slider from './ImageSlider';
+
 import PostHeader from './PostHeader';
 
 interface Props {
@@ -78,7 +77,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
       <PostHeader post={post} />
       {post.images.length > 1 ? (
-        <Slider id={post.id} images={post.images} />
+        <Slider id={post.id} images={post.images} publicId={post.publicId} />
       ) : (
         <Link href={`/p/${post.id}`}>
           <img

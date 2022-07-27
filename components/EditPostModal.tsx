@@ -67,21 +67,22 @@ const EditPostModal: React.FC<EditPostModalProps> = ({
   const onSubmit = async () => {
     // console.log({ imgNewUrl, imgOldUrl });
     // if (caption === post.caption) return;
-    if (newImages.length > 0) {
-      const media = await imagesUpload(newImages);
-      const newURLs = [...images, media];
-      console.log('images updated', newURLs);
-    }
     try {
-      // await updatePost({
-      //   variables: {
-      //     input: {
-      //       id: post.id,
-      //       caption: caption,
-      //       // images: [...imgOldUrl, media],
-      //     },
-      //   },
-      // });
+      // if (newImages.length > 0) {
+        const media = await imagesUpload(newImages);
+        const newURLs: string[] = images.concat(media);
+        console.log('images updated', newURLs);
+
+        await updatePost({
+          variables: {
+            input: {
+              id: post.id,
+              caption: caption,
+              images: newURLs,
+            },
+          },
+        });
+      // }
     } catch (error) {
       console.log(error);
     }

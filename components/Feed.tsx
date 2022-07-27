@@ -29,7 +29,6 @@ const Feed = () => {
           <PostCard key={node.id} post={node} />
           //   <h2 key={post.id}>{post.user.username}</h2>
         ))}
-        {editPostModal && <EditPostModal />}
         {hasNextPage ? (
           <div className='flex items-center justify-center'>
             <button
