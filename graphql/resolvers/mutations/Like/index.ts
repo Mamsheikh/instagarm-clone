@@ -1,4 +1,5 @@
 import { mutationField, nonNull, stringArg } from 'nexus';
+import { isAuth } from '../../../../utils/auth';
 
 export const toggleLike = mutationField('toggleLike', {
   type: 'Like',
@@ -7,9 +8,9 @@ export const toggleLike = mutationField('toggleLike', {
   },
   resolve: async (_, args, ctx) => {
     const req = ctx.req;
-    // const session = await getSession({ req });
+    const decodedJwt = await isAuth(req);
     const user = await ctx.prisma.user.findUnique({
-      where: { email: '' },
+      where: { id: decodedJwt.userId },
     });
     try {
       const isExist = await ctx.prisma.like.findFirst({

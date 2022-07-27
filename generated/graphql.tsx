@@ -212,7 +212,7 @@ export type CreatePostMutationVariables = Exact<{
 }>;
 
 
-export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name?: string | null, id: string } } | null };
+export type CreatePostMutation = { __typename?: 'Mutation', createPost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, userId: string, user: { __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null };
 
 export type UpdatePostMutationVariables = Exact<{
   input: UpdatePostInput;
@@ -343,10 +343,37 @@ export const CreatePostDocument = gql`
     id
     caption
     images
+    publicId
     userId
     user {
-      name
       id
+      name
+      username
+      image
+    }
+    likes {
+      id
+      userId
+      postId
+      post {
+        caption
+        images
+        userId
+      }
+      user {
+        id
+        name
+        image
+      }
+    }
+    comments {
+      id
+      content
+      user {
+        username
+        id
+        image
+      }
     }
   }
 }

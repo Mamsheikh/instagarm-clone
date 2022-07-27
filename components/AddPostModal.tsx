@@ -6,7 +6,11 @@ import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
 import { postState } from '../atoms/addPostState';
 import { editPostState } from '../atoms/editPostState';
-import { useCreatePostMutation } from '../generated/graphql';
+import {
+  Post,
+  PostsDocument,
+  useCreatePostMutation,
+} from '../generated/graphql';
 import { imagesUpload } from '../utils/imageUpload';
 import UserCard from './UserCard';
 
@@ -61,6 +65,22 @@ const AddPostModal = ({ user }) => {
             caption,
             images: media,
           },
+        },
+        update: (cache) => {
+          cache.evict({ fieldName: 'posts:{}' });
+        },
+        // update(cache, { data: { createPost } }) {
+        //   const { posts }: { posts: any } = cache.readQuery({
+        //     query: PostsDocument,
+        //   });
+        //   cache.writeQuery({
+        //     query: PostsDocument,
+        //     data: { posts: [...posts.edges.node, createPost] },
+        //   });
+        // },
+        onCompleted: () => {
+          setAddPost(false);
+          toast.success('Post created successfully');
         },
       });
     }
@@ -135,7 +155,10 @@ const AddPostModal = ({ user }) => {
             placeholder='Enter caption'
             className='w-full rounded border p-2'
           />
-          <button className='m-2 w-full rounded bg-blue-500 p-2 text-white transition-all duration-150 ease-out hover:bg-blue-600'>
+          <button
+            onClick={onSubmit}
+            className='m-2 w-full rounded bg-blue-500 p-2 text-white transition-all duration-150 ease-out hover:bg-blue-600'
+          >
             Create Post
           </button>
         </div>

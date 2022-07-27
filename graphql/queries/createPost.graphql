@@ -3,10 +3,37 @@ mutation CreatePost($input: CreatePostInput!) {
     id
     caption
     images
+    publicId
     userId
     user {
-      name
       id
+      name
+      username
+      image
+    }
+    likes {
+      id
+      userId
+      postId
+      post {
+        caption
+        images
+        userId
+      }
+      user {
+        id
+        name
+        image
+      }
+    }
+    comments {
+      id
+      content
+      user {
+        username
+        id
+        image
+      }
     }
   }
 }

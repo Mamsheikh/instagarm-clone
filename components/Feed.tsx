@@ -17,7 +17,6 @@ const Feed = () => {
       first: 4,
     },
   });
-  const [editPostModal, setEditPostModal] = useRecoilState(editPostModalState);
   if (loading) {
     return [0, 1, 2].map((item, index) => <PostSkeleton key={index} />);
   }
@@ -25,7 +24,7 @@ const Feed = () => {
   return (
     <div className='mx-auto grid grid-cols-1 md:max-w-3xl md:grid-cols-2 xl:max-w-4xl xl:grid-cols-3'>
       <section className='col-span-2'>
-        {data?.posts.edges.map(({ node }, index) => (
+        {data?.posts?.edges.map(({ node }, index) => (
           <PostCard key={node.id} post={node} />
           //   <h2 key={post.id}>{post.user.username}</h2>
         ))}
