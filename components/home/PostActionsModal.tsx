@@ -14,11 +14,25 @@ import { postState } from '../../atoms/addPostState';
 import { editPostModalState, editPostState } from '../../atoms/editPostState';
 import { postActionsState } from '../../atoms/postActionState';
 import { userState } from '../../atoms/userState';
-import { useDeletePostMutation } from '../../generated/graphql';
+import { Post, useDeletePostMutation } from '../../generated/graphql';
 import { IUser } from '../../lib/types';
 import EditPostModal from '../EditPostModal';
 
-const PostActionsModal = ({ post, open, setOpen, editPost, setEditPost }) => {
+interface PostActionsModalProps {
+  post: Post;
+  open: boolean;
+  setOpen?: (open: boolean) => void;
+  editPost?: boolean;
+  setEditPost?: (editPost: boolean) => void;
+}
+
+const PostActionsModal: React.FC<PostActionsModalProps> = ({
+  post,
+  open,
+  setOpen,
+  editPost,
+  setEditPost,
+}) => {
   const [deletePost, { loading }] = useDeletePostMutation();
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
 

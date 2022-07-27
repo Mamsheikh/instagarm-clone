@@ -2,6 +2,8 @@ import { DotsHorizontalIcon } from '@heroicons/react/solid';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import { useRecoilState } from 'recoil';
+import { editPostModalState } from '../../atoms/editPostState';
 import EditPostModal from '../EditPostModal';
 import PostActionsModal from './PostActionsModal';
 

@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+
 import React, { useEffect, useState } from 'react';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import prisma from '../../lib/prisma';
@@ -7,19 +8,18 @@ import { DotsHorizontalIcon } from '@heroicons/react/outline';
 import Link from 'next/link';
 import AddComment from '../../components/home/AddComment';
 import LikeBtn from '../../components/LikeBtn';
-import PostCard from '../../components/PostCard';
-import { images } from '../../data/images';
-import Carousel from '../../components/home/ImageSlider';
 import Layout from '../../components/Layout';
 import Slider from '../../components/home/ImageSlider';
+import PostActionsModal from '../../components/home/PostActionsModal';
+import EditPostModal from '../../components/EditPostModal';
 
 interface Props {
   post: Post;
   // userr: IUser
 }
 const Post = ({ post }: Props) => {
-  console.log(post);
-  // const { data: session, status } = useSession();
+  const [open, setOpen] = useState(false);
+  const [editPost, setEditPost] = useState(false);
   const [coment, setComent] = useState();
 
   return (
@@ -29,7 +29,7 @@ const Post = ({ post }: Props) => {
           {/* header */}
           <header className='static top-0 right-0 flex h-20 items-center justify-between border-b border-gray-300 px-3 md:absolute md:w-80 md:border-l'>
             <div className='flex items-center'>
-              <Link href={`/profile/${post.user.id}`}>
+              <Link href={`/u/${post.user.id}`}>
                 <a className='flex items-center'>
                   <img
                     className='h-10 w-10 cursor-pointer rounded-full'
@@ -43,6 +43,26 @@ const Post = ({ post }: Props) => {
             </div>
             {/* TODO Icon Button */}
             {/* <PostOptions post={data.getSinglePost as Post} /> */}
+            <DotsHorizontalIcon
+              className='h-5 w-5 cursor-pointer'
+              onClick={() => setOpen(!open)}
+            />
+            {open && (
+              <PostActionsModal
+                post={post}
+                open={open}
+                setOpen={setOpen}
+                editPost={editPost}
+                setEditPost={setEditPost}
+              />
+            )}
+            {editPost && (
+              <EditPostModal
+                editPost={editPost}
+                post={post}
+                setEditPost={setEditPost}
+              />
+            )}
           </header>
           {/* Media */}
           <div className='flex flex-1 flex-col justify-center bg-gray-800 md:mr-80 md:h-full'>
@@ -68,7 +88,7 @@ const Post = ({ post }: Props) => {
               <div className='md:min-h-48 overflow-y-auto px-3'>
                 {/* Post Caption */}
                 <div className='mb-3 flex border-b py-2'>
-                  <Link href={`/profile/${post.user.id}`}>
+                  <Link href={`/u/${post.user.id}`}>
                     <a className='mr-2 font-semibold '>
                       <img
                         className='my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500'
@@ -78,7 +98,7 @@ const Post = ({ post }: Props) => {
                   </Link>
                   <div className='mt-2 flex flex-col'>
                     <div>
-                      <Link href={`/profile/${post.user.id}`}>
+                      <Link href={`/u/${post.user.id}`}>
                         <a className='mr-1 inline-block font-semibold hover:underline'>
                           {post.user.username}
                         </a>
