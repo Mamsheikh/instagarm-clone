@@ -46,6 +46,7 @@ type Mutation {
   deletePost(postId: String!): Post
   follow(id: String!): User
   login(input: LoginUserInput!): User
+  logout: Boolean
   signup(input: CreateUserInput!): User
   toggleLike(postId: String!): Like
   unfollow(id: String!): User

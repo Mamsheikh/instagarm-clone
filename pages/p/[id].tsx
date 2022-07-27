@@ -31,7 +31,9 @@ const Post = ({ post }: Props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useRecoilState(editPostModalState);
-  const { data } = useMeQuery();
+  const { data } = useMeQuery({
+    errorPolicy: 'ignore',
+  });
   const [isLike, setIsLike] = useState(false);
   // const [viewer, setViewer] = useRecoilState<IUser>(userState);
   const [toggleLike, { loading, error }] = useToggleLikeMutation({

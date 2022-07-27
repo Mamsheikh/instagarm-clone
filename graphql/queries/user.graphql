@@ -61,3 +61,7 @@ mutation Login($input: LoginUserInput!) {
     }
   }
 }
+
+mutation LogoutMutation {
+  logout
+}

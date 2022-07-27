@@ -124,6 +124,28 @@ export const updateProfile = mutationField('updateProfile', {
   },
 });
 
+export const logoutMutation = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('logout', {
+      type: 'Boolean',
+      async resolve(_parent, _args, { res }) {
+        res.setHeader(
+          'Set-Cookie',
+          serialize('sid', '', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== 'development',
+            expires: new Date(0),
+            sameSite: 'strict',
+            path: '/',
+          })
+        );
+        return true;
+      },
+    });
+  },
+});
+
 export const follow = mutationField('follow', {
   type: 'User',
   args: {

@@ -28,7 +28,9 @@ interface Props {
 const PostCard: React.FC<Props> = ({ post }) => {
   // console.log('postcard', data.likes);
   const router = useRouter();
-  const { data } = useMeQuery();
+  const { data } = useMeQuery({
+    errorPolicy:'ignore'
+  });
   const [isLike, setIsLike] = useState(false);
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
   const [toggleLike, { loading, error }] = useToggleLikeMutation({

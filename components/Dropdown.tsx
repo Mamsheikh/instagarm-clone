@@ -1,15 +1,17 @@
-import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import { User } from '../generated/graphql';
+import { useRouter } from 'next/router';
+import React, { Fragment } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
-import { UserIcon } from '@heroicons/react/outline';
+import { useLogoutMutationMutation, User } from '../generated/graphql';
 
 interface DropdownProps {
   user?: User;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ user }) => {
+  const router = useRouter();
+  const [logout, { client }] = useLogoutMutationMutation();
   return (
     <div>
       <Menu as='div' className='relative'>
@@ -48,7 +50,14 @@ const Dropdown: React.FC<DropdownProps> = ({ user }) => {
               </Menu.Item>
               <Menu.Item>
                 <a
-                  onClick={() => {}}
+                  onClick={async () => {
+                    await logout({
+                      onCompleted: () => {
+                        router.push('/login');
+                      },
+                    });
+                    await client.resetStore();
+                  }}
                   className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-white'
                 >
                   Logout

@@ -1,28 +1,30 @@
-import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
-import { RiMessengerLine } from 'react-icons/ri';
-import { AiOutlinePlusSquare, AiOutlineCompass } from 'react-icons/ai';
-import { BsInstagram, BsSunFill } from 'react-icons/bs';
-import { FaMoon } from 'react-icons/fa';
+import {
+  HomeIcon,
+  MenuIcon,
+  MoonIcon,
+  SunIcon,
+} from '@heroicons/react/outline';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import { useEffect } from 'react';
+import { AiOutlineCompass, AiOutlinePlusSquare } from 'react-icons/ai';
+import { BsInstagram } from 'react-icons/bs';
+import { RiMessengerLine } from 'react-icons/ri';
+import { useRecoilState } from 'recoil';
+import { postState } from '../../atoms/addPostState';
+import { userState } from '../../atoms/userState';
+import { useMeQuery } from '../../generated/graphql';
+import AddPostModal from '../AddPostModal';
 import Dropdown from '../Dropdown';
 import Search from '../Search';
-import { MoonIcon, SunIcon } from '@heroicons/react/outline';
-import { GetServerSideProps } from 'next';
-import prisma from '../../lib/prisma';
-import { useMeQuery } from '../../generated/graphql';
-import { useRecoilState } from 'recoil';
-import { userState } from '../../atoms/userState';
-import { postState } from '../../atoms/addPostState';
-import AddPostModal from '../AddPostModal';
-import Link from 'next/link';
-import { HomeIcon, MenuIcon } from '@heroicons/react/outline';
 
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [addPost, setAddPost] = useRecoilState(postState);
 
-  const { data } = useMeQuery();
+  const { data } = useMeQuery({
+    errorPolicy: 'ignore',
+  });
 
   const [viewer, setViewer] = useRecoilState(userState);
 
