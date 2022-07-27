@@ -14,20 +14,28 @@ import { postState } from '../../atoms/addPostState';
 import { editPostModalState, editPostState } from '../../atoms/editPostState';
 import { postActionsState } from '../../atoms/postActionState';
 import { userState } from '../../atoms/userState';
+import { useDeletePostMutation } from '../../generated/graphql';
 import { IUser } from '../../lib/types';
 import EditPostModal from '../EditPostModal';
 
 const PostActionsModal = ({ post, open, setOpen, editPost, setEditPost }) => {
-  // console.log('post', user);
-  const [isOpen, setIsOpen] = useRecoilState(postActionsState);
-  // const [editPost, setEditPost] = useRecoilState(editPostState);
-  const [editPostModal, setEditPostModal] = useRecoilState(editPostModalState);
+  const [deletePost, { loading }] = useDeletePostMutation();
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
-  const [addPost, setAddPost] = useRecoilState(postState);
 
   const onEditPost = () => {
     setOpen(false);
     setEditPost(!editPost);
+  };
+  const onDeletePost = async () => {
+    await deletePost({
+      variables: {
+        postId: post.id,
+      },
+      update: (cache) => {
+        cache.evict({ id: 'Post:' + post.id });
+      },
+    });
+    setOpen(false);
   };
   return (
     <Dialog
@@ -39,8 +47,13 @@ const PostActionsModal = ({ post, open, setOpen, editPost, setEditPost }) => {
       <div className='relative  mx-4 mt-[30vh] max-h-40 w-full max-w-md rounded-lg bg-white dark:bg-black '>
         <div className='flex flex-col items-center justify-center space-y-2 px-4 py-3'>
           <div className='w-full border-b'>
-            <button className='mb-1 w-full font-semibold text-red-400 outline-none focus:outline-none'>
-              <span className='text-center'>Delete Post</span>
+            <button
+              onClick={onDeletePost}
+              className='mb-1 w-full font-semibold text-red-400 outline-none focus:outline-none'
+            >
+              <span className='text-center'>
+                {loading ? 'Deleting...' : 'Delete Post'}
+              </span>
             </button>
           </div>
           <div className='w-full border-b'>

@@ -43,6 +43,7 @@ input LoginUserInput {
 type Mutation {
   createComment(content: String!, postId: String!): Comment
   createPost(input: CreatePostInput!): Post
+  deletePost(postId: String!): Post
   follow(id: String!): User
   login(input: LoginUserInput!): User
   signup(input: CreateUserInput!): User

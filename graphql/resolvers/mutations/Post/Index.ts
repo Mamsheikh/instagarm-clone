@@ -1,6 +1,6 @@
 import { isAuth } from './../../../../utils/auth';
 import { CreatePostInput, UpdatePostInput } from './../../inputs';
-import { mutationField, nonNull } from 'nexus';
+import { mutationField, nonNull, extendType, stringArg } from 'nexus';
 import { nanoid } from 'nanoid';
 
 export const createPost = mutationField('createPost', {
@@ -67,5 +67,41 @@ export const updatePost = mutationField('updatePost', {
     } catch (error) {
       console.log(error);
     }
+  },
+});
+
+export const deletePost = extendType({
+  type: 'Mutation',
+  definition(t) {
+    t.field('deletePost', {
+      type: 'Post',
+      args: {
+        postId: nonNull(stringArg()),
+      },
+      resolve: async (_, { postId }, ctx) => {
+        try {
+          const req = ctx.req;
+          const decodedJwt = await isAuth(req);
+          const user = await ctx.prisma.user.findUnique({
+            where: { id: decodedJwt.userId },
+          });
+          const post = await ctx.prisma.post.findFirst({
+            where: {
+              id: postId,
+            },
+          });
+
+          if (post.userId !== user.id) {
+            throw new Error('not authorized');
+          }
+
+          return await ctx.prisma.post.delete({
+            where: { id: postId },
+          });
+        } catch (error) {
+          console.log(`failed to delete post ${error}`);
+        }
+      },
+    });
   },
 });
