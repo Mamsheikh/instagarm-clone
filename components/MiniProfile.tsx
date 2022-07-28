@@ -13,7 +13,7 @@ const MiniProfile = () => {
   return (
     <div className='mt-10 ml-10 flex items-center justify-center'>
       <div className=' rounded-full object-cover'>
-        {viewer.image ? (
+        {viewer?.image ? (
           <img
             className='h-12 w-12 rounded-full'
             src={viewer?.image}

@@ -158,7 +158,6 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  getPosts?: Maybe<Array<Maybe<Post>>>;
   getUser: User;
   me?: Maybe<User>;
   posts?: Maybe<Response>;
@@ -257,12 +256,7 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, user: { __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null }, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null>, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null> } | null } | null> | null } | null };
-
-export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetPostsQuery = { __typename?: 'Query', getPosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string, user: { __typename?: 'User', name?: string | null, username?: string | null, id: string, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, user: { __typename?: 'User', username?: string | null, id: string, image?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string, post: { __typename?: 'Post', caption?: string | null, images?: Array<string | null> | null, id: string, userId: string }, user: { __typename?: 'User', id: string, name?: string | null, image?: string | null } } | null> } | null> | null };
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null } | null> | null } | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -541,35 +535,23 @@ export const PostsDocument = gql`
         publicId
         createdAt
         userId
-        user {
-          id
-          name
-          username
-          image
-        }
         likes {
           id
           userId
           postId
-          post {
-            caption
-            images
-            userId
-          }
-          user {
-            id
-            name
-            image
-          }
+        }
+        user {
+          id
+          name
+          email
+          username
+          image
         }
         comments {
           id
           content
-          user {
-            username
-            id
-            image
-          }
+          postId
+          userId
         }
       }
     }
@@ -605,74 +587,6 @@ export function usePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Post
 export type PostsQueryHookResult = ReturnType<typeof usePostsQuery>;
 export type PostsLazyQueryHookResult = ReturnType<typeof usePostsLazyQuery>;
 export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariables>;
-export const GetPostsDocument = gql`
-    query GetPosts {
-  getPosts {
-    id
-    caption
-    images
-    userId
-    user {
-      name
-      username
-      id
-      image
-    }
-    comments {
-      id
-      content
-      user {
-        username
-        id
-        image
-      }
-    }
-    likes {
-      post {
-        caption
-        images
-        id
-        userId
-      }
-      id
-      userId
-      postId
-      user {
-        id
-        name
-        image
-      }
-    }
-  }
-}
-    `;
-
-/**
- * __useGetPostsQuery__
- *
- * To run a query within a React component, call `useGetPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetPostsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, options);
-      }
-export function useGetPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, options);
-        }
-export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
-export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
-export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {

@@ -11,9 +11,9 @@ const PostSkeleton = () => {
             <div className='h-10 w-10 animate-pulse rounded-full bg-gray-300 object-cover' />
           </div>
 
-          <p className='ml-4 flex-1 text-sm font-semibold dark:text-white'>
+          <div className='ml-4 flex-1 text-sm font-semibold dark:text-white'>
             <div className='h-4 w-20 animate-pulse rounded bg-gray-200'></div>
-          </p>
+          </div>
 
           <DotsHorizontalIcon
             className='h-5 w-5 cursor-pointer'
@@ -30,9 +30,9 @@ const PostSkeleton = () => {
           <div className='h-8 w-8 animate-pulse rounded-full bg-gray-300 object-cover' />
         </div>
 
-        <p className='ml-4 flex-1 text-sm font-semibold dark:text-white'>
+        <div className='ml-4 flex-1 text-sm font-semibold dark:text-white'>
           <div className='h-4 w-20 animate-pulse rounded bg-gray-200'></div>
-        </p>
+        </div>
 
         <BookmarkIcon className='postBtn' />
       </div>

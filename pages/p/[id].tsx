@@ -15,13 +15,14 @@ import EditPostModal from '../../components/EditPostModal';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { editPostModalState } from '../../atoms/editPostState';
 import moment from 'moment';
-import { Post } from '../../lib/types';
+// import { Post } from '../../lib/types';
 import {
   useMeQuery,
   useToggleLikeMutation,
-  PostsDocument,
+  Post,
 } from '../../generated/graphql';
 import { refreshData } from '../../utils';
+import { FaUserCircle } from 'react-icons/fa';
 
 interface Props {
   post: Post;
@@ -143,10 +144,14 @@ const Post = ({ post }: Props) => {
                 <div className='mb-3 flex border-b py-2'>
                   <Link href={`/u/${post.user.id}`}>
                     <a className='mr-2 font-semibold '>
-                      <img
-                        className='my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500'
-                        src={post.user.image}
-                      />
+                      {post.user.image ? (
+                        <img
+                          className='my-2 h-10 w-10 cursor-pointer rounded-full object-cover ring-2 ring-red-500'
+                          src={post.user.image}
+                        />
+                      ) : (
+                        <FaUserCircle className='h-10 w-10' />
+                      )}
                     </a>
                   </Link>
                   <div className='mt-2 flex flex-col'>
@@ -170,11 +175,14 @@ const Post = ({ post }: Props) => {
                     <div key={comment?.id} className='mt-2 flex'>
                       <Link href={`/u/${comment?.user?.id}`}>
                         <a className='mr-2 font-semibold '>
-                          {/* {comment?.user.} */}
-                          <img
-                            className='h-10 w-10 cursor-pointer rounded-full'
-                            src={comment?.user?.image}
-                          />
+                          {post.user.image ? (
+                            <img
+                              className='h-10 w-10 cursor-pointer rounded-full'
+                              src={comment?.user?.image}
+                            />
+                          ) : (
+                            <FaUserCircle className='h-10 w-10' />
+                          )}
                         </a>
                       </Link>
                       <div className='flex flex-col'>

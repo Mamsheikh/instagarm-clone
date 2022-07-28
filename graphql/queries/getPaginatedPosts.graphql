@@ -13,35 +13,23 @@ query Posts($first: Int, $after: String) {
         publicId
         createdAt
         userId
-        user {
-          id
-          name
-          username
-          image
-        }
         likes {
           id
           userId
           postId
-          post {
-            caption
-            images
-            userId
-          }
-          user {
-            id
-            name
-            image
-          }
+        }
+        user {
+          id
+          name
+          email
+          username
+          image
         }
         comments {
           id
           content
-          user {
-            username
-            id
-            image
-          }
+          postId
+          userId
         }
       }
     }

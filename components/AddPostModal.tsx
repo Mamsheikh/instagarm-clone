@@ -22,7 +22,7 @@ const AddPostModal = ({ user }) => {
     },
   });
   const inputRef = useRef(null);
-  const [editPost, setEditPost] = useRecoilState(editPostState);
+  const [uploading, setUploading] = useState(false);
   const [addPost, setAddPost] = useRecoilState(postState);
   const [images, setImages] = useState([]);
   const [caption, setCaption] = useState('');
@@ -53,37 +53,35 @@ const AddPostModal = ({ user }) => {
 
   const onSubmit = async () => {
     let media = [];
+    setUploading(true);
     if (images.length > 0) {
       media = await imagesUpload(images);
     }
-    if (images.length === 0) {
-      toast.error('Please select a cool Pic🌚');
-    } else {
-      await createPost({
-        variables: {
-          input: {
-            caption,
-            images: media,
-          },
+    setUploading(false);
+    await createPost({
+      variables: {
+        input: {
+          caption,
+          images: media,
         },
-        update: (cache) => {
-          cache.evict({ fieldName: 'posts:{}' });
-        },
-        // update(cache, { data: { createPost } }) {
-        //   const { posts }: { posts: any } = cache.readQuery({
-        //     query: PostsDocument,
-        //   });
-        //   cache.writeQuery({
-        //     query: PostsDocument,
-        //     data: { posts: [...posts.edges.node, createPost] },
-        //   });
-        // },
-        onCompleted: () => {
-          setAddPost(false);
-          toast.success('Post created successfully');
-        },
-      });
-    }
+      },
+      update: (cache) => {
+        cache.evict({ fieldName: 'posts:{}' });
+      },
+      // update(cache, { data: { createPost } }) {
+      //   const { posts }: { posts: any } = cache.readQuery({
+      //     query: PostsDocument,
+      //   });
+      //   cache.writeQuery({
+      //     query: PostsDocument,
+      //     data: { posts: [...posts.edges.node, createPost] },
+      //   });
+      // },
+      onCompleted: () => {
+        setAddPost(false);
+        toast.success('Post created successfully');
+      },
+    });
   };
 
   return (
@@ -159,7 +157,8 @@ const AddPostModal = ({ user }) => {
             onClick={onSubmit}
             className='m-2 w-full rounded bg-blue-500 p-2 text-white transition-all duration-150 ease-out hover:bg-blue-600'
           >
-            Create Post
+            {uploading && 'Uploading...'}{' '}
+            {loading ? 'Creating post...' : ' Create Post'}
           </button>
         </div>
       </div>

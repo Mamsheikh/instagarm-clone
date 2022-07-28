@@ -8,6 +8,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { postState } from '../../atoms/addPostState';
@@ -34,7 +35,7 @@ const PostActionsModal: React.FC<PostActionsModalProps> = ({
   setEditPost,
 }) => {
   const [deletePost, { loading }] = useDeletePostMutation();
-  const [viewer, setViewer] = useRecoilState<IUser>(userState);
+  const router = useRouter();
 
   const onEditPost = () => {
     setOpen(false);
@@ -47,6 +48,9 @@ const PostActionsModal: React.FC<PostActionsModalProps> = ({
       },
       update: (cache) => {
         cache.evict({ id: 'Post:' + post.id });
+      },
+      onCompleted: () => {
+        router.push('/');
       },
     });
     setOpen(false);

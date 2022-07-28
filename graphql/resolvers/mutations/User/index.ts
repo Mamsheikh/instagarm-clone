@@ -155,7 +155,7 @@ export const follow = mutationField('follow', {
     const req = ctx.req;
     const decodedJwt = await isAuth(req);
     const user = await ctx.prisma.user.findUnique({
-      where: { email: decodedJwt.userId },
+      where: { id: decodedJwt.userId },
     });
     try {
       const toFollowUser = await ctx.prisma.user.findUnique({
@@ -173,7 +173,9 @@ export const follow = mutationField('follow', {
           },
         },
       });
-    } catch (error) {}
+    } catch (error) {
+      console.log(`failed to follow user: ${error}`);
+    }
   },
 });
 

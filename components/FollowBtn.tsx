@@ -14,6 +14,7 @@ const FollowBtn = ({ user }: Props) => {
   const router = useRouter();
   const viewer = useRecoilValue<IUser>(userState);
   const [followed, setFollowed] = useState(false);
+  const [back, setBack] = useState(false);
   const [follow] = useFollowMutation({
     onCompleted: () => {
       refreshData();
@@ -32,6 +33,9 @@ const FollowBtn = ({ user }: Props) => {
   useEffect(() => {
     if (viewer?.following.find((item) => item.id === user.id)) {
       setFollowed(true);
+    }
+    if (viewer?.followers.find((item) => item.id === user.id)) {
+      setBack(true);
     }
     return () => setFollowed(false);
   }, [user.following, user.id]);
@@ -57,7 +61,7 @@ const FollowBtn = ({ user }: Props) => {
       {followed ? (
         <button
           onClick={handleUnFollow}
-          className='rounded bg-red-400 px-5 py-1 text-white'
+          className='rounded bg-red-500 px-4  py-1 text-white'
         >
           Unfollow
         </button>
@@ -66,7 +70,7 @@ const FollowBtn = ({ user }: Props) => {
           onClick={handleFollow}
           className='rounded bg-blue-500 px-5 py-1 text-white'
         >
-          Follow
+          Follow {back && 'Back'}
         </button>
       )}
     </>

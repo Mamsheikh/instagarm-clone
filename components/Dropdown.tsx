@@ -4,21 +4,23 @@ import { useRouter } from 'next/router';
 import React, { Fragment } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { useLogoutMutationMutation, User } from '../generated/graphql';
+import { IUser } from '../lib/types';
 
 interface DropdownProps {
-  user?: User;
+  image?: string;
+  id: string;
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ user }) => {
+const Dropdown: React.FC<DropdownProps> = ({ image, id }) => {
   const router = useRouter();
   const [logout, { client }] = useLogoutMutationMutation();
   return (
     <div>
       <Menu as='div' className='relative'>
         <Menu.Button>
-          {user.image ? (
+          {image ? (
             <img
-              src={user?.image}
+              src={image}
               className='h-8 w-8 rounded-full object-cover'
               alt=''
             />
@@ -37,7 +39,7 @@ const Dropdown: React.FC<DropdownProps> = ({ user }) => {
             <Menu.Items className='absolute right-0 mt-2 w-32  origin-top-right rounded-md border bg-white shadow-lg dark:bg-black'>
               <Menu.Item>
                 {({ active }) => (
-                  <Link href={`/u/${user.id}`}>
+                  <Link href={`/u/${id}`}>
                     <a
                       className={`${
                         active ? 'bg-gray-100 ' : ''

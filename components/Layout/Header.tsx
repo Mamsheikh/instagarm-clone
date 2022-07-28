@@ -65,31 +65,12 @@ const Header = () => {
         {/* Search Input TODO: */}
         <Search />
         <div className='flex items-center justify-end space-x-4'>
-          {/* HomeIcon */}
+          <Link href='/'>
+            <a>
+              <HomeIcon className='navBtn' />
+            </a>
+          </Link>
 
-          {/* <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='navBtn'
-            viewBox='0 0 20 20'
-            fill='currentColor'
-          >
-            <path d='M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z' />
-          </svg> */}
-          <HomeIcon className='navBtn' />
-          {/* MenuIcon */}
-          {/* <svg
-            xmlns='http://www.w3.org/2000/svg'
-            className='h-6 w-6 md:hidden'
-            viewBox='0 0 20 20'
-            fill='currentColor'
-          >
-            <path
-              fillRule='evenodd'
-              d='M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z'
-              clipRule='evenodd'
-            />
-          
-          </svg> */}
           <MenuIcon className='h-6 md:hidden' />
           <div onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
             {theme === 'light' ? (
@@ -106,7 +87,7 @@ const Header = () => {
           </div>
           {data?.me ? (
             <>
-              <div className='navBtn relative'>
+              {/* <div className='navBtn relative'>
                 <Link href='/message'>
                   <a>
                     <RiMessengerLine className='navBtn' />
@@ -115,7 +96,7 @@ const Header = () => {
                     </span>
                   </a>
                 </Link>
-              </div>
+              </div> */}
               <div className=' relative'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
@@ -137,13 +118,13 @@ const Header = () => {
                 onClick={() => setAddPost(!addPost)}
                 className='navBtn'
               />
-              <AiOutlineCompass className='navBtn' />
-              {/* <div className='avatar'>
-                <div className='-ml-2 h-8 w-8 rounded-full object-contain'>
-                  <img src={session?.user?.image} />
-                </div>
-              </div> */}
-              <Dropdown user={data?.me} />
+              <Link href='/explore'>
+                <a>
+                  <AiOutlineCompass className='navBtn' />
+                </a>
+              </Link>
+
+              <Dropdown id={data?.me?.id} image={data?.me?.image} />
               {addPost && <AddPostModal user={data?.me} />}
             </>
           ) : (
@@ -160,19 +141,3 @@ const Header = () => {
 };
 
 export default Header;
-// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//   // const { data: session, status } = useSession();
-//   // const userr = await prisma.user.findUnique({
-//   //   where: {email: session.user.email}
-//   // })
-//   const user = await prisma.user.findUnique({
-//     where: { id: params.id as string },
-//     // include: { posts: true, followedBy: true, following: true },
-//   });
-
-//   return {
-//     props: {
-//       user,
-//     },
-//   };
-// };

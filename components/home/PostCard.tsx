@@ -10,9 +10,9 @@ import { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
 import {
-  GetPostsDocument,
   PostsDocument,
   useMeQuery,
+  // Post,
   useToggleLikeMutation,
 } from '../../generated/graphql';
 import { IUser, Post } from '../../lib/types';
@@ -74,7 +74,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
   };
 
   return (
-    <div className='relative my-7 mx-auto max-w-lg rounded-sm bg-white dark:border dark:border-gray-400 dark:bg-black'>
+    <div className='relative my-7 mx-auto max-w-lg rounded bg-white dark:border dark:border-gray-400 dark:bg-black'>
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
       <PostHeader post={post} />
       {post.images.length > 1 ? (
@@ -90,16 +90,13 @@ const PostCard: React.FC<Props> = ({ post }) => {
       )}
       <div className='flex justify-between p-4'>
         <div className='flex space-x-4 '>
-          {/* {loading ? ( */}
-          {/* <LoaderIcon className='h-7' /> */}
-
           <LikeBtn
             loading={loading}
             isLike={isLike}
             handleLike={handleLike}
             handleUnLike={handleUnLike}
           />
-          {/* )} */}
+
           <ChatIcon className='postBtn' />
           <PaperAirplaneIcon className='postBtn' />
         </div>
