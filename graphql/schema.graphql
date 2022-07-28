@@ -79,7 +79,6 @@ type Post {
 }
 
 type Query {
-  getPosts: [Post]
   getUser(id: String!): User!
   me: User
   posts(after: String, first: Int): Response

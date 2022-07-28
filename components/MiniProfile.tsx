@@ -1,6 +1,7 @@
 import image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { FaUserCircle } from 'react-icons/fa';
 import { useRecoilState } from 'recoil';
 import { userState } from '../atoms/userState';
 import { useLogoutMutationMutation } from '../generated/graphql';
@@ -12,11 +13,15 @@ const MiniProfile = () => {
   return (
     <div className='mt-10 ml-10 flex items-center justify-center'>
       <div className=' rounded-full object-cover'>
-        <img
-          className='h-12 w-12 rounded-full'
-          src={viewer?.image}
-          alt='profile'
-        />
+        {viewer.image ? (
+          <img
+            className='h-12 w-12 rounded-full'
+            src={viewer?.image}
+            alt='profile'
+          />
+        ) : (
+          <FaUserCircle className='h-10 w-10' />
+        )}
       </div>
       <div className='mx-4 flex-1'>
         <h2 className='font-bold dark:text-gray-300'>{viewer?.username}</h2>

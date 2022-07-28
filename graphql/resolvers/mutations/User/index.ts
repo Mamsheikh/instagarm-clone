@@ -70,7 +70,7 @@ export const userLoginMutation = extendType({
             expiresIn: '7d',
           }
         );
-        console.log(encodedToken);
+        // console.log(encodedToken);
         // nookies.set({ res }, 'sid', encodedToken, {
         //   httpOnly: true,
         //   domain: 'http://localhost:3000',

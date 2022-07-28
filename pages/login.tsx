@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import LoginInput from '../components/LoginInput';
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 
-const Login = () => {
+const Login = (props) => {
   const [login] = useLoginMutation();
   const router = useRouter();
   const [errMsg, setErrMsg] = useState('');
@@ -49,7 +49,7 @@ const Login = () => {
                     query: MeDocument,
                     data: {
                       __typename: 'Query',
-                      Me: data?.login,
+                      me: data?.login,
                     },
                   });
                 },
@@ -103,14 +103,14 @@ const Login = () => {
               variables: {
                 input: { email_or_username: 'bob', password: 'password' },
               },
-              update: (cache, result) => {
-                const user = result.data?.login;
-                if (user) {
-                  cache.writeQuery({
-                    query: MeDocument,
-                    data: { me: user },
-                  });
-                }
+              update: (cache, { data }) => {
+                cache.writeQuery<MeQuery>({
+                  query: MeDocument,
+                  data: {
+                    __typename: 'Query',
+                    me: data?.login,
+                  },
+                });
               },
               onCompleted(data) {
                 router.push('/');
