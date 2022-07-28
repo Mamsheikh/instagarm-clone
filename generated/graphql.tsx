@@ -62,6 +62,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createComment?: Maybe<Comment>;
   createPost?: Maybe<Post>;
+  deleteComment?: Maybe<Comment>;
   deletePost?: Maybe<Post>;
   follow?: Maybe<User>;
   login?: Maybe<User>;
@@ -69,6 +70,7 @@ export type Mutation = {
   signup?: Maybe<User>;
   toggleLike?: Maybe<Like>;
   unfollow?: Maybe<User>;
+  updateComment?: Maybe<Comment>;
   updatePost?: Maybe<Post>;
   updateProfile?: Maybe<User>;
 };
@@ -82,6 +84,11 @@ export type MutationCreateCommentArgs = {
 
 export type MutationCreatePostArgs = {
   input: CreatePostInput;
+};
+
+
+export type MutationDeleteCommentArgs = {
+  commentId: Scalars['String'];
 };
 
 
@@ -112,6 +119,12 @@ export type MutationToggleLikeArgs = {
 
 export type MutationUnfollowArgs = {
   id: Scalars['String'];
+};
+
+
+export type MutationUpdateCommentArgs = {
+  caption: Scalars['String'];
+  commentId: Scalars['String'];
 };
 
 

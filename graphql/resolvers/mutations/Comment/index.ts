@@ -1,4 +1,6 @@
 import { mutationField, nonNull, stringArg } from 'nexus';
+import { nanoid } from 'nanoid';
+import { isAuth } from '../../../../utils/auth';
 
 export const createComment = mutationField('createComment', {
   type: 'Comment',
@@ -8,9 +10,10 @@ export const createComment = mutationField('createComment', {
   },
   async resolve(_, args, ctx) {
     const req = ctx.req;
-    // const session = await getSession({ req });
+    const decodedJwt = await isAuth(req);
+    const id = nanoid(7);
     const user = await ctx.prisma.user.findUnique({
-      where: { email: '' },
+      where: { id: decodedJwt.userId },
     });
     try {
       const post = await ctx.prisma.post.findUnique({
@@ -18,10 +21,11 @@ export const createComment = mutationField('createComment', {
         rejectOnNotFound: true,
       });
 
-      if (!post) throw new Error('No post found');
+      // if (!post) throw new Error('No post found');
 
       const comment = await ctx.prisma.comment.create({
         data: {
+          id,
           user: { connect: { id: user.id } },
           post: { connect: { id: args.postId } },
           content: args.content,
@@ -35,7 +39,7 @@ export const createComment = mutationField('createComment', {
   },
 });
 
-const updateComment = mutationField('updateComment', {
+export const updateComment = mutationField('updateComment', {
   type: 'Comment',
   args: {
     commentId: nonNull(stringArg()),
@@ -43,18 +47,22 @@ const updateComment = mutationField('updateComment', {
   },
   async resolve(_, args, ctx) {
     try {
+      const decodedJwt = await isAuth(ctx.req);
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: decodedJwt.userId },
+      });
       const comment = await ctx.prisma.comment.findUnique({
         where: { id: args.commentId },
         rejectOnNotFound: true,
       });
-      if (!comment) {
-        throw new Error(`no comment found`);
+      if (comment.userId !== user.id) {
+        throw new Error(`not authorized`);
       }
 
       return ctx.prisma.comment.update({
         where: { id: args.commentId },
         data: {
-          content: args.contentId,
+          content: args.caption,
         },
       });
     } catch (error) {
@@ -63,7 +71,7 @@ const updateComment = mutationField('updateComment', {
   },
 });
 
-const deleteComment = mutationField('deleteComment', {
+export const deleteComment = mutationField('deleteComment', {
   type: 'Comment',
   args: {
     commentId: nonNull(stringArg()),
@@ -71,9 +79,9 @@ const deleteComment = mutationField('deleteComment', {
   async resolve(_, args, ctx) {
     try {
       const req = ctx.req;
-      // const session = await getSession({ req });
+      const decodedJwt = await isAuth(req);
       const user = await ctx.prisma.user.findUnique({
-        where: { email: '' },
+        where: { id: decodedJwt.userId },
       });
       const comment = await ctx.prisma.comment.findUnique({
         where: { id: args.commentId },
