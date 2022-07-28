@@ -32,6 +32,7 @@
     "react-hook-form": "^7.27.1",
     "react-hot-toast": "^2.2.0",
     "react-icons": "^4.3.1",
+    "react-loader-spinner": "^5.1.7-beta.1",
     "react-responsive-carousel": "^3.2.23",
     "recoil": "^0.6.1",
     "yup": "^0.32.11"

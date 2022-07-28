@@ -1,11 +1,14 @@
-
 import image from 'next/image';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useRecoilState } from 'recoil';
 import { userState } from '../atoms/userState';
+import { useLogoutMutationMutation } from '../generated/graphql';
 
 const MiniProfile = () => {
   const [viewer, setViewer] = useRecoilState(userState);
+  const router = useRouter();
+  const [logout, { client }] = useLogoutMutationMutation();
   return (
     <div className='mt-10 ml-10 flex items-center justify-center'>
       <div className=' rounded-full object-cover'>
@@ -20,7 +23,14 @@ const MiniProfile = () => {
         <h3 className='text-sm text-gray-400'>Welcome to Prismagram</h3>
       </div>
       <button
-        onClick={() => {}}
+        onClick={async () => {
+          await logout({
+            onCompleted: () => {
+              router.push('/login');
+            },
+          });
+          await client.resetStore();
+        }}
         className='text-sm font-bold text-blue-400'
       >
         Sign out
