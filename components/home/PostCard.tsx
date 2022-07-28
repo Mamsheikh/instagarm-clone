@@ -72,6 +72,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
     });
     setIsLike(false);
   };
+
   return (
     <div className='relative my-7 mx-auto max-w-lg rounded-sm bg-white dark:border dark:border-gray-400 dark:bg-black'>
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
@@ -118,7 +119,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
           <a>View all {post.comments.length} comments</a>
         </Link>
       </div>
-      {post.comments.map((comment) => (
+      {post.comments.slice(0, 2).map((comment) => (
         <div
           key={comment.id}
           className='flex justify-between px-4 dark:text-gray-300'

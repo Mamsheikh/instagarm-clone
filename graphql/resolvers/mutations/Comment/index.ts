@@ -21,7 +21,7 @@ export const createComment = mutationField('createComment', {
         rejectOnNotFound: true,
       });
 
-      // if (!post) throw new Error('No post found');
+      if (!post) throw new Error('No post found');
 
       const comment = await ctx.prisma.comment.create({
         data: {

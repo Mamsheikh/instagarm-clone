@@ -1,29 +1,32 @@
 import { extendType, intArg, list, queryField, stringArg } from 'nexus';
 import { Post } from '../../models';
 
-export const getPosts = queryField('getPosts', {
-  type: list(Post),
-  resolve: async (_, __, ctx) => {
-    const req = ctx.req;
-    // const session = await getSession({ req });
-    const following = await ctx.prisma.user
-      .findFirst({
-        where: { id: 'e10660ba-382b-4660-915a-ad71febe6c01' },
-      })
-      .following();
-    const user = await ctx.prisma.user.findFirst({
-      where: { id: 'e10660ba-382b-4660-915a-ad71febe6c01' },
-    });
-    return ctx.prisma.post.findMany({
-      where: {
-        user: {
-          id: { in: [...following.map((user) => user.id), user.id] },
-        },
-      },
-      orderBy: { createdAt: 'asc' },
-    });
-  },
-});
+// export const getPosts = queryField('getPosts', {
+//   type: list(Post),
+//   resolve: async (_, __, ctx) => {
+//     const req = ctx.req;
+//     // const session = await getSession({ req });
+//     // const following = await ctx.prisma.user
+//     //   .findFirst({
+//     //     where: { id: 'e10660ba-382b-4660-915a-ad71febe6c01' },
+//     //   })
+//     //   .following();
+//     // const user = await ctx.prisma.user.findFirst({
+//     //   where: { id: 'e10660ba-382b-4660-915a-ad71febe6c01' },
+//     // });
+//     return ctx.prisma.post.findMany({
+//       include: {
+//         comments: {
+//           take: 2,
+//           // take: 2,
+//         },
+//       },
+//     });
+//     return ctx.prisma.post.findMany({
+//       include: { comments: { where: { selected: true } } },
+//     });
+//   },
+// });
 
 export const getPaginatedPosts = extendType({
   type: 'Query',
