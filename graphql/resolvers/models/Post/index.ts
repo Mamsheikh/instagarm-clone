@@ -42,6 +42,7 @@ export const Post = objectType({
           );
         },
       });
+    t.nonNull.dateTime('createdAt');
     t.nonNull.string('userId'),
       t.nonNull.field('user', {
         type: 'User',

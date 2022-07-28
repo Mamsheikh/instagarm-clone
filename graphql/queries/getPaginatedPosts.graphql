@@ -11,6 +11,7 @@ query Posts($first: Int, $after: String) {
         caption
         images
         publicId
+        createdAt
         userId
         user {
           id

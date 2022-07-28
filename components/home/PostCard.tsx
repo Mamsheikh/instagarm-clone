@@ -3,6 +3,7 @@ import {
   ChatIcon,
   PaperAirplaneIcon,
 } from '@heroicons/react/outline';
+import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
   // console.log('postcard', data.likes);
   const router = useRouter();
   const { data } = useMeQuery({
-    errorPolicy:'ignore'
+    errorPolicy: 'ignore',
   });
   const [isLike, setIsLike] = useState(false);
   const [viewer, setViewer] = useRecoilState<IUser>(userState);
@@ -136,7 +137,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
         </div>
       </div> */}
       <div className='mb-4 mt-2 px-4 text-xs uppercase text-gray-400'>
-        2 days ago.
+        {moment(post.createdAt).fromNow(true)} ago
       </div>
       <hr />
       <AddComment postId={post.id} />
