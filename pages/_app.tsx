@@ -29,7 +29,7 @@ function MyApp({ Component, pageProps }) {
     <ApolloProvider client={apolloClient}>
       <RecoilRoot>
         <ThemeProvider enableSystem={true} attribute='class'>
-          {pageLoading ? <LoadingScreen /> : <Component {...pageProps} />}
+          <Component {...pageProps} />
         </ThemeProvider>
       </RecoilRoot>
     </ApolloProvider>

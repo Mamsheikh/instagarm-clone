@@ -1,12 +1,16 @@
+import { EmojiHappyIcon } from '@heroicons/react/outline';
 import 'emoji-mart/css/emoji-mart.css';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import {
   PostsDocument,
   useCreateCommentMutation,
 } from '../../generated/graphql';
+import { refreshData } from '../../utils';
 
 const AddComment = ({ postId }) => {
   const [content, setContent] = useState('');
+  const router = useRouter();
   // const [showEmojis, setShowEmojis] = useState(false);
   const [createComment, { loading }] = useCreateCommentMutation();
 
@@ -22,7 +26,13 @@ const AddComment = ({ postId }) => {
           postId,
         },
         refetchQueries: () => [{ query: PostsDocument }],
+        onCompleted: () => {
+          if (router.pathname === '/p/[id]') {
+            refreshData(router);
+          }
+        },
       });
+
       setContent('');
     } catch (error) {}
   };
@@ -43,12 +53,12 @@ const AddComment = ({ postId }) => {
                 borderRadius: '20px',
               }}
             />
-          )}
-          <EmojiHappyIcon
-            onClick={() => setShowEmojis(!showEmojis)}
-            className='mr-2 h-7 cursor-pointer dark:text-white'
-          />
-        </div> */}
+            )} */}
+        <EmojiHappyIcon
+          onClick={() => {}}
+          className='mr-2 h-7 cursor-pointer dark:text-white'
+        />
+        {/* </div>  */}
         <input
           type='text'
           onChange={onChange}

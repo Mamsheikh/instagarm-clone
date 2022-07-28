@@ -186,9 +186,9 @@ const Post = ({ post }: Props) => {
                           </Link>
                           <span>{comment?.content}</span>
                         </div>
-                        <span className='mt-2 text-sm text-gray-400'>
+                        {/* <span className='mt-2 text-sm text-gray-400'>
                           {moment(post.createdAt).fromNow(true)} ago
-                        </span>
+                        </span> */}
                       </div>
                     </div>
                   ))}

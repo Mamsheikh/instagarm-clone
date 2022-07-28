@@ -24,7 +24,7 @@ export interface Post {
   images?: string[];
   publicId?: string[];
   userId: string;
-  createdAt?: string;
+  createdAt: string;
   user: User | null;
   likes: Like[] | null;
   comments: Comment[] | null;
