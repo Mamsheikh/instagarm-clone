@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import React from 'react';
 import { ThemeProvider } from 'next-themes';
+import NextNProgress from 'nextjs-progressbar';
 import { ApolloProvider } from '@apollo/client';
 import { RecoilRoot } from 'recoil';
 import Layout from '../components/Layout';
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }) {
     <ApolloProvider client={apolloClient}>
       <RecoilRoot>
         <ThemeProvider enableSystem={true} attribute='class'>
+          <NextNProgress />
           <Component {...pageProps} />
         </ThemeProvider>
       </RecoilRoot>

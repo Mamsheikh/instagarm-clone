@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 import { User, useSearchUserLazyQuery } from '../generated/graphql';
-import { Users } from '../lib/types';
+// import { Users } from '../lib/types';
 
 interface IProps {
   data: [User];
