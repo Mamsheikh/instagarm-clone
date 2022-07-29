@@ -20,6 +20,7 @@ import { IUser } from '../../lib/types';
 import EditPostModal from '../EditPostModal';
 
 interface PostActionsModalProps {
+  userId: string;
   post: Post;
   open: boolean;
   setOpen?: (open: boolean) => void;
@@ -28,6 +29,7 @@ interface PostActionsModalProps {
 }
 
 const PostActionsModal: React.FC<PostActionsModalProps> = ({
+  userId,
   post,
   open,
   setOpen,
@@ -62,25 +64,33 @@ const PostActionsModal: React.FC<PostActionsModalProps> = ({
       className='fixed inset-0 z-50 flex justify-center'
     >
       <Dialog.Overlay className='fixed inset-0 bg-black bg-opacity-80' />
-      <div className='relative  mx-4 mt-[30vh] max-h-40 w-full max-w-md rounded-lg bg-white dark:bg-black '>
+      <div className='relative  mx-4 my-auto mt-[30vh] w-full max-w-md rounded-lg bg-white dark:bg-black '>
         <div className='flex flex-col items-center justify-center space-y-2 px-4 py-3'>
+          {post.userId === userId && (
+            <>
+              <div className='w-full border-b'>
+                <button
+                  onClick={onDeletePost}
+                  className='mb-1 w-full font-semibold text-red-400 outline-none focus:outline-none'
+                >
+                  <span className='text-center'>
+                    {loading ? 'Deleting...' : 'Delete Post'}
+                  </span>
+                </button>
+              </div>
+              <div className='w-full border-b'>
+                <button
+                  className='mb-1 w-full outline-none focus:outline-none'
+                  onClick={onEditPost}
+                >
+                  <span className='text-center'>Edit Post</span>
+                </button>
+              </div>
+            </>
+          )}
+
           <div className='w-full border-b'>
-            <button
-              onClick={onDeletePost}
-              className='mb-1 w-full font-semibold text-red-400 outline-none focus:outline-none'
-            >
-              <span className='text-center'>
-                {loading ? 'Deleting...' : 'Delete Post'}
-              </span>
-            </button>
-          </div>
-          <div className='w-full border-b'>
-            <button className='mb-1 w-full ' onClick={onEditPost}>
-              <span className='text-center'>Edit Post</span>
-            </button>
-          </div>
-          <div className='w-full border-b'>
-            <button className='mb-1 w-full  '>
+            <button className='mb-1 w-full  outline-none focus:outline-none'>
               <span className='text-center'>
                 {' '}
                 <Link href={`/p/${post.id}`}>Go to Post</Link>
@@ -88,7 +98,10 @@ const PostActionsModal: React.FC<PostActionsModalProps> = ({
             </button>
           </div>
           <div className='w-full'>
-            <button className='-mt-1  w-full' onClick={() => setOpen(!open)}>
+            <button
+              className='-mt-1  w-full outline-none focus:outline-none'
+              onClick={() => setOpen(!open)}
+            >
               <span className='text-center'>Cancel</span>
             </button>
           </div>

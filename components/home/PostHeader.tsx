@@ -7,7 +7,7 @@ import { editPostModalState } from '../../atoms/editPostState';
 import EditPostModal from '../EditPostModal';
 import PostActionsModal from './PostActionsModal';
 
-const PostHeader = ({ post }) => {
+const PostHeader = ({ post, userId }) => {
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useState(false);
   return (
@@ -41,6 +41,7 @@ const PostHeader = ({ post }) => {
         />
         {open && (
           <PostActionsModal
+            userId={userId}
             setEditPost={setEditPost}
             editPost={editPost}
             open={open}

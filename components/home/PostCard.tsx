@@ -76,7 +76,7 @@ const PostCard: React.FC<Props> = ({ post }) => {
   return (
     <div className='relative my-7 mx-auto max-w-lg rounded bg-white dark:border dark:border-gray-400 dark:bg-black'>
       {/* {editPostModal && <EditPostModal user={data?.Me} />} */}
-      <PostHeader post={post} />
+      <PostHeader post={post} userId={data?.me?.id} />
       {post.images.length > 1 ? (
         <Slider id={post.id} images={post.images} publicId={post.publicId} />
       ) : (
@@ -123,9 +123,9 @@ const PostCard: React.FC<Props> = ({ post }) => {
         >
           <div>
             <span className='mr-1 text-sm font-semibold'>
-              {comment.user.username}
+              {comment?.user?.username}
             </span>
-            {comment.content}
+            {comment?.content}
           </div>
         </div>
       ))}
