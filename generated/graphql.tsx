@@ -159,6 +159,7 @@ export type Post = {
 export type Query = {
   __typename?: 'Query';
   explorePosts?: Maybe<Response>;
+  getFollowSuggestions?: Maybe<Array<Maybe<User>>>;
   getUser: User;
   me?: Maybe<User>;
   posts?: Maybe<Response>;
@@ -331,6 +332,11 @@ export type LogoutMutationMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutationMutation = { __typename?: 'Mutation', logout?: boolean | null };
+
+export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions?: Array<{ __typename?: 'User', id: string, name?: string | null, username?: string | null, image?: string | null } | null> | null };
 
 
 export const CreateCommentDocument = gql`
@@ -1096,3 +1102,40 @@ export function useLogoutMutationMutation(baseOptions?: Apollo.MutationHookOptio
 export type LogoutMutationMutationHookResult = ReturnType<typeof useLogoutMutationMutation>;
 export type LogoutMutationMutationResult = Apollo.MutationResult<LogoutMutationMutation>;
 export type LogoutMutationMutationOptions = Apollo.BaseMutationOptions<LogoutMutationMutation, LogoutMutationMutationVariables>;
+export const GetFollowSuggestionsDocument = gql`
+    query GetFollowSuggestions {
+  getFollowSuggestions {
+    id
+    name
+    username
+    image
+  }
+}
+    `;
+
+/**
+ * __useGetFollowSuggestionsQuery__
+ *
+ * To run a query within a React component, call `useGetFollowSuggestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowSuggestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowSuggestionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetFollowSuggestionsQuery(baseOptions?: Apollo.QueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, options);
+      }
+export function useGetFollowSuggestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, options);
+        }
+export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollowSuggestionsQuery>;
+export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
+export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;

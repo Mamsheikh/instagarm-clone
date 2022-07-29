@@ -65,3 +65,12 @@ mutation Login($input: LoginUserInput!) {
 mutation LogoutMutation {
   logout
 }
+
+query GetFollowSuggestions {
+  getFollowSuggestions {
+    id
+    name
+    username
+    image
+  }
+}

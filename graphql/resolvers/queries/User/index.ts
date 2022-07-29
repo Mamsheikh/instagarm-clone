@@ -58,3 +58,34 @@ export const Me = queryField('me', {
     });
   },
 });
+
+export const getFollowSuggestions = extendType({
+  type: 'Query',
+  definition(t) {
+    t.field('getFollowSuggestions', {
+      type: list(User),
+      async resolve(_parent, _args, ctx) {
+        const decodedJWT = await isAuth(ctx.req);
+        const user = await ctx.prisma.user.findFirst({
+          where: { id: decodedJWT.useId },
+          include: { followers: true, following: true },
+        });
+        const following = user.following;
+        return await ctx.prisma.user.findMany({
+          where: {
+            AND: [
+              {
+                id: {
+                  notIn: following.map((f) => f.id),
+                },
+              },
+              { id: { notIn: user.followers.map((f) => f.id) } },
+              { id: { notIn: [user.id] } },
+            ],
+          },
+          take: 10,
+        });
+      },
+    });
+  },
+});
