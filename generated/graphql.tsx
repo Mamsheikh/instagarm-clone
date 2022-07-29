@@ -158,10 +158,17 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
+  explorePosts?: Maybe<Response>;
   getUser: User;
   me?: Maybe<User>;
   posts?: Maybe<Response>;
   searchUser: Array<Maybe<User>>;
+};
+
+
+export type QueryExplorePostsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -269,6 +276,14 @@ export type DeletePostMutationVariables = Exact<{
 
 
 export type DeletePostMutation = { __typename?: 'Mutation', deletePost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string } | null };
+
+export type ExplorePostsQueryVariables = Exact<{
+  first?: InputMaybe<Scalars['Int']>;
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type ExplorePostsQuery = { __typename?: 'Query', explorePosts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null } | null> | null } | null };
 
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
@@ -683,6 +698,74 @@ export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const ExplorePostsDocument = gql`
+    query ExplorePosts($first: Int, $after: String) {
+  explorePosts(first: $first, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        caption
+        images
+        publicId
+        createdAt
+        userId
+        likes {
+          id
+          userId
+          postId
+        }
+        user {
+          id
+          name
+          email
+          username
+          image
+        }
+        comments {
+          id
+          content
+          postId
+          userId
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useExplorePostsQuery__
+ *
+ * To run a query within a React component, call `useExplorePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useExplorePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useExplorePostsQuery({
+ *   variables: {
+ *      first: // value for 'first'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useExplorePostsQuery(baseOptions?: Apollo.QueryHookOptions<ExplorePostsQuery, ExplorePostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ExplorePostsQuery, ExplorePostsQueryVariables>(ExplorePostsDocument, options);
+      }
+export function useExplorePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ExplorePostsQuery, ExplorePostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ExplorePostsQuery, ExplorePostsQueryVariables>(ExplorePostsDocument, options);
+        }
+export type ExplorePostsQueryHookResult = ReturnType<typeof useExplorePostsQuery>;
+export type ExplorePostsLazyQueryHookResult = ReturnType<typeof useExplorePostsLazyQuery>;
+export type ExplorePostsQueryResult = Apollo.QueryResult<ExplorePostsQuery, ExplorePostsQueryVariables>;
 export const SearchUserDocument = gql`
     query SearchUser($input: String) {
   searchUser(input: $input) {

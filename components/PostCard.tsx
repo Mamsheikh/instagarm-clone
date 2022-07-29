@@ -2,9 +2,9 @@ import React from 'react';
 import Image from 'next/image';
 import { ChatIcon, HeartIcon } from '@heroicons/react/solid';
 import { FaRegCommentDots } from 'react-icons/fa';
-// import { Post } from '../lib/types';
+import { Post } from '../lib/types';
 import Link from 'next/link';
-import { Post } from '../generated/graphql';
+// import { Post } from '../generated/graphql';
 
 interface Props {
   post: Post;

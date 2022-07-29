@@ -6,3 +6,41 @@ mutation DeletePost($postId: String!) {
     userId
   }
 }
+
+query ExplorePosts($first: Int, $after: String) {
+  explorePosts(first: $first, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      cursor
+      node {
+        id
+        caption
+        images
+        publicId
+        createdAt
+        userId
+        likes {
+          id
+          userId
+          postId
+        }
+        user {
+          id
+          name
+          email
+          username
+          image
+        }
+        comments {
+          id
+          content
+          postId
+          userId
+        }
+      }
+    }
+  }
+}

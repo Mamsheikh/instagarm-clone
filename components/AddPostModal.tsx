@@ -157,8 +157,9 @@ const AddPostModal = ({ user }) => {
             onClick={onSubmit}
             className='m-2 w-full rounded bg-blue-500 p-2 text-white transition-all duration-150 ease-out hover:bg-blue-600'
           >
-            {uploading && 'Uploading...'}{' '}
-            {loading ? 'Creating post...' : ' Create Post'}
+            {uploading && 'Uploading...' && loading
+              ? 'Creating post...'
+              : ' Create Post'}
           </button>
         </div>
       </div>
