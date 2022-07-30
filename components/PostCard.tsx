@@ -28,11 +28,11 @@ const PostCard = ({ post }: Props) => {
           <div className='absolute top-0 left-1/2 flex h-full w-full -translate-x-1/2 items-center justify-center space-x-3 bg-black-rgba text-white opacity-0 group-hover:opacity-100'>
             <div className='space-x-1'>
               <HeartIcon className=' inline h-6 w-6' />
-              <span>{post.likes.length}</span>
+              <span>{post?.likes.length}</span>
             </div>
             <div className='mr-2 space-x-1'>
               <ChatIcon className='inline h-5 w-5 scale-x-[-1]' />
-              <span>{post.comments.length}</span>
+              <span>{post?.comments.length}</span>
             </div>
           </div>
         </a>

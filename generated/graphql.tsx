@@ -158,18 +158,12 @@ export type Post = {
 
 export type Query = {
   __typename?: 'Query';
-  explorePosts?: Maybe<Response>;
+  explorePosts?: Maybe<Array<Maybe<Post>>>;
   getFollowSuggestions?: Maybe<Array<Maybe<User>>>;
   getUser: User;
   me?: Maybe<User>;
   posts?: Maybe<Response>;
   searchUser: Array<Maybe<User>>;
-};
-
-
-export type QueryExplorePostsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -278,13 +272,10 @@ export type DeletePostMutationVariables = Exact<{
 
 export type DeletePostMutation = { __typename?: 'Mutation', deletePost?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, userId: string } | null };
 
-export type ExplorePostsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']>;
-  after?: InputMaybe<Scalars['String']>;
-}>;
+export type ExplorePostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ExplorePostsQuery = { __typename?: 'Query', explorePosts?: { __typename?: 'Response', pageInfo?: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } | null, edges?: Array<{ __typename?: 'Edge', cursor?: string | null, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null } | null> | null } | null };
+export type ExplorePostsQuery = { __typename?: 'Query', explorePosts?: Array<{ __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null> | null };
 
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
@@ -705,40 +696,31 @@ export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutati
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
 export const ExplorePostsDocument = gql`
-    query ExplorePosts($first: Int, $after: String) {
-  explorePosts(first: $first, after: $after) {
-    pageInfo {
-      hasNextPage
-      endCursor
+    query ExplorePosts {
+  explorePosts {
+    id
+    caption
+    images
+    publicId
+    createdAt
+    userId
+    likes {
+      id
+      userId
+      postId
     }
-    edges {
-      cursor
-      node {
-        id
-        caption
-        images
-        publicId
-        createdAt
-        userId
-        likes {
-          id
-          userId
-          postId
-        }
-        user {
-          id
-          name
-          email
-          username
-          image
-        }
-        comments {
-          id
-          content
-          postId
-          userId
-        }
-      }
+    user {
+      id
+      name
+      email
+      username
+      image
+    }
+    comments {
+      id
+      content
+      postId
+      userId
     }
   }
 }
@@ -756,8 +738,6 @@ export const ExplorePostsDocument = gql`
  * @example
  * const { data, loading, error } = useExplorePostsQuery({
  *   variables: {
- *      first: // value for 'first'
- *      after: // value for 'after'
  *   },
  * });
  */

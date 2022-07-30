@@ -18,11 +18,13 @@ export interface IUser {
 }
 
 interface ILike {
+  _typename?: 'Like';
   id: string;
   userId: string;
   postId: string;
 }
 interface IiUser {
+  _typename?: 'User';
   id: string;
   name?: string;
   email?: string;
@@ -51,7 +53,7 @@ export interface Post {
   comments: IComment[];
 }
 export interface IPost {
-  __typename: 'User';
+  __typename: 'Post';
   id: string;
   caption?: string;
   images?: string[];

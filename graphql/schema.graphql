@@ -79,7 +79,7 @@ type Post {
 }
 
 type Query {
-  explorePosts(after: String, first: Int): Response
+  explorePosts: [Post]
   getFollowSuggestions: [User]
   getUser(id: String!): User!
   me: User
