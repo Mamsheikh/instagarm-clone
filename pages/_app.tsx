@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={apolloClient}>
       <RecoilRoot>
-        <ThemeProvider enableSystem={true} attribute='class'>
+        <ThemeProvider attribute='class'>
           <NextNProgress />
           <Component {...pageProps} />
         </ThemeProvider>

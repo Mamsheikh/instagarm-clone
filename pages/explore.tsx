@@ -5,7 +5,7 @@ import { images } from '../data/images';
 import { useExplorePostsQuery } from '../generated/graphql';
 
 const Explore = () => {
-  const { data, loading, fetchMore } = useExplorePostsQuery();
+  const { data } = useExplorePostsQuery();
   // if (loading) {
   //   return [0, 1, 2].map((item, index) => <PostSkeleton key={index} />);
   // }
