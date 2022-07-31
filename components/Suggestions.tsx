@@ -13,8 +13,8 @@ const Suggestions = () => {
       </div>
       {data?.getFollowSuggestions.map((user) => (
         <>
-          <div className='mt-3 flex items-center justify-between'>
-            <div key={user.id}>
+          <div key={user.id} className='mt-3 flex items-center justify-between'>
+            <div>
               {user.image ? (
                 <img
                   src={user.image}

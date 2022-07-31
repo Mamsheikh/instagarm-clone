@@ -20,6 +20,7 @@
     "emoji-mart": "^3.0.1",
     "formik": "^2.2.9",
     "graphql": "15.7.2",
+    "graphql-relay": "^0.10.0",
     "graphql-scalars": "^1.17.0",
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",

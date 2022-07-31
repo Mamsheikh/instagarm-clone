@@ -1,5 +1,13 @@
-import { extendType, intArg, list, queryField, stringArg } from 'nexus';
+import {
+  extendType,
+  intArg,
+  list,
+  nullable,
+  queryField,
+  stringArg,
+} from 'nexus';
 import { Post } from '../../models';
+import { connectionFromArraySlice, cursorToOffset } from 'graphql-relay';
 
 // export const getPosts = queryField('getPosts', {
 //   type: list(Post),
@@ -31,70 +39,25 @@ import { Post } from '../../models';
 export const getPaginatedPosts = extendType({
   type: 'Query',
   definition(t) {
-    t.field('posts', {
-      type: 'Response',
-      args: {
-        first: intArg(),
-        after: stringArg(),
-      },
-      async resolve(_, args, ctx) {
-        let queryResults = null;
+    t.connectionField('posts', {
+      type: Post,
+      resolve: async (_, { after, first }, ctx) => {
+        const offset = after ? cursorToOffset(after) + 1 : 0;
+        if (isNaN(offset)) throw new Error('cursor is invalid');
 
-        if (args.after) {
-          // check if there is a cursor as the argument
-          queryResults = await ctx.prisma.post.findMany({
-            take: args.first, // the number of items to return from the database
-            skip: 1, // skip the cursor
-            cursor: {
-              id: args.after, // the cursor
-            },
-          });
-        } else {
-          // if no cursor, this means that this is the first request
-          //  and we will return the first items in the database
-          queryResults = await ctx.prisma.post.findMany({
-            take: args.first,
-          });
-        }
-        // if the initial request returns links
-        if (queryResults.length > 0) {
-          // get last element in previous result set
-          const lastPostInResults = queryResults[queryResults.length - 1];
-          // cursor we'll return in subsequent requests
-          const myCursor = lastPostInResults.id;
+        const [totalCount, items] = await Promise.all([
+          ctx.prisma.post.count(),
+          ctx.prisma.post.findMany({
+            take: first,
+            skip: offset,
+          }),
+        ]);
 
-          // query after the cursor to check if we have nextPage
-          const secondQueryResults = await ctx.prisma.post.findMany({
-            take: args.first,
-            cursor: {
-              id: myCursor,
-            },
-            orderBy: {
-              createdAt: 'asc',
-            },
-          });
-          // return response
-          const result = {
-            pageInfo: {
-              endCursor: myCursor,
-              hasNextPage: secondQueryResults.length >= args.first, //if the number of items requested is greater than the response of the second query, we have another page
-            },
-            edges: queryResults.map((post) => ({
-              cursor: post.id,
-              node: post,
-            })),
-          };
-
-          return result;
-        }
-        //
-        return {
-          pageInfo: {
-            endCursor: null,
-            hasNextPage: false,
-          },
-          edges: [],
-        };
+        return connectionFromArraySlice(
+          items,
+          { first, after },
+          { sliceStart: offset, arrayLength: totalCount }
+        );
       },
     });
   },

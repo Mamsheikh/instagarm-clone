@@ -1,37 +1,37 @@
-query Posts($first: Int, $after: String) {
-  posts(first: $first, after: $after) {
-    pageInfo {
-      hasNextPage
-      endCursor
-    }
-    edges {
-      cursor
-      node {
-        id
-        caption
-        images
-        publicId
-        createdAt
-        userId
-        likes {
-          id
-          userId
-          postId
-        }
-        user {
-          id
-          name
-          email
-          username
-          image
-        }
-        comments {
-          id
-          content
-          postId
-          userId
-        }
-      }
-    }
-  }
-}
+# query Posts($first: Int, $after: String) {
+#   posts(first: $first, after: $after) {
+#     pageInfo {
+#       hasNextPage
+#       endCursor
+#     }
+#     edges {
+#       cursor
+#       node {
+#         id
+#         caption
+#         images
+#         publicId
+#         createdAt
+#         userId
+#         likes {
+#           id
+#           userId
+#           postId
+#         }
+#         user {
+#           id
+#           name
+#           email
+#           username
+#           image
+#         }
+#         comments {
+#           id
+#           content
+#           postId
+#           userId
+#         }
+#       }
+#     }
+#   }
+# }

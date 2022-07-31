@@ -1,10 +1,11 @@
 // /graphql/schema.ts
-import { makeSchema } from 'nexus'
-import { join } from 'path'
-import * as types from './resolvers'
+import { connectionPlugin, makeSchema } from 'nexus';
+import { join } from 'path';
+import * as types from './resolvers';
 
 export const schema = makeSchema({
   types,
+  plugins: [connectionPlugin()],
   outputs: {
     typegen: join(
       process.cwd(),
@@ -19,4 +20,4 @@ export const schema = makeSchema({
     export: 'Context',
     module: join(process.cwd(), 'graphql', 'context.ts'),
   },
-})
+});
