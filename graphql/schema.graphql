@@ -27,11 +27,6 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
-type Edge {
-  cursor: String
-  node: Post
-}
-
 type Like {
   id: String!
   post: Post!
@@ -61,14 +56,29 @@ type Mutation {
   updateProfile(input: UpdateProfileInput): User
 }
 
+"""
+PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo
+"""
 type PageInfo {
+  """
+  The cursor corresponding to the last nodes in edges. Null if the connection is empty.
+  """
   endCursor: String
-  hasNextPage: Boolean
-}
 
-type PaginatedPostsResponse {
-  hasMore: Boolean
-  posts: [Post]
+  """
+  Used to indicate whether more edges exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Used to indicate whether more edges exist prior to the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+
+  """
+  The cursor corresponding to the first nodes in edges. Null if the connection is empty.
+  """
+  startCursor: String
 }
 
 type Post {
