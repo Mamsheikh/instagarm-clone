@@ -23,6 +23,7 @@ import Link from 'next/link';
 import Layout from '../../components/Layout';
 import { useMeQuery } from '../../generated/graphql';
 import { FaUserCircle } from 'react-icons/fa';
+import Head from 'next/head';
 
 interface Props {
   user: IUser;
@@ -41,6 +42,10 @@ const Profile: React.FC<Props> = ({
 
   return (
     <Layout>
+      <Head>
+        <title>Prismagram - {user.username}</title>
+        <link rel='icon' href='/favicon.ico' />
+      </Head>
       <div className='mx-5 max-w-6xl overflow-y-auto p-10 pt-20 scrollbar scrollbar-thumb-black dark:text-white xl:mx-auto'>
         <div className='grid grid-cols-4 gap-4'>
           <div className='flex justify-center sm:col-span-2 lg:col-span-1'>
