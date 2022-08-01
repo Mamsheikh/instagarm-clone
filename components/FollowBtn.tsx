@@ -2,7 +2,11 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { userState } from '../atoms/userState';
-import { useFollowMutation, useUnfollowMutation } from '../generated/graphql';
+import {
+  useFollowMutation,
+  useMeQuery,
+  useUnfollowMutation,
+} from '../generated/graphql';
 import { IUser } from '../lib/types';
 
 interface Props {
@@ -12,7 +16,7 @@ interface Props {
 
 const FollowBtn = ({ user }: Props) => {
   const router = useRouter();
-  const viewer = useRecoilValue<IUser>(userState);
+  const { data } = useMeQuery();
   const [followed, setFollowed] = useState(false);
   const [back, setBack] = useState(false);
   const [follow] = useFollowMutation({
@@ -31,14 +35,14 @@ const FollowBtn = ({ user }: Props) => {
   };
 
   useEffect(() => {
-    if (viewer?.following.find((item) => item.id === user.id)) {
+    if (data?.me.following.find((item) => item.id === user.id)) {
       setFollowed(true);
     }
-    if (viewer?.followers.find((item) => item.id === user.id)) {
+    if (data?.me.followers.find((item) => item.id === user.id)) {
       setBack(true);
     }
     return () => setFollowed(false);
-  }, [user.following, user.id]);
+  }, [data.me.following, user.id]);
 
   const handleFollow = () => {
     follow({

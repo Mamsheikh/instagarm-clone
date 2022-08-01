@@ -89,7 +89,7 @@ const Login = (props) => {
                 type='password'
                 placeholder='Enter password'
               />
-              <button className='mt-2 rounded bg-blue-300 py-1 text-center text-sm font-medium text-white'>
+              <button className='mt-2 rounded bg-blue-500 py-1 text-center text-sm font-medium text-white'>
                 {isSubmitting ? 'Logging in...' : 'Login'}
               </button>
             </form>
