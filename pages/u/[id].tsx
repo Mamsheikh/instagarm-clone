@@ -29,8 +29,8 @@ interface Props {
   // userr: IUser
 }
 const Profile: React.FC<Props> = ({
-      user,
-    }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  user,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const posts = user.posts;
   const { data } = useMeQuery();
   // console.log(posts);
@@ -98,16 +98,14 @@ const Profile: React.FC<Props> = ({
               </div>
             </div>
             <div>
-              <div className='pt-3'>
-                <span className='text-lg font-bold text-gray-700'>
+              <div className='flex flex-col  pt-3'>
+                <span className='text-lg font-bold text-gray-700 dark:text-gray-400'>
                   {user.bio}
                 </span>
-                <p className='mr-2 text-base text-blue-700'>
-                  #javascript #react #graphql
-                </p>
+
                 <a
                   target='_blank'
-                  href='www.google.com'
+                  href={user.website}
                   className='mr-2 text-base font-medium text-blue-700'
                 >
                   {user.website}

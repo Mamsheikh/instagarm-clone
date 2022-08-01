@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import SearchResults from './SearchResults';
-import { User, useSearchUserLazyQuery } from '../generated/graphql';
+import { useSearchUserLazyQuery } from '../generated/graphql';
+
+interface User {
+  id: string;
+  name?: string;
+  username?: string;
+  image?: string;
+}
 
 const Search = () => {
   const [search, setSearch] = useState<string>('');
@@ -35,9 +42,9 @@ const Search = () => {
     if (!search) return;
     try {
       searchUser({ variables: { input: search } });
-      setUsers(data.searchUser);
+      // setUsers(data.searchUser);
       // console.log(data);
-      console.log('users', users);
+      // console.log('users', users);
     } catch (err) {
       console.log(err);
     }
@@ -115,10 +122,10 @@ const Search = () => {
           </button>
         </>
       )}
-      {showToolTip && data && users && (
-        <div className='search-tip absolute top-10 left-1/2 w-96 -translate-x-1/2 rounded-md bg-black p-5 text-white shadow-xl dark:bg-white'>
+      {showToolTip && data.searchUser && (
+        <div className='search-tip darK:bg-black absolute top-10 left-1/2 w-96 -translate-x-1/2 rounded-md bg-white p-5 text-white shadow-xl'>
           <div className='mb-5 flex justify-between'>
-            <h3 className='font-bold text-gray-800'>Results</h3>
+            <h3 className='font-bold dark:text-gray-800'>Results</h3>
             <button
               className='text-xs font-bold text-blue-400'
               onClick={onClose}
@@ -127,18 +134,19 @@ const Search = () => {
             </button>
             {loading && <span className='text-gray-800'>loading up</span>}
           </div>
-          {users.length === 0 && (
+          {users.length === 0 && loading === false && (
             <h2 className='text-center font-bold text-gray-700'>
               No Results found
             </h2>
           )}
-          {users.map((user) => (
+          {data.searchUser.map((user) => (
             <SearchResults
               onClose={onClose}
               key={user.id}
               id={user.id}
               name={user.name}
               image={user.image}
+              username={user.username}
             />
           ))}
         </div>

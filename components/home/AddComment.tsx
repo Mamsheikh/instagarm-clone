@@ -64,7 +64,7 @@ const AddComment = ({ postId }) => {
           onChange={onChange}
           value={content}
           placeholder='Add a comment...'
-          className='flex-1 border-none outline-none focus:ring-0 dark:bg-black dark:text-white'
+          className='flex-1 border-none outline-none focus:ring-0 dark:bg-gray-900 dark:text-white'
         />
         <button
           type='submit'

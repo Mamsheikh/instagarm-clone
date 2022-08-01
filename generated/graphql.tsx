@@ -38,12 +38,6 @@ export type CreateUserInput = {
   username: Scalars['String'];
 };
 
-export type Edge = {
-  __typename?: 'Edge';
-  cursor?: Maybe<Scalars['String']>;
-  node?: Maybe<Post>;
-};
-
 export type Like = {
   __typename?: 'Like';
   id: Scalars['String'];
@@ -137,16 +131,17 @@ export type MutationUpdateProfileArgs = {
   input?: InputMaybe<UpdateProfileInput>;
 };
 
+/** PageInfo cursor, as defined in https://facebook.github.io/relay/graphql/connections.htm#sec-undefined.PageInfo */
 export type PageInfo = {
   __typename?: 'PageInfo';
+  /** The cursor corresponding to the last nodes in edges. Null if the connection is empty. */
   endCursor?: Maybe<Scalars['String']>;
-  hasNextPage?: Maybe<Scalars['Boolean']>;
-};
-
-export type PaginatedPostsResponse = {
-  __typename?: 'PaginatedPostsResponse';
-  hasMore?: Maybe<Scalars['Boolean']>;
-  posts?: Maybe<Array<Maybe<Post>>>;
+  /** Used to indicate whether more edges exist following the set defined by the clients arguments. */
+  hasNextPage: Scalars['Boolean'];
+  /** Used to indicate whether more edges exist prior to the set defined by the clients arguments. */
+  hasPreviousPage: Scalars['Boolean'];
+  /** The cursor corresponding to the first nodes in edges. Null if the connection is empty. */
+  startCursor?: Maybe<Scalars['String']>;
 };
 
 export type Post = {
@@ -293,14 +288,14 @@ export type PostsQueryVariables = Exact<{
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges?: Array<{ __typename?: 'PostEdge', cursor: string, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage?: boolean | null, endCursor?: string | null } } | null };
+export type PostsQuery = { __typename?: 'Query', posts?: { __typename?: 'PostConnection', edges?: Array<{ __typename?: 'PostEdge', cursor: string, node?: { __typename?: 'Post', id: string, caption?: string | null, images?: Array<string | null> | null, publicId?: Array<string | null> | null, createdAt: any, userId: string, likes: Array<{ __typename?: 'Like', id: string, userId: string, postId: string } | null>, user: { __typename?: 'User', id: string, name?: string | null, email: string, username?: string | null, image?: string | null }, comments: Array<{ __typename?: 'Comment', id: string, content: string, postId: string, userId: string } | null> } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } | null };
 
 export type SearchUserQueryVariables = Exact<{
   input?: InputMaybe<Scalars['String']>;
 }>;
 
 
-export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', address?: string | null, bio?: string | null, email: string, id: string, image?: string | null, isAdmin: boolean, name?: string | null, phone?: string | null, username?: string | null, website?: string | null, following?: Array<{ __typename?: 'User', name?: string | null, id: string, username?: string | null, image?: string | null } | null> | null } | null> };
+export type SearchUserQuery = { __typename?: 'Query', searchUser: Array<{ __typename?: 'User', name?: string | null, image?: string | null, username?: string | null, id: string } | null> };
 
 export type ToggleLikeMutationVariables = Exact<{
   postId: Scalars['String'];
@@ -773,22 +768,10 @@ export type PostsQueryResult = Apollo.QueryResult<PostsQuery, PostsQueryVariable
 export const SearchUserDocument = gql`
     query SearchUser($input: String) {
   searchUser(input: $input) {
-    address
-    bio
-    email
-    id
-    image
-    isAdmin
     name
-    phone
+    image
     username
-    website
-    following {
-      name
-      id
-      username
-      image
-    }
+    id
   }
 }
     `;
