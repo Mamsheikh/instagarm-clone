@@ -6,18 +6,12 @@ import * as types from './resolvers';
 export const schema = makeSchema({
   types,
   plugins: [connectionPlugin()],
-  outputs: {
-    typegen: join(
-      process.cwd(),
-      'node_modules',
-      '@types',
-      'nexus-typegen',
-      'index.d.ts'
-    ),
-    schema: join(process.cwd(), 'graphql', 'schema.graphql'),
-  },
   contextType: {
+    module: join(process.cwd(), './types/Context.ts'),
     export: 'Context',
-    module: join(process.cwd(), 'graphql', 'context.ts'),
+  },
+  outputs: {
+    schema: join(process.cwd(), './graphql/generated/schema.graphql'),
+    typegen: join(process.cwd(), './graphql/generated/nexus-typegen.d.ts'),
   },
 });

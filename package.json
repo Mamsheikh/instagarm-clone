@@ -1,7 +1,10 @@
 {
   "private": true,
   "scripts": {
+    "build:nexus-typegen": "ts-node --transpile-only graphql/schema.ts",
+    "predev": "yarn run build:nexus-typegen && yarn run gen",
     "dev": "next dev",
+    "prebuild": "yarn run build:nexus-typegen && yarn run gen",
     "build": "next build",
     "start": "next start",
     "generate:nexus": "ts-node --transpile-only graphql/schema.ts",
@@ -18,6 +21,7 @@
     "classnames": "^2.3.1",
     "cloudinary-react": "^1.8.1",
     "cookie": "^0.5.0",
+    "cors": "^2.8.5",
     "emoji-mart": "^3.0.1",
     "formik": "^2.2.9",
     "graphql": "15.7.2",
@@ -26,7 +30,7 @@
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "moment": "^2.29.4",
-    "nanoid": "^4.0.0",
+    "nanoid": "2.1.11",
     "next": "^12.1.0",
     "next-themes": "^0.1.1",
     "nextjs-progressbar": "^0.0.14",

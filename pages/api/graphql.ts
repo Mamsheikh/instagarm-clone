@@ -1,31 +1,24 @@
-import { ApolloServer } from 'apollo-server-micro'
-import { schema } from '../../graphql/schema'
-import Cors from 'micro-cors'
-import { createContext } from '../../graphql/context'
-
-const cors = Cors()
-
-const apolloServer = new ApolloServer({
-  schema,
-  context: createContext,
-})
-
-const startServer = apolloServer.start()
-
-export default cors(async function handler(req, res) {
-  if (req.method === 'OPTIONS') {
-    res.end()
-    return false
-  }
-  await startServer
-
-  await apolloServer.createHandler({
-    path: '/api/graphql',
-  })(req, res)
-})
+import { NextApiRequest, NextApiResponse } from 'next';
+import { server } from '../../lib/apolloServer';
+import { cors } from '../../middleware/cors';
+// import { cors } from "../../modules/middleware/cors";
 
 export const config = {
   api: {
     bodyParser: false,
   },
+};
+
+const serverStart = server.start();
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  await cors(req, res);
+  // schema-wide middleware
+
+  await serverStart;
+  await server.createHandler({ path: '/api/graphql' })(req, res);
+  return;
 }
