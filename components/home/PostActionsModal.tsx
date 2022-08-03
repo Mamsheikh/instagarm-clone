@@ -20,7 +20,7 @@ import { IUser } from '../../lib/types';
 import EditPostModal from '../EditPostModal';
 
 interface PostActionsModalProps {
-  userId: string;
+  userId?: string;
   post: Post;
   open: boolean;
   setOpen?: (open: boolean) => void;
