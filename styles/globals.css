@@ -5,7 +5,7 @@
 
 @layer components {
   body {
-    @apply scrollbar scrollbar-track-gray-600 scrollbar-thumb-gray-900 dark:bg-black;
+    @apply bg-gray-100 scrollbar scrollbar-track-gray-600 scrollbar-thumb-gray-900 dark:bg-black;
   }
   .navBtn {
     @apply hidden h-6 w-6 cursor-pointer text-gray-900 transition-all duration-150 ease-out hover:scale-125 dark:text-white md:inline-flex;

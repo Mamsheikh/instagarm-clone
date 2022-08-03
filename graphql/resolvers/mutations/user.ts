@@ -1,12 +1,8 @@
 import { mutationField, nonNull, stringArg, extendType, nullable } from 'nexus';
 import { hash, compare } from 'bcrypt';
 import { serialize } from 'cookie';
-import {
-  CreateUserInput,
-  LoginUserInput,
-  UpdateProfileInput,
-} from '../inputs';
-import { nanoid } from 'nanoid';
+import { CreateUserInput, LoginUserInput, UpdateProfileInput } from '../inputs';
+import nanoid from 'nanoid';
 import { Context } from '../../context';
 import {
   registrationValidation,

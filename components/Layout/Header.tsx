@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/outline';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { AiOutlineCompass, AiOutlinePlusSquare } from 'react-icons/ai';
 import { BsInstagram } from 'react-icons/bs';
@@ -21,7 +22,7 @@ import Search from '../Search';
 const Header = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const [addPost, setAddPost] = useRecoilState(postState);
-
+  const router = useRouter();
   const { data } = useMeQuery({
     errorPolicy: 'ignore',
   });
