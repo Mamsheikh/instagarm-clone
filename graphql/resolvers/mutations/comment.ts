@@ -1,6 +1,6 @@
 import { mutationField, nonNull, stringArg } from 'nexus';
 import { nanoid } from 'nanoid';
-import { isAuth } from '../../../../utils/auth';
+import { isAuth } from '../../../utils/auth';
 
 export const createComment = mutationField('createComment', {
   type: 'Comment',

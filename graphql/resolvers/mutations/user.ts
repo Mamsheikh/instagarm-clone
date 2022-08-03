@@ -5,16 +5,16 @@ import {
   CreateUserInput,
   LoginUserInput,
   UpdateProfileInput,
-} from '../../inputs';
+} from '../inputs';
 import { nanoid } from 'nanoid';
-import { Context } from '../../../context';
+import { Context } from '../../context';
 import {
   registrationValidation,
   loginValidation,
-} from '../../../../utils/registrationValidation';
+} from '../../../utils/registrationValidation';
 import { PrismaClient } from '@prisma/client';
-import { createToken } from '../../../../utils/jwt';
-import { isAuth } from '../../../../utils/auth';
+import { createToken } from '../../../utils/jwt';
+import { isAuth } from '../../../utils/auth';
 
 export const userSignUpMutation = extendType({
   type: 'Mutation',

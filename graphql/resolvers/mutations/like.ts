@@ -1,5 +1,5 @@
 import { mutationField, nonNull, stringArg } from 'nexus';
-import { isAuth } from '../../../../utils/auth';
+import { isAuth } from '../../../utils/auth';
 
 export const toggleLike = mutationField('toggleLike', {
   type: 'Like',

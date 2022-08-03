@@ -1,5 +1,5 @@
-import { isAuth } from '../../../../utils/auth';
-import { CreatePostInput, UpdatePostInput } from '../../inputs';
+import { isAuth } from '../../../utils/auth';
+import { CreatePostInput, UpdatePostInput } from '../inputs';
 import { mutationField, nonNull, extendType, stringArg } from 'nexus';
 import { nanoid } from 'nanoid';
 
