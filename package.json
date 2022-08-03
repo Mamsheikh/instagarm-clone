@@ -2,9 +2,9 @@
   "private": true,
   "scripts": {
     "build:nexus-typegen": "ts-node --transpile-only graphql/schema.ts",
-    "predev": "yarn run build:nexus-typegen && yarn run gen",
+    "predev": "yarn run build:nexus-typegen",
     "dev": "next dev",
-    "prebuild": "yarn run build:nexus-typegen && yarn run gen",
+    "prebuild": "yarn run build:nexus-typegen",
     "build": "next build",
     "start": "next start",
     "generate:nexus": "ts-node --transpile-only graphql/schema.ts",
