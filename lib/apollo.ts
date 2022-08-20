@@ -20,7 +20,7 @@ const cache = new InMemoryCache({
 });
 
 const apolloClient = new ApolloClient({
-  uri: `${process.env.URL}/api/graphql`,
+  uri: `https://prismagram.vercel.app/api/graphql`,
   cache: cache,
 });
 
