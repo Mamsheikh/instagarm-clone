@@ -57,7 +57,7 @@ const Signup = (props) => {
             const creds = { ...values };
             // actions.resetForm();
             try {
-              const { data } = await signup({
+              await signup({
                 variables: {
                   input: {
                     email: creds.email,
@@ -66,6 +66,7 @@ const Signup = (props) => {
                   },
                 },
                 onCompleted: (data) => {
+                  toast.success('Signup successfull');
                   redirectToLoginPage();
                 },
               });
@@ -110,7 +111,7 @@ const Signup = (props) => {
                 placeholder='Confirm password'
               />
               <button className='mt-2 rounded bg-blue-500 py-1 text-center text-sm font-medium text-white'>
-                {isSubmitting ? 'signing you up' : 'Sign up'}
+                {loading ? 'signing you up' : 'Sign up'}
               </button>
             </form>
           )}

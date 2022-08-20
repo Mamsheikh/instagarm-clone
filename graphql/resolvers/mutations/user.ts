@@ -2,7 +2,7 @@ import { mutationField, nonNull, stringArg, extendType, nullable } from 'nexus';
 import { hash, compare } from 'bcrypt';
 import { serialize } from 'cookie';
 import { CreateUserInput, LoginUserInput, UpdateProfileInput } from '../inputs';
-import nanoid from 'nanoid';
+import shortId from 'shortid';
 import { Context } from '../../context';
 import {
   registrationValidation,
@@ -19,7 +19,7 @@ export const userSignUpMutation = extendType({
       type: 'User',
       args: { input: nonNull(CreateUserInput) },
       async resolve(_parent, { input }, ctx: Context) {
-        const id = nanoid(10);
+        const id = shortId.generate();
         await registrationValidation.validate(input);
         const userName = await ctx.prisma.user.findUnique({
           where: { username: input.username },

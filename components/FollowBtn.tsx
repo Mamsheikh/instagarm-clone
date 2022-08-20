@@ -42,7 +42,7 @@ const FollowBtn = ({ user }: Props) => {
       setBack(true);
     }
     return () => setFollowed(false);
-  }, [data.me.following, user.id]);
+  }, [data?.me?.following, user?.id]);
 
   const handleFollow = () => {
     follow({

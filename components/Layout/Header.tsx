@@ -20,7 +20,7 @@ import Dropdown from '../Dropdown';
 import Search from '../Search';
 
 const Header = () => {
-  const { systemTheme, theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [addPost, setAddPost] = useRecoilState(postState);
   const router = useRouter();
   const { data } = useMeQuery({

@@ -1,8 +1,7 @@
 import { isAuth } from '../../../utils/auth';
 import { CreatePostInput, UpdatePostInput } from '../inputs';
 import { mutationField, nonNull, extendType, stringArg } from 'nexus';
-import { nanoid } from 'nanoid';
-
+import shortId from 'shortid';
 export const createPost = mutationField('createPost', {
   type: 'Post',
   args: {
@@ -13,11 +12,11 @@ export const createPost = mutationField('createPost', {
     const decodedJwt = await isAuth(req);
     // console.log({ decodedJwt });
     try {
-      const id = nanoid(7);
+      const id = shortId.generate();
       const user = await ctx.prisma.user.findUnique({
         where: { id: decodedJwt.userId },
       });
-      // console.log({ user });
+      console.log({ id });
       if (!user) throw new Error('no user found');
       if (args.input.images.length === 0) throw new Error('Enter a pic');
       return await ctx.prisma.post.create({

@@ -7,6 +7,7 @@ import moment from 'moment';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
 import { userState } from '../../atoms/userState';
 import {
@@ -49,15 +50,25 @@ const PostCard: React.FC<Props> = ({ post }) => {
   }, [post.likes]);
 
   const handleLike = async () => {
+    if (!data?.me) {
+      toast.error('Login to perform action');
+      router.push('/login');
+      return;
+    }
     await toggleLike({
       variables: {
         postId: post.id,
       },
-      refetchQueries: () => [{ query: PostsDocument }],
+      refetchQueries: () => [{ query: PostsDocument, variables: { first: 4 } }],
     });
     setIsLike(true);
   };
   const handleUnLike = async () => {
+    if (!data?.me) {
+      toast.error('Login to perform action');
+      router.push('/login');
+      return;
+    }
     await toggleLike({
       variables: {
         postId: post.id,

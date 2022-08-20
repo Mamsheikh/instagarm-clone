@@ -3,14 +3,16 @@ import { Formik } from 'formik';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import LoginInput from '../components/LoginInput';
 import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 
 const Login = (props) => {
-  const [login] = useLoginMutation();
+  const [login, { loading }] = useLoginMutation();
   const router = useRouter();
   const [errMsg, setErrMsg] = useState('');
+
   return (
     <div className='flex h-screen flex-col items-center justify-center bg-gray-100'>
       <div className='mb-3 flex w-80 flex-col items-center border border-gray-300 bg-white pt-8 pb-4'>
@@ -35,9 +37,9 @@ const Login = (props) => {
           })}
           onSubmit={async (values, actions) => {
             const creds = { ...values };
-            actions.resetForm();
+            // actions.resetForm();
             try {
-              const { data } = await login({
+              await login({
                 variables: {
                   input: {
                     email_or_username: creds.username_or_email,
@@ -55,6 +57,7 @@ const Login = (props) => {
                 },
                 onCompleted(data) {
                   if (data.login) {
+                    toast.success('Login successfull');
                     router.push('/');
                   }
                 },
@@ -90,7 +93,7 @@ const Login = (props) => {
                 placeholder='Enter password'
               />
               <button className='mt-2 rounded bg-blue-500 py-1 text-center text-sm font-medium text-white'>
-                {isSubmitting ? 'Logging in...' : 'Login'}
+                {loading ? 'Logging in...' : 'Login'}
               </button>
             </form>
           )}
@@ -98,24 +101,30 @@ const Login = (props) => {
         <button
           className='mt-2 w-64 rounded bg-blue-500 py-1 text-center text-sm font-medium text-white'
           onClick={() => {
-            // setTestLoading(true);
-            login({
-              variables: {
-                input: { email_or_username: 'bob', password: 'password' },
-              },
-              update: (cache, { data }) => {
-                cache.writeQuery<MeQuery>({
-                  query: MeDocument,
-                  data: {
-                    __typename: 'Query',
-                    me: data?.login,
-                  },
-                });
-              },
-              onCompleted(data) {
-                router.push('/');
-              },
-            });
+            toast.promise(
+              login({
+                variables: {
+                  input: { email_or_username: 'bob', password: 'password' },
+                },
+                update: (cache, { data }) => {
+                  cache.writeQuery<MeQuery>({
+                    query: MeDocument,
+                    data: {
+                      __typename: 'Query',
+                      me: data?.login,
+                    },
+                  });
+                },
+                onCompleted(data) {
+                  router.push('/');
+                },
+              }),
+              {
+                loading: 'Logging you in...',
+                error: 'Failed to log you in',
+                success: 'Login successfull',
+              }
+            );
           }}
         >
           Login as Guest

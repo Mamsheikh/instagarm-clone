@@ -1,5 +1,5 @@
 import { mutationField, nonNull, stringArg } from 'nexus';
-import { nanoid } from 'nanoid';
+import shortId from 'shortid';
 import { isAuth } from '../../../utils/auth';
 
 export const createComment = mutationField('createComment', {
@@ -11,7 +11,7 @@ export const createComment = mutationField('createComment', {
   async resolve(_, args, ctx) {
     const req = ctx.req;
     const decodedJwt = await isAuth(req);
-    const id = nanoid(7);
+    const id = shortId.generate();
     const user = await ctx.prisma.user.findUnique({
       where: { id: decodedJwt.userId },
     });

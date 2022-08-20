@@ -9,11 +9,11 @@ import { useMeQuery } from '../generated/graphql';
 const Home: NextPage = (props) => {
   const router = useRouter();
   const { data } = useMeQuery();
-  useEffect(() => {
-    if (!data?.me) {
-      router.push('/login');
-    }
-  }, [data?.me]);
+  // useEffect(() => {
+  // if (!data) {
+  //   router.push('/login');
+  // }
+  // }, [data?.me]);
   return (
     <Layout>
       <div className=' bg-gray-100 pt-20 dark:bg-black'>

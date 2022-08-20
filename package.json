@@ -30,7 +30,6 @@
     "micro": "^9.3.4",
     "micro-cors": "^0.1.1",
     "moment": "^2.29.4",
-    "nanoid": "2.1.11",
     "next": "^12.1.0",
     "next-themes": "^0.1.1",
     "nextjs-progressbar": "^0.0.14",
@@ -44,6 +43,7 @@
     "react-loader-spinner": "^5.1.7-beta.1",
     "react-responsive-carousel": "^3.2.23",
     "recoil": "^0.6.1",
+    "shortid": "^2.2.16",
     "yup": "^0.32.11"
   },
   "devDependencies": {

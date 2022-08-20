@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { PhotographIcon, PlayIcon } from '@heroicons/react/outline';
 import { XIcon } from '@heroicons/react/solid';
+import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRecoilState } from 'recoil';
@@ -21,6 +22,7 @@ const AddPostModal = ({ user }) => {
       setAddPost(false);
     },
   });
+  const router = useRouter();
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [addPost, setAddPost] = useRecoilState(postState);
@@ -77,8 +79,9 @@ const AddPostModal = ({ user }) => {
       //     data: { posts: [...posts.edges.node, createPost] },
       //   });
       // },
-      onCompleted: () => {
+      onCompleted: (data) => {
         setAddPost(false);
+        router.push(`/p/${data.createPost.id}`);
         toast.success('Post created successfully');
       },
     });
